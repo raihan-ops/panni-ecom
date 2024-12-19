@@ -1,0 +1,139 @@
+/* @import '~antd/dist/antd.css'; */
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+
+
+/* .page-container {
+  width: 80%;
+  margin: 0 auto;
+  max-width: 1280px;
+} */
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.custom-prev-btn,
+.custom-next-btn {
+  /* Add your custom styles here */
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  /* Adjust styles as needed */
+}
+
+.conatainer {
+  margin: 20px 0;
+}
+
+.swiper-slide.swiper-slide-active,
+.swiper-slide.swiper-slide-next,
+.swiper-slide.swiper-slide-prev {
+  background: inherit;
+  width: 100%;
+}
+
+.swiper-slide {
+  background: inherit;
+}
+
+
+.custom-shape-divider-top-1703852338 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.custom-shape-divider-top-1703852338 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 40px;
+  transform: rotateY(180deg);
+}
+
+
+
+/* For screen size 1980 and above */
+.myContainer {
+  padding-left: 25rem;
+  padding-right: 25rem;
+}
+
+/* Scoped styling only for customSwiper */
+.customSwiper .custom-bullet {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #F4F5F566;
+  margin: 0 4px;
+  display: inline-block;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* Scoped active bullet styling */
+.customSwiper .swiper-pagination-bullet-active {
+  width: 24px;
+  border-radius: 10px;
+  background-color: #F4F5F5;
+}
+
+.customSwiper .swiper-pagination {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+
+
+.custom-scrollbar {
+  padding-right: -15px;
+  /* This creates space for the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(6,24,55,0.6);
+  border-radius: 3px;
+  
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(6,24,55,0.6);
+ 
+}
