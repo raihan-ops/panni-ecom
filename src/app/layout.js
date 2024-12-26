@@ -6,22 +6,18 @@ import { antdThemeConfigs } from '@/themeConfig/antdthemeConfig';
 import ProviderInjection from '@/providers/ProviderInjection';
 import localFont from 'next/font/local';
 
-
-
 export const metadata = {
   metadataBase: new URL('http://localhost:3000'),
   title: {
     absolute: '',
-    default: 'otonest',
+    default: 'Panni',
   },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={``}
-      >
+      <body className={``}>
         <AntdRegistry>
           <ConfigProvider theme={antdThemeConfigs}>
             <ProviderInjection>{children}</ProviderInjection>

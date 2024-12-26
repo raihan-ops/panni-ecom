@@ -2,9 +2,14 @@ import { PATH_HOME, PATH_ALL_CATEGORIES, PATH_STORIES_AND_VIDEOS } from '@/helpe
 
 export const MAIN_NAV_ITEMS = [
   {
-    path: PATH_ALL_CATEGORIES,
-    title: 'All Categories',
-    displayName: 'All Categories',
+    path: PATH_HOME,
+    title: 'Home',
+    displayName: 'Home',
+  },
+  {
+    path: PATH_HOME,
+    title: 'New-Arrivals',
+    displayName: 'New Arrivals',
   },
   {
     path: PATH_HOME,
@@ -18,15 +23,14 @@ export const MAIN_NAV_ITEMS = [
   },
   {
     path: PATH_HOME,
-    title: 'Womans',
-    displayName: 'Womans',
+    title: 'About',
+    displayName: 'About',
   },
   {
     path: PATH_HOME,
-    title: 'Womans',
-    displayName: 'Womans',
+    title: 'Contact',
+    displayName: 'Contact',
   },
-  
 ];
 
 export const ADMIN_NAVS = [

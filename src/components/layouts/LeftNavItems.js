@@ -4,9 +4,13 @@ import Link from 'next/link';
 import React from 'react';
 import { usePathname } from 'next/navigation';
 import { MAIN_NAV_ITEMS } from '@/helpers/Navs';
-import { Input } from '../shared/input';
-import { ShoppingOutlined } from '@ant-design/icons';
+import { Input, Select } from 'antd';
+
+const { Search } = Input;
+const { Option } = Select;
+
 const LeftNavItems = ({ toggleMenu }) => {
+  const onSearch = (value, _e, info) => console.log(info?.source, value);
   const pathname = usePathname();
 
   const handleToggle = () => {
@@ -14,6 +18,14 @@ const LeftNavItems = ({ toggleMenu }) => {
       toggleMenu();
     }
   };
+
+  const selectBefore = (
+    <Select defaultValue="All">
+      <Option value="All">All</Option>
+      <Option value="Mens">Mens</Option>
+      <Option value="Womens">Women's</Option>
+    </Select>
+  );
 
   const isActiveRoute = (route) => {
     if (route === pathname) {
@@ -24,13 +36,15 @@ const LeftNavItems = ({ toggleMenu }) => {
   };
 
   return (
-    <div className='bg-primary'>
-      <div className="container  hidden justify-between items-center lg:flex text-base text-secondary-dark dark:text-secondary-light w-full">
-        <div>
-          <p className="text-white">All Categories</p>
-        </div>
-
-        <ul className="justify-center items-center lg:flex ">
+    <div className="bg-white border-b">
+      <div className="container py-2 hidden justify-between items-center lg:flex text-base text-secondary-dark dark:text-secondary-light w-full">
+        <ul className="justify-between items-center lg:flex ">
+          <div className="cursor-pointer">
+            <p className="font-medium transition-all duration-200 text-red-400 hover:text-red-700">
+              All Categories
+            </p>
+          </div>
+          <div className="h-4 w-[5px] bg-red-400 mx-2"></div>
           {MAIN_NAV_ITEMS.map((nav, i) => (
             <li
               key={i}
@@ -41,20 +55,25 @@ const LeftNavItems = ({ toggleMenu }) => {
                 href={nav.path}
                 title={nav.title}
                 onClick={handleToggle}
-                className="inline-block w-full h-full p-2 text-white font-medium"
+                className="inline-block w-full h-full p-2 text-black font-normal group"
               >
                 {nav.displayName}
+                <div className="bg-red-400 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
               </Link>
             </li>
           ))}
         </ul>
 
-        <ShoppingOutlined
-          style={{
-            color: 'white',
-            fontSize: '24px',
-          }}
-        />
+        <div className="bg-white">
+          <Search
+            addonBefore={selectBefore}
+            placeholder="Input search text"
+            allowClear
+            enterButton="Search"
+            size="large"
+            onSearch={onSearch}
+          />
+        </div>
       </div>
     </div>
   );

@@ -1,8 +1,10 @@
 // Fetch settings for a single mode
 
+import HomePage from '@/components/pages/Home';
+
 export async function generateMetadata() {
   return {
-    title: 'Aldo',
+    title: 'Panni',
     description: 'Default Description',
     openGraph: {
       title: 'Seo title',
@@ -13,9 +15,8 @@ export async function generateMetadata() {
 
 const Home = async () => {
   return (
-    <div>
-      <p className="container font-bold text-primary">Hlw</p>
-      
+    <div className="container">
+      <HomePage />
     </div>
   );
 };

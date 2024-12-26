@@ -1,8 +1,7 @@
-import Header from '@/components/layouts/Header';
-import Footer from '@/components/layouts/Footer';
-
 import './main.css';
 import '../../styles/style.css';
+import Header from '@/components/layouts/Header';
+import Footer from '@/components/layouts/Footer';
 
 const BaseLayout = ({ children }) => {
   return (
