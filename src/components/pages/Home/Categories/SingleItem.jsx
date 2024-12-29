@@ -4,8 +4,8 @@ import Image from 'next/image';
 const SingleItem = ({ item }) => {
   return (
     <a href="#" className="group flex flex-col items-center">
-      <div className="w-[130px] h-[130px] w-full bg-[#F2F3F8] h-32.5 rounded-full flex items-center justify-center mb-4">
-        <Image src={item.img} alt="Category" className="w-[60%] h-[60%]" />
+      <div className="w-40 h-40 overflow-hidden bg-[#F2F3F8] h-32.5 rounded-full flex items-center justify-center mb-4">
+        <Image src={item.img} alt="Category" className="w-full h-full p-8" />
       </div>
 
       <div className="flex justify-center">

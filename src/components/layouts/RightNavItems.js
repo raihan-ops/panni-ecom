@@ -22,7 +22,7 @@ const RightNavItems = () => {
                 fontSize: '24px',
               }}
             />
-            <div className="text-white text-[12px] bg-red-400 w-5 h-5 flex items-center justify-center text-xs rounded-full absolute -top-[6px] -right-[8px]">
+            <div className="text-white text-[12px] bg-gray-600 w-5 h-5 flex items-center justify-center text-xs rounded-full absolute -top-[6px] -right-[8px]">
               3
             </div>
           </div>
@@ -48,14 +48,14 @@ const RightNavItems = () => {
               <Link href={'#'}>
                 <div className="login group">
                   Login
-                  <div className="bg-red-400 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+                  <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
                 </div>
               </Link>
               /
               <Link href={'#'}>
                 <div className="login group">
                   Sign-up
-                  <div className="bg-red-400 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+                  <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
                 </div>
               </Link>
             </div>

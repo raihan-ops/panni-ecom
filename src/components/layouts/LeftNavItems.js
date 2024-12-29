@@ -40,11 +40,11 @@ const LeftNavItems = ({ toggleMenu }) => {
       <div className="container py-2 hidden justify-between items-center lg:flex text-base text-secondary-dark dark:text-secondary-light w-full">
         <ul className="justify-between items-center lg:flex ">
           <div className="cursor-pointer">
-            <p className="font-medium transition-all duration-200 text-red-400 hover:text-red-700">
+            <p className="font-medium transition-all duration-200 hover:text-red-700">
               All Categories
             </p>
           </div>
-          <div className="h-4 w-[5px] bg-red-400 mx-2"></div>
+          <div className="h-4 w-[5px] bg-gray-600 mx-2"></div>
           {MAIN_NAV_ITEMS.map((nav, i) => (
             <li
               key={i}
@@ -58,7 +58,7 @@ const LeftNavItems = ({ toggleMenu }) => {
                 className="inline-block w-full h-full p-2 text-black font-normal group"
               >
                 {nav.displayName}
-                <div className="bg-red-400 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+                <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
               </Link>
             </li>
           ))}

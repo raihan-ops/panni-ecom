@@ -372,7 +372,7 @@ const ProductDetails = () => {
               <button
                 key={key}
                 onClick={() => setActiveTab(item.id)}
-                className={`font-medium lg:text-lg ease-out duration-200 hover:text-black relative before:h-[1px] before:bg-red-400 before:absolute before:left-0 before:bottom-0 before:ease-out before:duration-200 hover:before:w-full 
+                className={`font-medium lg:text-lg ease-out duration-200 hover:text-black relative before:h-[1px] before:bg-gray-600 before:absolute before:left-0 before:bottom-0 before:ease-out before:duration-200 hover:before:w-full 
                                     ${
                                       activeTab === item.id
                                         ? 'text-gray-800 before:w-full'

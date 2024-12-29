@@ -1,4 +1,4 @@
-import { PATH_HOME, PATH_ALL_CATEGORIES, PATH_STORIES_AND_VIDEOS } from '@/helpers/Slugs';
+import { PATH_HOME, PATH_ABOUT, PATH_CONTACT } from '@/helpers/Slugs';
 
 export const MAIN_NAV_ITEMS = [
   {
@@ -22,12 +22,12 @@ export const MAIN_NAV_ITEMS = [
     displayName: 'Womans',
   },
   {
-    path: PATH_HOME,
+    path: PATH_ABOUT,
     title: 'About',
     displayName: 'About',
   },
   {
-    path: PATH_HOME,
+    path: PATH_CONTACT,
     title: 'Contact',
     displayName: 'Contact',
   },

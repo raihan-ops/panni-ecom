@@ -13,3 +13,38 @@
     color: var(--swiper-navigation-color, var(--swiper-theme-color));
 
 }
+
+
+/* scrollbar */
+.cartSection {
+    height: 200px;
+    overflow-y: auto;
+    background: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+/* WebKit Browsers */
+.cartSection::-webkit-scrollbar {
+    width: 8px;
+}
+
+.cartSection::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+.cartSection::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.cartSection::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Firefox */
+.cartSection {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f0f0f0;
+}
