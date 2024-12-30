@@ -1,7 +1,7 @@
 export const PATH_HOME = '/';
 export const PATH_CONTACT = '/contact';
 export const PATH_ABOUT = '/about';
-export const PATH_ALL_PRODUCT = '/all-product';
+export const PATH_ALL_PRODUCT = '/all-products';
 
 // export const PATH_CAR = '/profile-list';
 
