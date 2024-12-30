@@ -15,17 +15,19 @@ const RightNavItems = () => {
         </div>
 
         <div className="flex items-center gap-6">
-          <div className="w-fit h-fit relative">
-            <ShoppingOutlined
-              style={{
-                color: 'black',
-                fontSize: '24px',
-              }}
-            />
-            <div className="text-white text-[12px] bg-gray-600 w-5 h-5 flex items-center justify-center text-xs rounded-full absolute -top-[6px] -right-[8px]">
-              3
+          <Link href="/checkout">
+            <div className="w-fit h-fit relative ">
+              <ShoppingOutlined
+                style={{
+                  color: 'black',
+                  fontSize: '24px',
+                }}
+              />
+              <div className="text-white text-[12px] bg-gray-600 w-5 h-5 flex items-center justify-center text-xs rounded-full absolute -top-[6px] -right-[8px]">
+                3
+              </div>
             </div>
-          </div>
+          </Link>
 
           <div className="w-fit border flex items-center gap-2 rounded-md overflow-hidden px-3 py-1">
             <div>

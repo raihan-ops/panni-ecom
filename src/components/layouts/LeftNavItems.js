@@ -4,10 +4,11 @@ import Link from 'next/link';
 import React from 'react';
 import { usePathname } from 'next/navigation';
 import { MAIN_NAV_ITEMS } from '@/helpers/Navs';
-import { Input, Select } from 'antd';
+import { AudioOutlined } from '@ant-design/icons';
+import { Input, Space } from 'antd';
 
 const { Search } = Input;
-const { Option } = Select;
+// const { Option } = Select;
 
 const LeftNavItems = ({ toggleMenu }) => {
   const onSearch = (value, _e, info) => console.log(info?.source, value);
@@ -19,13 +20,13 @@ const LeftNavItems = ({ toggleMenu }) => {
     }
   };
 
-  const selectBefore = (
-    <Select defaultValue="All">
-      <Option value="All">All</Option>
-      <Option value="Mens">Mens</Option>
-      <Option value="Womens">Women's</Option>
-    </Select>
-  );
+  // const selectBefore = (
+  //   <Select defaultValue="All">
+  //     <Option value="All">All</Option>
+  //     <Option value="Mens">Mens</Option>
+  //     <Option value="Womens">Women's</Option>
+  //   </Select>
+  // );
 
   const isActiveRoute = (route) => {
     if (route === pathname) {
@@ -65,13 +66,20 @@ const LeftNavItems = ({ toggleMenu }) => {
         </ul>
 
         <div className="bg-white">
-          <Search
+          {/* <Search
             addonBefore={selectBefore}
             placeholder="Input search text"
             allowClear
             enterButton="Search"
             size="large"
             onSearch={onSearch}
+          /> */}
+          <Search
+            placeholder="input search text"
+            onSearch={onSearch}
+            style={{
+              width: 200,
+            }}
           />
         </div>
       </div>

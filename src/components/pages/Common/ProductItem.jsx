@@ -9,6 +9,7 @@ import Image from 'next/image';
 // import { updateproductDetails } from "@/redux/features/product-details";
 // import { useDispatch } from "react-redux";
 import Link from 'next/link';
+import assets from '@/assets/asset';
 
 const ProductItem = ({ item }) => {
   // const { openModal } = useModalContext();
@@ -45,10 +46,10 @@ const ProductItem = ({ item }) => {
   return (
     <Link href={'/products/' + item?.slug}>
       <div className="group">
-        <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-[#F6F7FB] min-h-[270px] mb-1">
-          <Image src={item.imgs.previews[0]} alt="" width={250} height={250} />
+        <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-[#F6F7FB] min-h-[250px] mb-1">
+          <Image src={assets.Tv} alt="" width={250} height={250} />
 
-          <div className="absolute left-0 bottom-0 translate-y-full w-full flex items-center justify-center gap-3 pb-5 ease-linear duration-200 group-hover:translate-y-0">
+          <div className="absolute left-0 bottom-0 translate-y-full w-full flex items-center justify-center gap-3 ease-linear duration-200 group-hover:-translate-y-1">
             {/* quick view */}
             <button
               // onClick={() => {
@@ -160,7 +161,7 @@ const ProductItem = ({ item }) => {
           <Link href={'/products/' + item?.slug}> {item.title} </Link>
         </h3>
 
-        <span className="flex items-center gap-2 font-medium text-lg">
+        <span className="flex items-center gap-2 font-medium text-sm">
           <span className="text-black">৳{item.discountedPrice}</span>
           <span className="text-gray-400 line-through">৳{item.price}</span>
         </span>

@@ -1,4 +1,4 @@
-import { PATH_HOME, PATH_ABOUT, PATH_CONTACT } from '@/helpers/Slugs';
+import { PATH_HOME, PATH_ABOUT, PATH_CONTACT, PATH_ALL_PRODUCT } from '@/helpers/Slugs';
 
 export const MAIN_NAV_ITEMS = [
   {
@@ -7,17 +7,17 @@ export const MAIN_NAV_ITEMS = [
     displayName: 'Home',
   },
   {
-    path: PATH_HOME,
+    path: PATH_ALL_PRODUCT,
     title: 'New-Arrivals',
     displayName: 'New Arrivals',
   },
   {
-    path: PATH_HOME,
+    path: PATH_ALL_PRODUCT,
     title: 'Mens',
     displayName: 'Mens',
   },
   {
-    path: PATH_HOME,
+    path: PATH_ALL_PRODUCT,
     title: 'Womans',
     displayName: 'Womans',
   },

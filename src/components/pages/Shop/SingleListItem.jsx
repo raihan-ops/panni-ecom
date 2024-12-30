@@ -1,43 +1,16 @@
 'use client';
 import React from 'react';
-import { useModalContext } from '@/app/context/QuickViewModalContext';
-import { useDispatch } from 'react-redux';
+
 import Link from 'next/link';
 import Image from 'next/image';
 
 const SingleListItem = ({ item }) => {
-  const { openModal } = useModalContext();
-  const dispatch = useDispatch();
-
-  // update the QuickView state
-  const handleQuickViewUpdate = () => {
-    dispatch({
-      type: 'quickView/updateQuickView',
-      payload: { ...item },
-    });
-  };
+  const handleQuickViewUpdate = () => {};
 
   // add to cart
-  const handleAddToCart = () => {
-    dispatch({
-      type: 'cart/addItemToCart',
-      payload: {
-        ...item,
-        quantity: 1,
-      },
-    });
-  };
+  const handleAddToCart = () => {};
 
-  const handleItemToWishList = () => {
-    dispatch({
-      type: 'wishlist/addItemToWishlist',
-      payload: {
-        ...item,
-        status: 'available',
-        quantity: 1,
-      },
-    });
-  };
+  const handleItemToWishList = () => {};
 
   return (
     <div className="group rounded-lg bg-white shadow-1">
@@ -47,10 +20,6 @@ const SingleListItem = ({ item }) => {
 
           <div className="absolute left-0 bottom-0 translate-y-full w-full flex items-center justify-center gap-2.5 pb-5 ease-linear duration-200 group-hover:translate-y-0">
             <button
-              onClick={() => {
-                openModal();
-                handleQuickViewUpdate();
-              }}
               aria-label="button for quick view"
               className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-blue"
             >
@@ -78,14 +47,14 @@ const SingleListItem = ({ item }) => {
             </button>
 
             <button
-              onClick={() => handleAddToCart()}
+              // onClick={() => handleAddToCart()}
               className="inline-flex font-medium text-custom-sm py-[7px] px-5 rounded-[5px] bg-blue text-white ease-out duration-200 hover:bg-blue-dark"
             >
               Add to cart
             </button>
 
             <button
-              onClick={() => handleItemToWishList()}
+              // onClick={() => handleItemToWishList()}
               aria-label="button for favorite select"
               className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-blue"
             >
