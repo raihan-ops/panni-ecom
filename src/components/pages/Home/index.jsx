@@ -4,14 +4,20 @@ import Categories from './Categories';
 import NewArrival from './NewArrivals';
 import PromoBanner from './PromoBanner';
 import CounDown from './Countdown';
+import SectionProductItems from '../Common/SectionProductItems';
+import ReverseProductItems from '../Common/ReverseProductItems';
+import PromoBannerTwice from './PromoBanner/PromoBannerTwice';
 
 const HomePage = () => {
   return (
-    <main>
+    <main className="mb-20">
       <Hero />
       <Categories />
-      <NewArrival />
+      {/* <NewArrival /> */}
+      <SectionProductItems />
       <PromoBanner />
+      <ReverseProductItems />
+      <PromoBannerTwice />
       <CounDown />
     </main>
   );

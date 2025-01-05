@@ -9,7 +9,7 @@ import localFont from 'next/font/local';
 export const metadata = {
   metadataBase: new URL('http://localhost:3000'),
   title: {
-    absolute: '',
+    absolute: 'Panni',
     default: 'Panni',
   },
 };

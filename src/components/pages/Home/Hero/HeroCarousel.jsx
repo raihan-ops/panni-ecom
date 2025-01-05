@@ -28,14 +28,14 @@ const HeroCarousal = () => {
         <div className="flex items-center justify-between pt-6 sm:pt-0 flex-col-reverse sm:flex-row h-full">
           <div className="w-full h-full relative">
             <Image
-              src={assets.b1}
+              src={assets.banner}
               alt="headphone"
               className="w-full h-full"
               // width={100}
               // height={358}
             />
 
-            <div className="max-w-[500px] py-10 sm:py-16 lg:py-26 pl-4 sm:pl-7 lg:pl-12 text-white absolute -top-5">
+            {/* <div className="max-w-[500px] py-10 sm:py-16 lg:py-26 pl-4 sm:pl-7 lg:pl-12 text-white absolute -top-5">
               <div className="flex items-center gap-4 mb-7.5 sm:mb-10">
                 <span className="block font-semibold text-6xl text-blue-500">30%</span>
                 <span className="block text-dark text-sm sm:text-custom-1 sm:leading-[24px]">
@@ -57,7 +57,7 @@ const HeroCarousal = () => {
               >
                 Shop Now
               </a>
-            </div>
+            </div> */}
           </div>
         </div>
       </SwiperSlide>

@@ -1,8 +1,9 @@
 import hero1 from '@/assets/images/hero/hero-01.png';
 import heroBg from '@/assets/images/hero/hero-bg.png';
 import herobag from '@/assets/images/hero/herobag.jpg';
-import b1 from '@/assets/images/hero/b1.jpg';
+// import b1 from '@/assets/images/hero/b1.jpg';
 import b2 from '@/assets/images/hero/b2.jpg';
+import banner from '@/assets/images/hero/banner.png';
 // import icon1 from '@/assets/images/icons/icon-01.svg';
 // import icon2 from '@/assets/images/icons/icon-02.svg';
 // import icon3 from '@/assets/images/icons/icon-03.svg';
@@ -22,7 +23,7 @@ const assets = {
   hero1,
   heroBg,
   herobag,
-  b1,
+  // b1,
   b2,
   Tv,
   laptop,
@@ -34,6 +35,7 @@ const assets = {
   promoBanner1,
   promoBanner2,
   promoBanner3,
+  banner,
   // icon1,
   // icon2,
   // icon3,

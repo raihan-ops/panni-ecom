@@ -3,6 +3,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import ProductItem from '@/components/pages/Common/ProductItem';
 import shopData from '@/components/pages/Shop/shopData';
+import { PATH_ALL_PRODUCT } from '@/helpers/Slugs';
+import ReverseProductItems from '../../Common/ReverseProductItems';
 
 const NewArrival = () => {
   return (
@@ -37,19 +39,18 @@ const NewArrival = () => {
           </div>
 
           <Link
-            href="/shop-with-sidebar"
+            href={PATH_ALL_PRODUCT}
             className="inline-flex font-medium text-custom-sm py-3 px-7 rounded-md border-gray-3 border bg-gray-100 text-dark ease-out duration-200 hover:bg-white hover:text-gray-900 hover:border-transparent"
           >
             View All
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-7 gap-y-9">
-          {/* <!-- New Arrivals item --> */}
+        {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-7 gap-y-9">
           {shopData.map((item, key) => (
             <ProductItem item={item} key={key} />
           ))}
-        </div>
+        </div> */}
       </div>
     </section>
   );
