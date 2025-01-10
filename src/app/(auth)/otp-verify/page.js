@@ -4,12 +4,13 @@ import { Typography } from '@/components/shared/typography';
 import { Button } from '@/components/shared/button';
 import BaseForm from '@/components/form/BaseForm';
 import useFormItems from './hoc/useOtpFormItems';
-import { Icons } from '@/assets/icons';
+
 import { useRouter, useSearchParams } from 'next/navigation';
 import api from '@/providers/Api';
-import { PATH_HOME } from '@/helpers/Slugs';
 import { Toast } from '@/components/shared/toast/Toast';
 import { USER_OTP_RESEND_API_URL, USER_OTP_VERIFY_API_URL } from '@/helpers/apiUrl';
+import { PATH_HOME } from '@/helpers/Slugs';
+import { Icons } from '@/assets/icons';
 
 const OtpVerify = () => {
   const formItems = useFormItems();
