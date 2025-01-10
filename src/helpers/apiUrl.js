@@ -13,3 +13,9 @@ export const GET_ALL_SECTIONS_API_URL = `${API_URL}/sections`;
 
 //banner
 export const GET_ALL_BANNERS = `${API_URL}/banners`;
+
+// categories
+export const GET_ALL_SUB_CATEGORIES = `${API_URL}/sub-categories`;
+
+// products
+export const GET_ALL_PRODUCTS = `${API_URL}/products`;

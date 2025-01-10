@@ -14,7 +14,7 @@ const Hero = () => {
   useEffect(() => {
     (async function fetchBanners() {
       try {
-        const response = await axios.get(`${GET_ALL_BANNERS}`);
+        const response = await axios.get(`${GET_ALL_BANNERS}?bannerType=HOMEPAGE_SLIDER`);
         setBanners(response.data); // Assuming response.data contains the banners array
         // console.log('Banners--------', response.data);
       } catch (error) {
@@ -24,6 +24,8 @@ const Hero = () => {
       }
     })();
   }, []);
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <section className="overflow-hidden pt-6 pb-10 lg:pb-12 xl:pb-12 lg:pt-5 xl:pt-5 rounded">

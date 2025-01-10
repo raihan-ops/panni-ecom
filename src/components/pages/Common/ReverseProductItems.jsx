@@ -1,11 +1,28 @@
-import React from 'react';
-import shopData from '../Shop/shopData';
+'use client';
+import React, { useEffect, useState } from 'react';
 import ProductItem from './ProductItemSecond';
 import Link from 'next/link';
 import { PATH_ALL_PRODUCT } from '@/helpers/Slugs';
+import axios from 'axios';
+import { GET_ALL_PRODUCTS } from '@/helpers/apiUrl';
 // import ProductItem from './ProductItem';
 
 const ReverseProductItems = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async function fetchProducts() {
+      try {
+        const response = await axios.get(`${GET_ALL_PRODUCTS}?size=${9}&category=men`);
+        setProducts(response.data.content);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
   return (
     <div>
       <div>
@@ -20,7 +37,7 @@ const ReverseProductItems = () => {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-7 gap-y-9">
           {/* <!-- New Arrivals item --> */}
-          {shopData.slice(0, 4).map((item, key) => (
+          {products.slice(0, 4).map((item, key) => (
             <ProductItem item={item} key={key} />
           ))}
         </div>
@@ -29,20 +46,20 @@ const ReverseProductItems = () => {
       <div className="grid grid-cols-12 grid-rows-1 grid-flow-col gap-x-7 gap-y-9 mt-7">
         <div className="col-span-6 row-start-1">
           <div className="grid grid-cols-2 gap-x-7 gap-y-9">
-            {shopData.slice(5, 7).map((item, key) => (
+            {products.slice(5, 7).map((item, key) => (
               <ProductItem item={item} key={key} />
             ))}
           </div>
         </div>
         <div className="col-span-6 row-start-2">
           <div className="grid grid-cols-2 gap-x-7 gap-y-9">
-            {shopData.slice(5, 7).map((item, key) => (
+            {products.slice(5, 7).map((item, key) => (
               <ProductItem item={item} key={key} />
             ))}
           </div>
         </div>
         <div className="col-span-6 row-span-2 pImgsecMain">
-          {shopData.slice(4, 5).map((item, key) => (
+          {products.slice(4, 5).map((item, key) => (
             <ProductItem item={item} key={key} />
           ))}
         </div>

@@ -3,14 +3,15 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import assets from '@/assets/asset';
 
 const ProductItem = ({ item }) => {
+  const imageSrc =
+    Array.isArray(item.images) && item.images.length > 0 ? item.images[0].image : item.image;
   return (
-    <Link href={'/products/' + item?.slug}>
+    <Link href={'/##/' + item?.slug}>
       <div className="group h-full">
         <div className="relative overflow-hidden flex items-center pImgsec justify-center rounded-lg bg-[#F6F7FB]  mb-1">
-          <Image src={assets.Tv} alt="" width={250} height={250} />
+          <Image src={imageSrc} alt="" width={250} height={250} />
 
           <div className="absolute left-0 bottom-0 translate-y-full w-full flex items-center justify-center gap-3 ease-linear duration-200 group-hover:-translate-y-1">
             {/* quick view */}
@@ -60,7 +61,7 @@ const ProductItem = ({ item }) => {
           className="font-medium text-black ease-out duration-200 hover:text-blue mb-0"
           // onClick={() => handleProductDetails()}
         >
-          <Link href={'/products/' + item?.slug}> {item.title} </Link>
+          <Link href={'//' + item?.slug}> {item.name} </Link>
         </h3>
 
         <span className="flex items-center gap-2 font-medium text-sm">
