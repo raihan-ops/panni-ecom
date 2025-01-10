@@ -1,10 +1,30 @@
-import React from 'react';
+'use client';
+import React, { useEffect, useState } from 'react';
 import HeroCarousel from './HeroCarousel';
 import HeroFeature from './HeroFeature';
 import Image from 'next/image';
 import assets from '@/assets/asset';
+import axios from 'axios';
+import { GET_ALL_BANNERS } from '@/helpers/apiUrl';
 
 const Hero = () => {
+  const [banners, setBanners] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async function fetchBanners() {
+      try {
+        const response = await axios.get(`${GET_ALL_BANNERS}`);
+        setBanners(response.data); // Assuming response.data contains the banners array
+        // console.log('Banners--------', response.data);
+      } catch (error) {
+        console.error('Error fetching banners:', error);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
   return (
     <section className="overflow-hidden pt-6 pb-10 lg:pb-12 xl:pb-12 lg:pt-5 xl:pt-5 rounded">
       <div className="w-full mx-auto px-4 sm:px-8 xl:px-0">
@@ -20,7 +40,7 @@ const Hero = () => {
                 height={520}
               />
 
-              <HeroCarousel />
+              <HeroCarousel data={banners} />
             </div>
           </div>
 
