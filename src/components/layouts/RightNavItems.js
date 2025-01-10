@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { Input } from '../shared/input';
 import { ShoppingOutlined } from '@ant-design/icons';
 import Link from 'next/link';
+import { LOGIN, SIGN_UP } from '@/helpers/Slugs';
 
 const RightNavItems = () => {
   return (
@@ -47,14 +48,14 @@ const RightNavItems = () => {
               </svg>
             </div>
             <div className="flex">
-              <Link href={'#'}>
+              <Link href={LOGIN}>
                 <div className="login group">
                   Login
                   <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
                 </div>
               </Link>
               /
-              <Link href={'#'}>
+              <Link href={SIGN_UP}>
                 <div className="login group">
                   Sign-up
                   <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
