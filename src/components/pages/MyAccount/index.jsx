@@ -4,7 +4,7 @@ import Breadcrumb from '../Common/Breadcrumb';
 import Image from 'next/image';
 import AddressModal from './AddressModal';
 import Orders from './Orders';
-import assets from '@/assets/asset';
+import assets from '../../../assets/asset';
 
 const MyAccount = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
