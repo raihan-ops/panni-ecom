@@ -7,7 +7,7 @@ import 'swiper/css/navigation';
 import 'swiper/css';
 import SingleItem from './SingleItem';
 import axios from 'axios';
-import { GET_ALL_SUB_CATEGORIES } from '../../../../helpers/apiUrl';
+import { GET_ALL_SUB_CATEGORIES } from '@/helpers/apiUrl';
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);

@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { ACCESS_TOKEN } from '@/helpers/constant';
 import { usePathname, useRouter } from 'next/navigation';
 import api from '@/providers/Api';
-import { PATH_HOME } from '../helpers/Slugs';
+import { PATH_HOME } from '@/helpers/Slugs';
 
 const AuthContext = createContext();
 

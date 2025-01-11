@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import ProductItem from './ProductItemSecond';
 import Link from 'next/link';
-import { PATH_ALL_PRODUCT } from '../../../helpers/Slugs';
+import { PATH_ALL_PRODUCT } from '@/helpers/Slugs';
 import axios from 'axios';
-import { GET_ALL_PRODUCTS } from '../../../helpers/apiUrl';
+import { GET_ALL_PRODUCTS } from '@/helpers/apiUrl';
 // import ProductItem from './ProductItem';
 
 const ReverseProductItems = () => {

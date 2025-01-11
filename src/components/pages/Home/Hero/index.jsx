@@ -5,7 +5,7 @@ import HeroFeature from './HeroFeature';
 import Image from 'next/image';
 import assets from '@/assets/asset';
 import axios from 'axios';
-import { GET_ALL_BANNERS } from '../../../../helpers/apiUrl';
+import { GET_ALL_BANNERS } from '@/helpers/apiUrl';
 
 const Hero = () => {
   const [banners, setBanners] = useState([]);

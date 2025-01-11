@@ -1,6 +1,6 @@
 'use client';
 
-import { GET_ALL_SECTIONS_API_URL } from '../helpers/apiUrl';
+import { GET_ALL_SECTIONS_API_URL } from '@/helpers/apiUrl';
 import { MODE_BIKE, MODE_CAR } from '@/helpers/constant';
 import api from '@/providers/Api';
 import { createContext, useContext, useEffect, useState } from 'react';

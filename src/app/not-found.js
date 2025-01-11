@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { PATH_HOME } from '../helpers/Slugs';
+import { PATH_HOME } from '@/helpers/Slugs';
 
 const NotFound = () => {
   return (

@@ -1,4 +1,4 @@
-import { PATH_HOME, PATH_ABOUT, PATH_CONTACT, PATH_ALL_PRODUCT } from '../helpers/Slugs';
+import { PATH_HOME, PATH_ABOUT, PATH_CONTACT, PATH_ALL_PRODUCT } from '@/helpers/Slugs';
 
 export const MAIN_NAV_ITEMS = [
   {

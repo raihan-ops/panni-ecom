@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { Input } from '../shared/input';
 import { ShoppingOutlined } from '@ant-design/icons';
 import Link from 'next/link';
-import { LOGIN, SIGN_UP } from '../../helpers/Slugs';
+import { LOGIN, SIGN_UP } from '@/helpers/Slugs';
 
 const RightNavItems = () => {
   return (

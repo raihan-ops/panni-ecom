@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import ProductItem from '@/components/pages/Common/ProductItem';
 import shopData from '@/components/pages/Shop/shopData';
-import { PATH_ALL_PRODUCT } from '../../../../helpers/Slugs';
+import { PATH_ALL_PRODUCT } from '@/helpers/Slugs';
 import ReverseProductItems from '../../Common/ReverseProductItems';
 
 const NewArrival = () => {

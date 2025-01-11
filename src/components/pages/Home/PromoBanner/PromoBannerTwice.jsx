@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { GET_ALL_BANNERS } from '../../../../helpers/apiUrl';
+import { GET_ALL_BANNERS } from '@/helpers/apiUrl';
 
 const PromoBannerTwice = () => {
   const [promotionalBanner, setPromotionalBanner] = useState([]);

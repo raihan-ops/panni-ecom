@@ -8,9 +8,9 @@ import useFormItems from './hoc/useOtpFormItems';
 import { useRouter, useSearchParams } from 'next/navigation';
 import api from '@/providers/Api';
 import { Toast } from '@/components/shared/toast/Toast';
-import { USER_OTP_RESEND_API_URL, USER_OTP_VERIFY_API_URL } from '../../../helpers/apiUrl';
-import { PATH_HOME } from '../../../helpers/Slugs';
-import { Icons } from '../../../assets/icons';
+import { USER_OTP_RESEND_API_URL, USER_OTP_VERIFY_API_URL } from '@/helpers/apiUrl';
+import { PATH_HOME } from '@/helpers/Slugs';
+import { Icons } from '@/assets/icons';
 
 const OtpVerify = () => {
   const formItems = useFormItems();

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { PATH_HOME } from '../../helpers/Slugs';
-import assets from '../../assets/asset';
+import { PATH_HOME } from '@/helpers/Slugs';
+import assets from '@/assets/asset';
 // import LogoFull from "public/logo-full.webp";
 import NavMenu from '@/components/layouts/NavMenu';
 import MobileMenu from '@/components/layouts/MobileMenu';
