@@ -1,70 +1,99 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Breadcrumb from '../Common/Breadcrumb';
-import SingleGridItem from '../Shop/SingleGridItem';
-import SingleListItem from '../Shop/SingleListItem';
-// import CustomSelect from "../ShopWithSidebar/CustomSelect";
-import shopData from '../Shop/shopData';
-import { Select } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
 import { Dropdown, Space } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 import SizeDropdown from './SizeDropdown';
 import CategoryDropdown from './CategoryDropdown';
 import ColorsDropdown from './ColorsDropdwon';
 import ProductItem from '../Common/ProductItem';
+import axios from 'axios';
+import { GET_ALL_PRODUCTS, GET_ALL_SUB_CATEGORIES } from '@/helpers/apiUrl';
 
 const AllProductsPAge = () => {
-  // const [productStyle, setProductStyle] = useState("grid");
+  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [sortOption, setSortOption] = useState('newest');
+  const [loading, setLoading] = useState(true);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [pageTotal, setPageTotal] = useState(0);
+
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
+
+  useEffect(() => {
+    (async function fetchSubcategories() {
+      try {
+        const response = await axios.get(`${GET_ALL_SUB_CATEGORIES}?size=100`);
+        setCategories(response.data.content);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    })();
+
+    // Fetch all products initially
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async (categoryIds = []) => {
+    try {
+      const categoryQuery =
+        categoryIds.length > 0 ? `&subCategoryIds=${categoryIds.join(',')}` : '';
+      const sortQuery = `&sort=${sortOption}`;
+      const response = await axios.get(`${GET_ALL_PRODUCTS}?size=10${categoryQuery}${sortQuery}`);
+      setProducts(response.data?.content);
+      setTotalProducts(response.data?.totalElements);
+      setPageTotal(response.data?.content?.length);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Re-fetch products whenever sortOption changes
+  useEffect(() => {
+    fetchProducts(selectedCategoryIds, sortOption);
+  }, [sortOption]);
+
+  const handleCategoryClick = (categoryId) => {
+    setSelectedCategoryIds(
+      (prev) =>
+        prev.includes(categoryId)
+          ? prev.filter((id) => id !== categoryId) // Remove if already selected
+          : [...prev, categoryId], // Add if not selected
+    );
+  };
+
+  const handleSortChange = ({ key }) => {
+    setSortOption(key); // Update the sort option state
+  };
 
   const items = [
     {
-      label: 'Latest Products',
-      value: '0',
-      key: '0',
+      label: 'Oldest',
+      value: 'oldest',
+      key: 'oldest',
     },
     {
-      label: 'Best Selling',
-      value: '2',
-      key: '1',
+      label: 'Newest',
+      value: 'newest',
+      key: 'newest',
     },
     {
-      label: 'Old Products',
-      value: '2',
-      key: '2',
-    },
-  ];
-
-  const categories = [
-    {
-      name: 'Desktop',
-      products: 10,
-      isRefined: true,
+      label: 'Price Low to High',
+      value: 'price-low-to-high',
+      key: 'price-low-to-high',
     },
     {
-      name: 'Laptop',
-      products: 12,
-      isRefined: false,
+      label: 'Price High to Low',
+      value: 'price-high-to-low',
+      key: 'price-high-to-low',
     },
     {
-      name: 'Monitor',
-      products: 30,
-      isRefined: false,
-    },
-    {
-      name: 'UPS',
-      products: 23,
-      isRefined: false,
-    },
-    {
-      name: 'Phone',
-      products: 10,
-      isRefined: false,
-    },
-    {
-      name: 'Watch',
-      products: 13,
-      isRefined: false,
+      label: 'A to Z',
+      value: 'a-z',
+      key: 'a-z',
     },
   ];
 
@@ -88,7 +117,10 @@ const AllProductsPAge = () => {
                     </div>
 
                     {/* <!-- category box --> */}
-                    <CategoryDropdown categories={categories} />
+                    <CategoryDropdown
+                      categories={categories}
+                      onCategoryClick={handleCategoryClick}
+                    />
 
                     {/* // <!-- size box --> */}
                     <SizeDropdown />
@@ -108,7 +140,10 @@ const AllProductsPAge = () => {
                       {/* <Select defaultValue={"sort"} className="w-40" options={options} /> */}
                       <Dropdown
                         menu={{
-                          items,
+                          items: items.map((item) => ({
+                            ...item,
+                            onClick: () => handleSortChange(item),
+                          })),
                         }}
                         className=" border px-4 py-1 rounded-md"
                         trigger={['click']}
@@ -121,27 +156,17 @@ const AllProductsPAge = () => {
                         </a>
                       </Dropdown>
                       <p>
-                        Showing <span className="text-dark">9 of 50</span> Products
+                        Showing{' '}
+                        <span className="text-dark">
+                          {pageTotal} of {totalProducts}
+                        </span>{' '}
+                        Products
                       </p>
                     </div>
                   </div>
                 </div>
-                {/* <div
-                                className={`grid ${productStyle === "grid"
-                                    ? "grid-cols-3 gap-4"
-                                    : "grid-cols-1 gap-6"
-                                    }`}
-                            >
-                                {shopData.map((item) =>
-                                    productStyle === "grid" ? (
-                                        <SingleGridItem key={item.id} product={item} />
-                                    ) : (
-                                        <SingleListItem key={item.id} product={item} />
-                                    )
-                                )}
-                            </div> */}
                 <div className="grid grid-cols-3 gap-4">
-                  {shopData.map((item, key) => (
+                  {products.map((item, key) => (
                     <ProductItem item={item} key={key} />
                   ))}
                 </div>
