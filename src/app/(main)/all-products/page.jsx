@@ -1,7 +1,7 @@
 import AllProductsPAge from '@/components/pages/All-products';
 import React from 'react';
 
-const AllProducr = () => {
+const AllProducts = () => {
   return (
     <div>
       <AllProductsPAge />
@@ -9,4 +9,4 @@ const AllProducr = () => {
   );
 };
 
-export default AllProducr;
+export default AllProducts;
