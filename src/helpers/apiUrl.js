@@ -1,4 +1,4 @@
-export const ROOT_URL = 'http://192.168.0.109';
+export const ROOT_URL = 'http://192.168.0.109:7001';
 const API_VERSION = '/api/1.0.0';
 export const API_URL = `${ROOT_URL}${API_VERSION}`;
 
