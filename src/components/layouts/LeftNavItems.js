@@ -112,18 +112,62 @@ const LeftNavItems = ({ toggleMenu }) => {
           {MAIN_NAV_ITEMS.map((nav, i) => (
             <li
               key={i}
-              className={`max-lg:mb-2 lg:ml-2 cursor-pointer transition-all `}
-              // ${isActiveRoute(nav.path)}
+              className="max-lg:mb-2 lg:ml-2 cursor-pointer transition-all relative group"
             >
               <Link
                 href={nav.path}
                 title={nav.title}
-                onClick={handleToggle}
                 className="inline-block w-full h-full p-2 text-black font-normal group"
               >
                 {nav.displayName}
                 <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
               </Link>
+              {/* Subcategories dropdown */}
+              {nav.subcategory && (
+                <div className="absolute border border-black rounded-md left-0 top-full bg-white ml-[-5rem] shadow-md min-w-[50rem] p-4 opacity-0 transform scale-95 translate-y-2 invisible group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 z-10">
+                  <div className="grid grid-cols-3">
+                    {nav.subcategory.map((_sub_category, j) => (
+                      <>
+                        <div key={j} className="col-span-1">
+                          <div>
+                            {/* _sub_category Link */}
+                            <div className="mb-2 mt-2">
+                              <Link
+                                href={_sub_category.path}
+                                title={_sub_category.title}
+                                className="font-bold text-black hover:text-gray-700 transition-all"
+                              >
+                                {_sub_category.displayName}
+                              </Link>
+                            </div>
+                            {/* Sub-subcategories */}
+                            {_sub_category.subsubcategory && (
+                              <ul className="space-y-2">
+                                {_sub_category.subsubcategory.map((_subsubcategory, k) => (
+                                  <li key={k} className="hover:bg-gray-200">
+                                    {_subsubcategory.path && (
+                                      <Link
+                                        href={_subsubcategory.path}
+                                        title={_subsubcategory.title}
+                                        className="text-black hover:text-gray-700 transition-all w-full"
+                                      >
+                                        {_subsubcategory.displayName}
+                                      </Link>
+                                    )}
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        </div>
+                        {/* <div className="col-span-1">
+                          <Image width={500} height={400} src={_sub_category.image} alt='' />
+                        </div> */}
+                      </>
+                    ))}
+                  </div>
+                </div>
+              )}
             </li>
           ))}
         </ul>
