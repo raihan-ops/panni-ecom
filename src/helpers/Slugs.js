@@ -23,3 +23,11 @@ export const PATH_FORGOT_PASSWORD = '/forgot-password';
 export const PATH_RESET_PASSWORD = '/reset-password';
 export const PATH_OTP_VERIFY = '/otp-verify';
 export const PATH_PROFILE = '/otp-verify';
+
+// admin
+export const ADMIN_DASHBOARD_PATH = '/admin/dashboard';
+export const ADMIN_PROFILE_PATH = '/admin/profile';
+export const ADMIN_ARTICLES_PATH = '/admin/articles';
+export const ADMIN_PRODUCTS_PATH = '/admin/products';
+export const ADMIN_CATEGORIES_PATH = '/admin/categories';
+export const ADMIN_ORDERS_PATH = '/admin/orders';

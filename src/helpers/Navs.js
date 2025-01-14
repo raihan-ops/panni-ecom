@@ -1,4 +1,12 @@
-import { PATH_HOME, PATH_ABOUT, PATH_CONTACT, PATH_ALL_PRODUCT } from '@/helpers/Slugs';
+import {
+  PATH_HOME,
+  PATH_ABOUT,
+  PATH_CONTACT,
+  PATH_ALL_PRODUCT,
+  ADMIN_DASHBOARD_PATH,
+  ADMIN_PRODUCTS_PATH,
+} from '@/helpers/Slugs';
+import { MinusOutlined } from '@ant-design/icons';
 
 export const MAIN_NAV_ITEMS = [
   {
@@ -34,14 +42,50 @@ export const MAIN_NAV_ITEMS = [
 ];
 
 export const ADMIN_NAVS = [
-  // {
-  //     path: ADMIN_ARTICLES_PATH,
-  //     title: "Admin dashboard page link",
-  //     displayName: "Articles"
-  // },
-  // {
-  //     path: ADMIN_PROFILE_PATH,
-  //     title: "Admin profile page link",
-  //     displayName: "Profile"
-  // },
+  {
+    key: 'dashboard',
+    label: 'Dashboard',
+    // onClick: () => handleClick(PATH.DASHBOARD_PATH),
+    path: ADMIN_DASHBOARD_PATH,
+    icon: <MinusOutlined className="text-base" />,
+    children: null,
+    // permissions: [Permission.ALL],
+  },
+
+  {
+    key: 'Stores',
+    label: 'Stores',
+    // onClick: () => handleClick(PATH.DASHBOARD_PATH),
+    icon: <MinusOutlined className="text-base" />,
+    // permissions: [Permission.ALL],
+    children: [
+      {
+        key: 'Products',
+        label: 'Products',
+        path: ADMIN_PRODUCTS_PATH,
+        // onClick: () => handleClick(PATH.PRODUCT_LIST_PATH),
+        icon: <MinusOutlined className="text-base" />,
+        children: null,
+        // permissions: [Permission.READ_USERS],
+      },
+    ],
+  },
+  {
+    key: 'config',
+    label: 'configuration',
+    // onClick: () => handleClick(PATH.DASHBOARD_PATH),
+    icon: <MinusOutlined className="text-base" />,
+    // permissions: [Permission.ALL],
+    children: [
+      {
+        key: 'Site configuration',
+        label: 'Site configuration',
+        path: ADMIN_PRODUCTS_PATH,
+        // onClick: () => handleClick(PATH.PRODUCT_LIST_PATH),
+        icon: <MinusOutlined className="text-base" />,
+        children: null,
+        // permissions: [Permission.READ_USERS],
+      },
+    ],
+  },
 ];
