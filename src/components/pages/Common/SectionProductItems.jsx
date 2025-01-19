@@ -14,7 +14,7 @@ const SectionProductItems = () => {
   useEffect(() => {
     (async function fetchProducts() {
       try {
-        const response = await axios.get(`${GET_ALL_PRODUCTS}?size=${9}&category=men`);
+        const response = await axios.get(`${GET_ALL_PRODUCTS}?size=${9}&categoryType=MEN`);
         setProducts(response.data.content);
       } catch (error) {
         console.error('Error fetching categories:', error);
@@ -59,7 +59,7 @@ const SectionProductItems = () => {
         </div>
         <div className="col-span-6 row-start-2">
           <div className="grid grid-cols-2 gap-x-7 gap-y-9">
-            {products?.slice(5, 7).map((item, key) => (
+            {products?.slice(7, 9).map((item, key) => (
               <ProductItem item={item} key={key} />
             ))}
           </div>

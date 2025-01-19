@@ -14,7 +14,7 @@ const ReverseProductItems = () => {
   useEffect(() => {
     (async function fetchProducts() {
       try {
-        const response = await axios.get(`${GET_ALL_PRODUCTS}?size=${9}&category=men`);
+        const response = await axios.get(`${GET_ALL_PRODUCTS}?size=${9}&categoryType=WOMEN`);
         setProducts(response.data.content);
       } catch (error) {
         console.error('Error fetching categories:', error);
@@ -46,20 +46,20 @@ const ReverseProductItems = () => {
       <div className="grid grid-cols-12 grid-rows-1 grid-flow-col gap-x-7 gap-y-9 mt-7">
         <div className="col-span-6 row-start-1">
           <div className="grid grid-cols-2 gap-x-7 gap-y-9">
-            {products.slice(5, 7).map((item, key) => (
+            {products.slice(4, 6).map((item, key) => (
               <ProductItem item={item} key={key} />
             ))}
           </div>
         </div>
         <div className="col-span-6 row-start-2">
           <div className="grid grid-cols-2 gap-x-7 gap-y-9">
-            {products.slice(5, 7).map((item, key) => (
+            {products.slice(6, 8).map((item, key) => (
               <ProductItem item={item} key={key} />
             ))}
           </div>
         </div>
         <div className="col-span-6 row-span-2 pImgsecMain">
-          {products.slice(4, 5).map((item, key) => (
+          {products.slice(8, 9).map((item, key) => (
             <ProductItem item={item} key={key} />
           ))}
         </div>
