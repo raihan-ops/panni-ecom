@@ -16,6 +16,7 @@ const AllProductsPAge = () => {
   const [products, setProducts] = useState([]);
   const [colors, setColors] = useState([]);
   const [activeColor, setActiveColor] = useState(null);
+  const [size, setSize] = useState('');
   const [sortOption, setSortOption] = useState('newest');
   const [loading, setLoading] = useState(true);
   const [totalProducts, setTotalProducts] = useState(0);
@@ -42,12 +43,17 @@ const AllProductsPAge = () => {
     try {
       const categoryQuery =
         categoryIds.length > 0 ? `&subCategoryIds=${categoryIds.join(',')}` : '';
+
       const colorQuery = activeColor ? `&color=${encodeURIComponent(activeColor)}` : '';
 
+      const sizeQuery = size ? `&productSize=${size}` : '';
+
       const sortQuery = `&sort=${sortOption}`;
+
       const response = await axios.get(
-        `${GET_ALL_PRODUCTS}?size=10${categoryQuery}${sortQuery}${colorQuery}`,
+        `${GET_ALL_PRODUCTS}?size=10${categoryQuery}${sortQuery}${colorQuery}${sizeQuery}`,
       );
+
       setProducts(response.data?.content);
       setTotalProducts(response.data?.totalElements);
       setPageTotal(response.data?.content?.length);
@@ -62,7 +68,6 @@ const AllProductsPAge = () => {
     try {
       const response = await axios.get(`${GET_ALL_PRODUCT_COLORS}`);
       setColors(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error('Error fetching colors:', error);
     } finally {
@@ -73,7 +78,7 @@ const AllProductsPAge = () => {
   // Re-fetch products whenever sortOption changes
   useEffect(() => {
     fetchProducts(selectedCategoryIds, sortOption);
-  }, [sortOption, selectedCategoryIds, activeColor]);
+  }, [sortOption, selectedCategoryIds, activeColor, size]);
 
   const handleCategoryClick = (categoryId) => {
     setSelectedCategoryIds(
@@ -90,6 +95,11 @@ const AllProductsPAge = () => {
 
   const handelColorCode = (code) => {
     setActiveColor(code);
+  };
+
+  const handleSizeChange = (size) => {
+    setSize(size);
+    console.log('Size:', size);
   };
 
   const items = [
@@ -146,7 +156,7 @@ const AllProductsPAge = () => {
                     />
 
                     {/* // <!-- size box --> */}
-                    <SizeDropdown />
+                    <SizeDropdown onSizeClick={handleSizeChange} />
 
                     {/* // <!-- color box --> */}
                     {/* <ColorsDropdwon /> */}
