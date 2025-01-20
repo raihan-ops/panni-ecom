@@ -17,10 +17,10 @@ const AboutPage = () => {
 
   return (
     <>
-      <div className="container">
+      <div className="">
         <Breadcrumb title={'About'} pages={['About-us']} />
 
-        <div className="flex w-full xl:max-w-[2100px] mx-auto mt-10">
+        <div className="flex w-full mx-auto mt-10">
           <div className="w-full lg:w-1/2 mt-8 md:mt-0 px-4 sm:px-8 md:px-0">
             <p className="leading-8 md:text-justify">{t.aboutLongText}</p>
             <br />

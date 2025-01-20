@@ -36,7 +36,7 @@ const CategoryItem = ({ category, onCategoryClick }) => {
           </svg>
         </div>
 
-        <span>{category.name}</span>
+        <span className="text-left">{category.name}</span>
       </div>
 
       <span

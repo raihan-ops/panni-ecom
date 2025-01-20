@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { MAIN_NAV_ITEMS } from '@/helpers/Navs';
 import { AudioOutlined } from '@ant-design/icons';
@@ -9,6 +9,14 @@ import { Input, Space } from 'antd';
 import { Button, Drawer } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 import Image from 'next/image';
+import { PATH_ABOUT, PATH_ALL_PRODUCT, PATH_CONTACT, PATH_HOME } from '@/helpers/Slugs';
+import {
+  GET_NAVBAR_CATEGORIES_MEN,
+  GET_NAVBAR_CATEGORIES_NEW_ARRIVAL,
+  GET_NAVBAR_CATEGORIES_WOMEN,
+} from '@/helpers/apiUrl';
+import axios from 'axios';
+import Img from '../shared/Img';
 
 const { Search } = Input;
 // const { Option } = Select;
@@ -23,13 +31,6 @@ const LeftNavItems = ({ toggleMenu }) => {
     }
   };
 
-  // const selectBefore = (
-  //   <Select defaultValue="All">
-  //     <Option value="All">All</Option>
-  //     <Option value="Mens">Mens</Option>
-  //     <Option value="Womens">Women's</Option>
-  //   </Select>
-  // );
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
     setOpen(true);
@@ -45,6 +46,49 @@ const LeftNavItems = ({ toggleMenu }) => {
 
     return 'hover:bg-primary hover:text-white rounded-sm';
   };
+
+  // new arrial API
+  const [categories, setCategories] = useState([]);
+  const [men, setMen] = useState([]);
+  const [women, setWomen] = useState([]);
+
+  // new arrival
+  useEffect(() => {
+    (async function fetchNewArrivalCategories() {
+      try {
+        const response = await axios.get(GET_NAVBAR_CATEGORIES_NEW_ARRIVAL);
+        setCategories(response?.data);
+      } catch (error) {
+        console.error('Error fetching new arrival categories:', error);
+      }
+    })();
+  }, []);
+
+  // men
+  useEffect(() => {
+    (async function fetchMenCategories() {
+      try {
+        const response = await axios.get(GET_NAVBAR_CATEGORIES_MEN);
+        setMen(response?.data);
+      } catch (error) {
+        console.error('Error fetching new arrival categories:', error);
+      }
+    })();
+  }, []);
+
+  // women
+  useEffect(() => {
+    (async function fetchWomenCategories() {
+      try {
+        const response = await axios.get(GET_NAVBAR_CATEGORIES_WOMEN);
+        setWomen(response?.data);
+      } catch (error) {
+        console.error('Error fetching new arrival categories:', error);
+      }
+    })();
+  }, []);
+
+  console.log(women);
 
   return (
     <div className="bg-white border-b">
@@ -78,25 +122,80 @@ const LeftNavItems = ({ toggleMenu }) => {
               <div>
                 <Image src="" alt="Logo" />
               </div>
-              <div className="">
+              <div className="mt-8">
                 <ul>
-                  {MAIN_NAV_ITEMS.map((nav, i) => (
-                    <li
-                      key={i}
-                      className={`max-lg:mb-2 lg:ml-2 cursor-pointer transition-all `}
-                      // ${isActiveRoute(nav.path)}
+                  <li
+                    className={`max-lg:mb-2 lg:ml-2 cursor-pointer transition-all `}
+                    // ${isActiveRoute(nav.path)}
+                  >
+                    <Link
+                      href={PATH_ALL_PRODUCT}
+                      title="New Arrivals"
+                      onClick={handleToggle}
+                      className="inline-block w-full h-full p-2 text-black font-normal group"
                     >
-                      <Link
-                        href={nav.path}
-                        title={nav.title}
-                        onClick={handleToggle}
-                        className="inline-block w-full h-full p-2 text-black font-normal group"
-                      >
-                        {nav.displayName}
-                        <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
-                      </Link>
-                    </li>
-                  ))}
+                      New-Arrivals
+                      <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+                    </Link>
+                  </li>
+
+                  <li
+                    className={`max-lg:mb-2 lg:ml-2 cursor-pointer transition-all `}
+                    // ${isActiveRoute(nav.path)}
+                  >
+                    <Link
+                      href={PATH_ALL_PRODUCT}
+                      title="Men"
+                      onClick={handleToggle}
+                      className="inline-block w-full h-full p-2 text-black font-normal group"
+                    >
+                      Men
+                      <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+                    </Link>
+                  </li>
+
+                  <li
+                    className={`max-lg:mb-2 lg:ml-2 cursor-pointer transition-all `}
+                    // ${isActiveRoute(nav.path)}
+                  >
+                    <Link
+                      href={PATH_ALL_PRODUCT}
+                      title="Women"
+                      onClick={handleToggle}
+                      className="inline-block w-full h-full p-2 text-black font-normal group"
+                    >
+                      Women
+                      <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+                    </Link>
+                  </li>
+                  <li
+                    className={`max-lg:mb-2 lg:ml-2 cursor-pointer transition-all `}
+                    // ${isActiveRoute(nav.path)}
+                  >
+                    <Link
+                      href={PATH_ABOUT}
+                      title="About"
+                      onClick={handleToggle}
+                      className="inline-block w-full h-full p-2 text-black font-normal group"
+                    >
+                      About
+                      <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+                    </Link>
+                  </li>
+                  <li
+                    className={`max-lg:mb-2 lg:ml-2 cursor-pointer transition-all `}
+                    // ${isActiveRoute(nav.path)}
+                  >
+                    <Link
+                      href={PATH_CONTACT}
+                      title="Contact"
+                      onClick={handleToggle}
+                      className="inline-block w-full h-full p-2 text-black font-normal group"
+                    >
+                      Contact
+                      <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+                    </Link>
+                  </li>
                 </ul>
               </div>
 
@@ -109,67 +208,219 @@ const LeftNavItems = ({ toggleMenu }) => {
           </div>
 
           <div className="h-4 w-[5px] bg-gray-600 mx-2"></div>
-          {MAIN_NAV_ITEMS.map((nav, i) => (
-            <li
-              key={i}
-              className="max-lg:mb-2 lg:ml-2 cursor-pointer transition-all relative group"
+          <li className="max-lg:mb-2 lg:ml-2 cursor-pointer transition-all relative group">
+            <Link
+              href={PATH_HOME}
+              title="Home"
+              className="inline-block w-full h-full p-2 text-black font-normal group"
             >
-              <Link
-                href={nav.path}
-                title={nav.title}
-                className="inline-block w-full h-full p-2 text-black font-normal group"
-              >
-                {nav.displayName}
-                <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
-              </Link>
-              {/* Subcategories dropdown */}
-              {nav.subcategory && (
-                <div className="absolute border border-black rounded-md left-0 top-full bg-white ml-[-5rem] shadow-md min-w-[50rem] p-4 opacity-0 transform scale-95 translate-y-2 invisible group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 z-10">
-                  <div className="grid grid-cols-3">
-                    {nav.subcategory.map((_sub_category, j) => (
-                      <>
-                        <div key={j} className="col-span-1">
-                          <div>
-                            {/* _sub_category Link */}
-                            <div className="mb-2 mt-2">
-                              <Link
-                                href={_sub_category.path}
-                                title={_sub_category.title}
-                                className="font-bold text-black hover:text-gray-700 transition-all"
-                              >
-                                {_sub_category.displayName}
-                              </Link>
-                            </div>
-                            {/* Sub-subcategories */}
-                            {_sub_category.subsubcategory && (
-                              <ul className="space-y-2">
-                                {_sub_category.subsubcategory.map((_subsubcategory, k) => (
-                                  <li key={k} className="hover:bg-gray-200">
-                                    {_subsubcategory.path && (
-                                      <Link
-                                        href={_subsubcategory.path}
-                                        title={_subsubcategory.title}
-                                        className="text-black hover:text-gray-700 transition-all w-full"
-                                      >
-                                        {_subsubcategory.displayName}
-                                      </Link>
-                                    )}
-                                  </li>
-                                ))}
-                              </ul>
-                            )}
-                          </div>
-                        </div>
-                        {/* <div className="col-span-1">
-                          <Image width={500} height={400} src={_sub_category.image} alt='' />
-                        </div> */}
-                      </>
-                    ))}
-                  </div>
+              Home
+              <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+            </Link>
+          </li>
+          <li className="max-lg:mb-2 lg:ml-2 cursor-pointer transition-all relative group">
+            <Link
+              href={PATH_ALL_PRODUCT}
+              title="New Arrival"
+              className="inline-block w-full h-full p-2 text-black font-normal group"
+            >
+              New Arrival
+              <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+            </Link>
+            {/* Subcategories dropdown */}
+            <div className="absolute min-h-[18rem] flex justify-between w-full border border-black overflow-hidden rounded-md left-0 top-full bg-white ml-[-5rem] shadow-md min-w-[50rem] opacity-0 transform scale-95 translate-y-2 invisible group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 z-10">
+              <div className="grid grid-cols-3 gap-4 w-full px-4 py-1">
+                {categories?.map((_sub_category, j) => (
+                  <>
+                    <div key={j} className="col-span-1 h-fit">
+                      <div className="mb-2 mt-2">
+                        <Link
+                          href={PATH_ALL_PRODUCT}
+                          title={_sub_category.name}
+                          className="font-bold text-black hover:text-gray-700 transition-all"
+                        >
+                          {_sub_category.name}
+                        </Link>
+                      </div>
+
+                      {_sub_category.subCategoryList && (
+                        <ul className="space-y-2">
+                          {_sub_category.subCategoryList.map((_subsubcategory, k) => (
+                            <li key={k} className="hover:bg-gray-200">
+                              {_subsubcategory && (
+                                <Link
+                                  href={PATH_ALL_PRODUCT}
+                                  title={_subsubcategory.name}
+                                  className="text-black hover:text-gray-700 transition-all w-full"
+                                >
+                                  {_subsubcategory.name}
+                                </Link>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  </>
+                ))}
+              </div>
+              {categories?.[0] && (
+                <div className="w-[35rem]">
+                  <img
+                    className="w-full h-full"
+                    src={categories[0].subCategoryList?.[0]?.image || categories[0].image || ''}
+                    alt={
+                      categories[0].subCategoryList?.[0]?.image
+                        ? 'Subcategory Image'
+                        : 'No Image Available'
+                    }
+                  />
                 </div>
               )}
-            </li>
-          ))}
+            </div>
+          </li>
+          <li className="max-lg:mb-2 lg:ml-2 cursor-pointer transition-all relative group">
+            <Link
+              href={PATH_ALL_PRODUCT}
+              title="Men"
+              className="inline-block w-full h-full p-2 text-black font-normal group"
+            >
+              Men
+              <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+            </Link>
+            {/* Subcategories dropdown */}
+            <div className="absolute min-h-[18rem] flex justify-between w-full border border-black overflow-hidden rounded-md left-0 top-full bg-white ml-[-5rem] shadow-md min-w-[50rem] opacity-0 transform scale-95 translate-y-2 invisible group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 z-10">
+              <div className="grid grid-cols-3 gap-4 w-full px-4 py-1">
+                {men?.map((_sub_category, j) => (
+                  <>
+                    <div key={j} className="col-span-1 h-fit">
+                      <div className="mb-2 mt-2">
+                        <Link
+                          href={PATH_ALL_PRODUCT}
+                          title={_sub_category.name}
+                          className="font-bold text-black hover:text-gray-700 transition-all"
+                        >
+                          {_sub_category.name}
+                        </Link>
+                      </div>
+
+                      {_sub_category.subCategoryList && (
+                        <ul className="space-y-2">
+                          {_sub_category.subCategoryList.map((_subsubcategory, k) => (
+                            <li key={k} className="hover:bg-gray-200">
+                              {_subsubcategory && (
+                                <Link
+                                  href={PATH_ALL_PRODUCT}
+                                  title={_subsubcategory.name}
+                                  className="text-black hover:text-gray-700 transition-all w-full"
+                                >
+                                  {_subsubcategory.name}
+                                </Link>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  </>
+                ))}
+              </div>
+              {men?.[0] && (
+                <div className="w-[35rem]">
+                  <img
+                    className="w-full h-full"
+                    src={men[0].subCategoryList?.[0]?.image || men[0].image || ''}
+                    alt={
+                      men[0].subCategoryList?.[0]?.image
+                        ? 'Subcategory Image'
+                        : 'No Image Available'
+                    }
+                  />
+                </div>
+              )}
+            </div>
+          </li>
+          <li className="max-lg:mb-2 lg:ml-2 cursor-pointer transition-all relative group">
+            <Link
+              href={PATH_ALL_PRODUCT}
+              title="Women"
+              className="inline-block w-full h-full p-2 text-black font-normal group"
+            >
+              Women
+              <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+            </Link>
+            {/* Subcategories dropdown */}
+            <div className="absolute min-h-[18rem] flex justify-between w-full border border-black overflow-hidden rounded-md left-0 top-full bg-white ml-[-5rem] shadow-md min-w-[50rem] opacity-0 transform scale-95 translate-y-2 invisible group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 z-10">
+              <div className="grid grid-cols-3 gap-4 w-full px-4 py-1">
+                {women?.map((_sub_category, j) => (
+                  <>
+                    <div key={j} className="col-span-1 h-fit">
+                      <div className="mb-2 mt-2">
+                        <Link
+                          href={PATH_ALL_PRODUCT}
+                          title={_sub_category.name}
+                          className="font-bold text-black hover:text-gray-700 transition-all"
+                        >
+                          {_sub_category.name}
+                        </Link>
+                      </div>
+
+                      {_sub_category.subCategoryList && (
+                        <ul className="space-y-2">
+                          {_sub_category.subCategoryList.map((_subsubcategory, k) => (
+                            <li key={k} className="hover:bg-gray-200">
+                              {_subsubcategory && (
+                                <Link
+                                  href={PATH_ALL_PRODUCT}
+                                  title={_subsubcategory.name}
+                                  className="text-black hover:text-gray-700 transition-all w-full"
+                                >
+                                  {_subsubcategory.name}
+                                </Link>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  </>
+                ))}
+              </div>
+              {women?.[0] && (
+                <div className="w-[35rem]">
+                  <img
+                    className="w-full h-full"
+                    src={women[0].subCategoryList?.[0]?.image || women[0].image || ''}
+                    alt={
+                      women[0].subCategoryList?.[0]?.image
+                        ? 'Subcategory Image'
+                        : 'No Image Available'
+                    }
+                  />
+                </div>
+              )}
+            </div>
+          </li>
+          <li className="max-lg:mb-2 lg:ml-2 cursor-pointer transition-all relative group">
+            <Link
+              href={PATH_ABOUT}
+              title="About"
+              className="inline-block w-full h-full p-2 text-black font-normal group"
+            >
+              About
+              <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+            </Link>
+          </li>
+          <li className="max-lg:mb-2 lg:ml-2 cursor-pointer transition-all relative group">
+            <Link
+              href={PATH_CONTACT}
+              title="Contact"
+              className="inline-block w-full h-full p-2 text-black font-normal group"
+            >
+              Contact
+              <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+            </Link>
+          </li>
         </ul>
 
         <div className="bg-white">
