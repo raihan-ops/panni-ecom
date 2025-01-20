@@ -19,3 +19,6 @@ export const GET_ALL_SUB_CATEGORIES = `${API_URL}/sub-categories`;
 
 // products
 export const GET_ALL_PRODUCTS = `${API_URL}/products`;
+
+//colors
+export const GET_ALL_PRODUCT_COLORS = `${API_URL}/product-colors`;

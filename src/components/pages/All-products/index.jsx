@@ -9,11 +9,13 @@ import CategoryDropdown from './CategoryDropdown';
 import ColorsDropdown from './ColorsDropdwon';
 import ProductItem from '../Common/ProductItem';
 import axios from 'axios';
-import { GET_ALL_PRODUCTS, GET_ALL_SUB_CATEGORIES } from '@/helpers/apiUrl';
+import { GET_ALL_PRODUCT_COLORS, GET_ALL_PRODUCTS, GET_ALL_SUB_CATEGORIES } from '@/helpers/apiUrl';
 
 const AllProductsPAge = () => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
+  const [colors, setColors] = useState([]);
+  const [activeColor, setActiveColor] = useState(null);
   const [sortOption, setSortOption] = useState('newest');
   const [loading, setLoading] = useState(true);
   const [totalProducts, setTotalProducts] = useState(0);
@@ -33,14 +35,19 @@ const AllProductsPAge = () => {
 
     // Fetch all products initially
     fetchProducts();
+    fetchColors();
   }, []);
 
   const fetchProducts = async (categoryIds = []) => {
     try {
       const categoryQuery =
         categoryIds.length > 0 ? `&subCategoryIds=${categoryIds.join(',')}` : '';
+      const colorQuery = activeColor ? `&color=${encodeURIComponent(activeColor)}` : '';
+
       const sortQuery = `&sort=${sortOption}`;
-      const response = await axios.get(`${GET_ALL_PRODUCTS}?size=10${categoryQuery}${sortQuery}`);
+      const response = await axios.get(
+        `${GET_ALL_PRODUCTS}?size=10${categoryQuery}${sortQuery}${colorQuery}`,
+      );
       setProducts(response.data?.content);
       setTotalProducts(response.data?.totalElements);
       setPageTotal(response.data?.content?.length);
@@ -51,10 +58,22 @@ const AllProductsPAge = () => {
     }
   };
 
+  const fetchColors = async () => {
+    try {
+      const response = await axios.get(`${GET_ALL_PRODUCT_COLORS}`);
+      setColors(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching colors:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Re-fetch products whenever sortOption changes
   useEffect(() => {
     fetchProducts(selectedCategoryIds, sortOption);
-  }, [sortOption]);
+  }, [sortOption, selectedCategoryIds, activeColor]);
 
   const handleCategoryClick = (categoryId) => {
     setSelectedCategoryIds(
@@ -67,6 +86,10 @@ const AllProductsPAge = () => {
 
   const handleSortChange = ({ key }) => {
     setSortOption(key); // Update the sort option state
+  };
+
+  const handelColorCode = (code) => {
+    setActiveColor(code);
   };
 
   const items = [
@@ -127,7 +150,7 @@ const AllProductsPAge = () => {
 
                     {/* // <!-- color box --> */}
                     {/* <ColorsDropdwon /> */}
-                    <ColorsDropdown />
+                    <ColorsDropdown colors={colors} onColorClick={handelColorCode} />
                   </div>
                 </form>
               </div>

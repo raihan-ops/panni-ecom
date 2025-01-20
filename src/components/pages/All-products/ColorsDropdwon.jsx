@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 
-const ColorsDropdown = () => {
+const ColorsDropdown = ({ colors, onColorClick }) => {
   const [toggleDropdown, setToggleDropdown] = useState(true);
-  const [activeColor, setActiveColor] = useState('blue');
-
-  const colors = ['red', 'blue', 'orange', 'pink', 'purple'];
+  const [activeColor, setActiveColor] = useState('');
 
   return (
     <div className="bg-gray-100 shadow-1 rounded-lg">
       <div
-        onClick={() => setToggleDropdown(!toggleDropdown)}
+        onClick={() => {
+          setToggleDropdown(!toggleDropdown);
+        }}
         className={`cursor-pointer flex items-center justify-between py-3 pl-6 pr-5 ${
           toggleDropdown && 'shadow-filter'
         }`}
@@ -39,24 +39,31 @@ const ColorsDropdown = () => {
 
       <div className={`flex-wrap gap-2 p-6 ${toggleDropdown ? 'flex' : 'hidden'}`}>
         {colors.map((color, key) => (
-          <label key={key} htmlFor={color} className="cursor-pointer select-none flex items-center">
+          <label
+            key={key}
+            htmlFor={color.code}
+            className="cursor-pointer select-none flex items-center"
+          >
             <div className="relative">
               <input
                 type="radio"
                 name="color"
-                id={color}
+                id={color.code}
                 className="sr-only"
-                onChange={() => setActiveColor(color)}
+                onChange={() => {
+                  setActiveColor(color.code);
+                  onColorClick(color.name);
+                }}
               />
               <div
                 className={`flex items-center justify-center w-5 h-5 rounded-full ${
-                  activeColor === color && 'border'
+                  activeColor === color.code ? 'border' : ''
                 }`}
-                style={{ borderColor: `${color}` }}
+                style={{ borderColor: `${color.code}` }}
               >
                 <span
                   className="block w-3 h-3 rounded-full"
-                  style={{ backgroundColor: `${color}` }}
+                  style={{ backgroundColor: `${color.code}` }}
                 ></span>
               </div>
             </div>
