@@ -201,9 +201,11 @@ const AllProductsPAge = () => {
                 </div>
                 <div className="grid grid-cols-3 gap-4">
                   {products.map((item, key) => (
-                    <Link key={key} href={`products/${item?.slug} `}>
-                      <ProductItem item={item} key={key} />
-                    </Link>
+                    <div key={key}>
+                      <Link href={`products/${item?.slug}`}>
+                        <ProductItem item={item} />
+                      </Link>
+                    </div>
                   ))}
                 </div>
               </div>

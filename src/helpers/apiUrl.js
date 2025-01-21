@@ -29,3 +29,6 @@ export const GET_PRODUCT_BY_SLUG = `${API_URL}/products/slug`;
 
 //colors
 export const GET_ALL_PRODUCT_COLORS = `${API_URL}/product-colors`;
+
+//offer
+export const GET_ACTIVE_OFFER = `${API_URL}/active-offer`;

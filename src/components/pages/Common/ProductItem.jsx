@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 
 const ProductItem = ({ item }) => {
   const imageSrc =
@@ -122,7 +121,7 @@ const ProductItem = ({ item }) => {
         className="font-medium text-black ease-out duration-200 hover:text-blue mb-0"
         // onClick={() => handleProductDetails()}
       >
-        <Link href={'//' + item?.slug}> {item.name} </Link>
+        {item.name}
       </h3>
 
       <span className="flex items-center gap-2 font-medium text-sm">
