@@ -126,8 +126,25 @@ const ProductItem = ({ item }) => {
       </h3>
 
       <span className="flex items-center gap-2 font-medium text-sm">
-        <span className="text-black">৳{item.discountedPrice}</span>
-        <span className="text-gray-400 line-through">৳{item.price}</span>
+        {item.discountPercentage > 0 ? (
+          <div>
+            <span className="text-black">
+              {' '}
+              ৳{(item.price * (1 - item.discountPercentage / 100)).toFixed(2)}
+            </span>
+            <span className="text-gray-400 line-through">৳{item.price}</span>
+          </div>
+        ) : item.productOffer && item.productOffer?.discountPercentage > 0 ? (
+          <>
+            <span className="text-black">
+              {' '}
+              ৳{(item.price * (1 - item.productOffer?.discountPercentage / 100)).toFixed(2)}
+            </span>
+            <span className="text-gray-400 line-through">৳{item.price}</span>
+          </>
+        ) : (
+          <span className="text-black ">৳{item.price}</span>
+        )}
       </span>
     </div>
   );

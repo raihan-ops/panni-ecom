@@ -113,14 +113,30 @@ const ProductDetails = () => {
               </div>
 
               <h3 className="font-medium text-custom-1 mb-4">
-                <span className="text-sm sm:text-base text-dark">
-                  Price: ${product?.price}
-                  {/*Price: {}*/}
-                </span>
-                <span className="line-through text-gray-400 text-sm">
-                  {' '}
-                  {/* ${product.discountedPrice}{" "} */}
-                  ৳60{' '}
+                <span className="flex items-center gap-2 font-medium text-sm">
+                  {product?.discountPercentage > 0 ? (
+                    <div>
+                      <span className="text-black">
+                        {' '}
+                        ৳{(product.price * (1 - product.discountPercentage / 100)).toFixed(2)}
+                      </span>
+                      <span className="text-gray-400 line-through">৳{product.price}</span>
+                    </div>
+                  ) : product?.productOffer && product.productOffer?.discountPercentage > 0 ? (
+                    <>
+                      <span className="text-black">
+                        {' '}
+                        ৳
+                        {(
+                          product.price *
+                          (1 - product.productOffer?.discountPercentage / 100)
+                        ).toFixed(2)}
+                      </span>
+                      <span className="text-gray-400 line-through">৳{product.price}</span>
+                    </>
+                  ) : (
+                    <span className="text-black ">৳{product?.price}</span>
+                  )}
                 </span>
               </h3>
 
@@ -275,7 +291,7 @@ const ProductDetails = () => {
               className={`rounded-xl bg-white shadow-1 p-4 sm:p-6 mt-10  ${activeTab === 'tabOne' ? 'block' : 'hidden'}`}
             >
               <div className="rounded-md even:bg-gray-1 py-4 px-4 sm:px-5">
-                {product.description}
+                {product?.description ? product.description : ''}
               </div>
             </div>
           </div>
@@ -289,7 +305,7 @@ const ProductDetails = () => {
               }`}
             >
               {/*  info item  */}
-              {product.additionalInfo}
+              {product?.additionalInfo ?? ''}
             </div>
           </div>
           {/*  tab content two end  */}
