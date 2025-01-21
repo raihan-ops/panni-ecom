@@ -1,4 +1,5 @@
 export const ROOT_URL = 'http://192.168.0.109:7001';
+// export const ROOT_URL = 'https://5621-220-247-128-71.ngrok-free.app';
 const API_VERSION = '/api/1.0.0';
 export const API_URL = `${ROOT_URL}${API_VERSION}`;
 
@@ -10,6 +11,11 @@ export const USER_OTP_RESEND_API_URL = `${API_URL}/client/resend-otp`;
 export const GET_ALL_SECTIONS_API_URL = `${API_URL}/sections`;
 
 /* ========== Public ============*/
+
+//Navbar
+export const GET_NAVBAR_CATEGORIES_NEW_ARRIVAL = `${API_URL}/categories/type/NEW_ARRIVAL`;
+export const GET_NAVBAR_CATEGORIES_MEN = `${API_URL}/categories/type/MEN`;
+export const GET_NAVBAR_CATEGORIES_WOMEN = `${API_URL}/categories/type/WOMEN`;
 
 //banner
 export const GET_ALL_BANNERS = `${API_URL}/banners`;

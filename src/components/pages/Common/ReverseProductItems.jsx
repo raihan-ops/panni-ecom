@@ -37,7 +37,7 @@ const ReverseProductItems = () => {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-7 gap-y-9">
           {/* <!-- New Arrivals item --> */}
-          {products.slice(0, 4).map((item, key) => (
+          {products?.slice(0, 4).map((item, key) => (
             <ProductItem item={item} key={key} />
           ))}
         </div>
@@ -46,20 +46,20 @@ const ReverseProductItems = () => {
       <div className="grid grid-cols-12 grid-rows-1 grid-flow-col gap-x-7 gap-y-9 mt-7">
         <div className="col-span-6 row-start-1">
           <div className="grid grid-cols-2 gap-x-7 gap-y-9">
-            {products.slice(4, 6).map((item, key) => (
+            {products?.slice(4, 6).map((item, key) => (
               <ProductItem item={item} key={key} />
             ))}
           </div>
         </div>
         <div className="col-span-6 row-start-2">
           <div className="grid grid-cols-2 gap-x-7 gap-y-9">
-            {products.slice(6, 8).map((item, key) => (
+            {products?.slice(6, 8).map((item, key) => (
               <ProductItem item={item} key={key} />
             ))}
           </div>
         </div>
         <div className="col-span-6 row-span-2 pImgsecMain">
-          {products.slice(8, 9).map((item, key) => (
+          {products?.slice(8, 9).map((item, key) => (
             <ProductItem item={item} key={key} />
           ))}
         </div>
