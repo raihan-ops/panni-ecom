@@ -10,6 +10,7 @@ import ColorsDropdown from './ColorsDropdwon';
 import ProductItem from '../Common/ProductItem';
 import axios from 'axios';
 import { GET_ALL_PRODUCT_COLORS, GET_ALL_PRODUCTS, GET_ALL_SUB_CATEGORIES } from '@/helpers/apiUrl';
+import Link from 'next/link';
 
 const AllProductsPAge = () => {
   const [categories, setCategories] = useState([]);
@@ -200,7 +201,11 @@ const AllProductsPAge = () => {
                 </div>
                 <div className="grid grid-cols-3 gap-4">
                   {products.map((item, key) => (
-                    <ProductItem item={item} key={key} />
+                    <div key={key}>
+                      <Link href={`products/${item?.slug}`}>
+                        <ProductItem item={item} />
+                      </Link>
+                    </div>
                   ))}
                 </div>
               </div>
