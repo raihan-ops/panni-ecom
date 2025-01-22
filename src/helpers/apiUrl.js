@@ -1,5 +1,5 @@
-// export const ROOT_URL = 'http://192.168.0.109:7001';
-export const ROOT_URL = 'http://localhost:7001';
+export const ROOT_URL = 'http://192.168.0.109:7001';
+// export const ROOT_URL = 'http://localhost:7001';
 // export const ROOT_URL = 'https://5621-220-247-128-71.ngrok-free.app';
 const API_VERSION = '/api/1.0.0';
 export const API_URL = `${ROOT_URL}${API_VERSION}`;
