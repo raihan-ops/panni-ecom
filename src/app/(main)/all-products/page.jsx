@@ -1,10 +1,10 @@
 import AllProductsPAge from '@/components/pages/All-products';
 import React from 'react';
 
-const AllProducts = () => {
+const AllProducts = ({ searchParams }) => {
   return (
     <div>
-      <AllProductsPAge />
+      <AllProductsPAge params={searchParams} />
     </div>
   );
 };
