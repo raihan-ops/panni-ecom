@@ -10,9 +10,11 @@ import {
   CHANGE_PASSWORD_URL,
   FORGET_PASSWORD_URL,
   LOGIN_URL_API_URL,
+  RESEND_OTP_API_URL,
   RESET_PASSWORD_AUTH_CODE,
   SEND_OTP,
   SIGNUP_URL,
+  USER_OTP_VERIFY_API_URL,
   USER_PROFILE_API_URL,
   VERIFY_OTP,
 } from '@/helpers/apiUrl';
@@ -57,7 +59,7 @@ export default function AuthContextProvider({ children }) {
 
   const loginHandler = async (body, callback) => {
     await api.post({ url: LOGIN_URL_API_URL, setLoading, body }, (response) => {
-      const token = response.data.token;
+      const token = response.data.token.access;
       localStorage.setItem(ACCESS_TOKEN, token);
       document.cookie = `${ACCESS_TOKEN}=${token}; path=/`;
 
@@ -78,9 +80,10 @@ export default function AuthContextProvider({ children }) {
     });
   };
 
-  const forgetPassword = async (body, callback) => {
-    await api.updateData({ url: FORGET_PASSWORD_URL, setLoading, body }, () => {
-      callback();
+  const forgotPasswordHandler = async (body, callback) => {
+    await api.post({ url: `${FORGET_PASSWORD_URL}?email=${body}`, setLoading }, (res) => {
+      Toast('success', 'Success', 'Otp has been send successfully.');
+      callback(res);
     });
   };
   const resetPasswordAuth = async (body, callback) => {
@@ -93,20 +96,33 @@ export default function AuthContextProvider({ children }) {
 
   const signupHandler = async (body, callback) => {
     await api.post({ url: SIGNUP_URL, setLoading, body }, (response) => {
-      localStorage.setItem(ACCESS_TOKEN, response.data.token);
+      // localStorage.setItem(ACCESS_TOKEN, response.data.token);
       callback(response);
     });
   };
 
   const otpVerify = async (body, callback) => {
-    await api.getSingleData(
+    await api.post(
       {
-        url: `${VERIFY_OTP}?phone=${body.phone}&otp=${body.otp}&type=signup`,
+        url: `${VERIFY_OTP}?email=${body.email}&code=${body.otp}`,
         setLoading,
       },
       (response) => {
-        localStorage.setItem(ACCESS_TOKEN, response.data.token);
+        localStorage.setItem(ACCESS_TOKEN, response.data.token.access);
         callback();
+      },
+    );
+  };
+
+  const forgotOtpVerify = async (body, callback) => {
+    await api.post(
+      {
+        url: `${USER_OTP_VERIFY_API_URL}?email=${body.email}&code=${body.otp}`,
+        setLoading,
+      },
+      (response) => {
+        // localStorage.setItem(ACCESS_TOKEN, response.data.token.access);
+        callback(response);
       },
     );
   };
@@ -129,42 +145,36 @@ export default function AuthContextProvider({ children }) {
     );
   };
 
-  const sendOtp = async (body, callback) => {
-    await api.getSingleData(
+  const resendSendOtp = async (body, callback) => {
+    await api.post(
       {
-        url: `${SEND_OTP}?phone=${body}&type=signup`,
+        url: `${RESEND_OTP_API_URL}?email=${body}`,
         setLoading,
       },
       (response) => {
-        localStorage.setItem(ACCESS_TOKEN, response.data.token);
+        // localStorage.setItem(ACCESS_TOKEN, response.data.token);
+        Toast('success', 'Success', 'Otp has been send successfully.');
         if (callback) {
           callback();
         }
       },
     );
   };
-  const sendForgetPasswordOtp = async (body, callback) => {
-    await api.getSingleData(
+  const resetPasswordHandler = async (body, callback) => {
+    await api.post(
       {
-        url: `${SEND_OTP}?phone=${body}&type=forgotPassword`,
+        url: `${CHANGE_PASSWORD_URL}?email=${body.email}&code=${body.otp}`,
         setLoading,
+        body: {
+          newPassword: body.newPassword,
+        },
       },
       (response) => {
-        localStorage.setItem(ACCESS_TOKEN, response.data.token);
+        // localStorage.setItem(ACCESS_TOKEN, response.data.token.access);
+        Toast('success', 'Success', 'Password changed successfully.');
         if (callback) {
-          callback();
+          callback(response);
         }
-      },
-    );
-  };
-  const otpVerifyForgetPassword = async (body, callback) => {
-    await api.getSingleData(
-      {
-        url: `${VERIFY_OTP}?phone=${body.phone}&otp=${body.otp}&type=forgotPassword`,
-        setLoading,
-      },
-      () => {
-        callback();
       },
     );
   };
@@ -180,7 +190,7 @@ export default function AuthContextProvider({ children }) {
         errorHandle: () => errorHandle(),
       },
       (response) => {
-        setProfile(response.data);
+        setProfile(response.data.info);
         setIsLogin(true);
       },
     );
@@ -204,7 +214,7 @@ export default function AuthContextProvider({ children }) {
     setProfile(null);
     localStorage.clear();
     document.cookie = `${ACCESS_TOKEN}=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
-    router.push('/login');
+    // router.push('/login');
   };
 
   return (
@@ -225,6 +235,10 @@ export default function AuthContextProvider({ children }) {
         otpVerify,
         loginHandler,
         onRedirectionPage,
+        resendSendOtp,
+        forgotPasswordHandler,
+        forgotOtpVerify,
+        resetPasswordHandler,
         isToken: () => (localStorage.getItem(ACCESS_TOKEN) ? true : false),
         isProtectedRoute: (path) => protectedRoutes.some((route) => path.startsWith(route)),
       }}

@@ -2,8 +2,6 @@ export const PATH_HOME = '/';
 export const PATH_CONTACT = '/contact';
 export const PATH_ABOUT = '/about';
 export const PATH_ALL_PRODUCT = '/all-products';
-export const LOGIN = '/signin';
-export const SIGN_UP = '/signup';
 
 // export const PATH_CAR = '/profile-list';
 
@@ -19,8 +17,8 @@ export const SIGN_UP = '/signup';
 // export const PATH_CONTACT_US = '/contact-us';
 
 // auth
-export const PATH_LOGIN = '/login';
-export const PATH_REGISTER = '/register';
+export const LOGIN = '/signin';
+export const SIGN_UP = '/signup';
 export const PATH_FORGOT_PASSWORD = '/forgot-password';
 export const PATH_RESET_PASSWORD = '/reset-password';
 export const PATH_OTP_VERIFY = '/otp-verify';

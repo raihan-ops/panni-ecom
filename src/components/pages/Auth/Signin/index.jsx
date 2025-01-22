@@ -7,9 +7,10 @@ import { useForm } from 'react-hook-form';
 import { useAuthContext } from '@/contexts/AuthContextProvider';
 import { useRouter } from 'next/navigation';
 import { Toast } from '@/components/shared/toast/Toast';
+import { PATH_FORGOT_PASSWORD } from '@/helpers/Slugs';
 
 const Signin = () => {
-  const { loginHandler } = useAuthContext();
+  const { loginHandler, loading } = useAuthContext();
   const router = useRouter();
   const [showPassword, setShowPassword] = React.useState(false);
   const {
@@ -134,12 +135,13 @@ const Signin = () => {
                     Remember me
                   </label>
                 </div>
-                <Link href="/forgot-password" className="text-sm text-blue-700 hover:underline">
+                <Link href={PATH_FORGOT_PASSWORD} className="text-sm text-blue-700 hover:underline">
                   Forgot Password?
                 </Link>
               </div>
 
               <button
+                disabled={loading}
                 type="submit"
                 className="w-full flex justify-center font-medium text-white bg-black border py-3 px-6 rounded-lg ease-out duration-200 hover:bg-white hover:text-black"
               >

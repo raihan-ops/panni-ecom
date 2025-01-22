@@ -4,13 +4,14 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthContext } from '@/contexts/AuthContextProvider';
 import Breadcrumb from '../../Common/Breadcrumb';
+import { PATH_HOME, PATH_RESET_PASSWORD } from '@/helpers/Slugs';
 
 const OTPVerify = () => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [timer, setTimer] = useState(60);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { otpVerify, sendOtp } = useAuthContext();
+  const { otpVerify, resendSendOtp, forgotOtpVerify, loading } = useAuthContext();
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const email = searchParams.get('email');
@@ -47,7 +48,7 @@ const OTPVerify = () => {
 
   const handleResendOTP = async () => {
     if (timer === 0) {
-      await sendOtp(email, () => {
+      await resendSendOtp(email, () => {
         setTimer(60);
       });
     }
@@ -64,9 +65,15 @@ const OTPVerify = () => {
     const otpString = otp.join('');
 
     if (otpString.length === 6) {
-      await otpVerify({ email, otp: otpString, type }, () => {
-        //   router.push('/dashboard');
-      });
+      if (type === 'forgot-password') {
+        forgotOtpVerify({ email, otp: otpString }, () => {
+          router.push(`${PATH_RESET_PASSWORD}?email=${email}&otp=${otpString}`);
+        });
+      } else {
+        otpVerify({ email, otp: otpString }, () => {
+          router.push(PATH_HOME);
+        });
+      }
     }
   };
 
@@ -100,28 +107,31 @@ const OTPVerify = () => {
               </div>
 
               <button
+                disabled={loading}
                 type="submit"
                 className="w-full flex justify-center font-medium text-white bg-black py-3 px-6 rounded-lg border ease-out duration-200 hover:bg-white hover:text-black"
               >
                 Verify OTP
               </button>
 
-              <div className="text-center mt-4">
-                <p className="text-sm text-gray-600">
-                  Didn't receive the code?{' '}
-                  {timer > 0 ? (
-                    <span>Resend in {timer}s</span>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={handleResendOTP}
-                      className="text-blue-700 hover:underline"
-                    >
-                      Resend OTP
-                    </button>
-                  )}
-                </p>
-              </div>
+              {type !== 'forgot-password' && (
+                <div className="text-center mt-4">
+                  <p className="text-sm text-gray-600">
+                    Didn't receive the code?{' '}
+                    {timer > 0 ? (
+                      <span>Resend in {timer}s</span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleResendOTP}
+                        className="text-blue-700 hover:underline"
+                      >
+                        Resend OTP
+                      </button>
+                    )}
+                  </p>
+                </div>
+              )}
             </form>
           </div>
         </div>
