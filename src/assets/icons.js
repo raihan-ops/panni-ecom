@@ -6,7 +6,8 @@ import icon5 from './icons/icon-05.svg';
 import icon6 from './icons/icon-06.svg';
 import icon7 from './icons/icon-07.svg';
 import icon8 from './icons/icon-08.svg';
-
+import InStock from './icons/instock.svg';
+import OutOfStock from './icons/out-of-stock.svg';
 export const Icons = {
   icon1,
   icon2,
@@ -16,4 +17,6 @@ export const Icons = {
   icon6,
   icon7,
   icon8,
+  InStock,
+  OutOfStock,
 };

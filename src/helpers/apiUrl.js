@@ -35,6 +35,10 @@ export const GET_ALL_SUB_CATEGORIES = `${API_URL}/sub-categories`;
 
 // products
 export const GET_ALL_PRODUCTS = `${API_URL}/products`;
+export const GET_PRODUCT_BY_SLUG = `${API_URL}/products/slug`;
 
 //colors
 export const GET_ALL_PRODUCT_COLORS = `${API_URL}/product-colors`;
+
+//offer
+export const GET_ACTIVE_OFFER = `${API_URL}/active-offer`;

@@ -1,9 +1,8 @@
 import React from 'react';
 import Hero from './Hero';
 import Categories from './Categories';
-import NewArrival from './NewArrivals';
 import PromoBanner from './PromoBanner';
-import CounDown from './Countdown';
+import CountDown from './Countdown';
 import SectionProductItems from '../Common/SectionProductItems';
 import ReverseProductItems from '../Common/ReverseProductItems';
 import PromoBannerTwice from './PromoBanner/PromoBannerTwice';
@@ -18,7 +17,7 @@ const HomePage = () => {
       <PromoBanner />
       <ReverseProductItems />
       <PromoBannerTwice />
-      <CounDown />
+      <CountDown />
     </main>
   );
 };
