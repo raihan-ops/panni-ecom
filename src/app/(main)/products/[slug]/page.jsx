@@ -312,7 +312,7 @@ const ProductDetails = () => {
           {/* tab content end  */}
         </div>
 
-        <RelatedProducts />
+        <RelatedProducts productId={product?.id} />
       </section>
     </div>
   );
