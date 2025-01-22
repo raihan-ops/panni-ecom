@@ -5,6 +5,18 @@ import { ACCESS_TOKEN } from '@/helpers/constant';
 import { usePathname, useRouter } from 'next/navigation';
 import api from '@/providers/Api';
 import { PATH_HOME } from '@/helpers/Slugs';
+import { Toast } from '@/components/shared/toast/Toast';
+import {
+  CHANGE_PASSWORD_URL,
+  FORGET_PASSWORD_URL,
+  LOGIN_URL_API_URL,
+  RESET_PASSWORD_AUTH_CODE,
+  SEND_OTP,
+  SIGNUP_URL,
+  USER_PROFILE_API_URL,
+  VERIFY_OTP,
+} from '@/helpers/apiUrl';
+import { protectedRoutes } from '@/helpers/constant';
 
 const AuthContext = createContext();
 
@@ -26,196 +38,153 @@ export default function AuthContextProvider({ children }) {
   const router = useRouter();
   const pathName = usePathname();
 
-  // useEffect(() => {
-  //   const token = isToken();
-  //   if (token) {
-  //     if (['/login'].includes(pathName)) router.push('/');
-  //     getUserProfile();
-  //   } else {
-  //     setProfileLoading(false);
-  //     if (!['/', '/login', '/register'].includes(pathName))
-  //       router.push('/login');
-  //   }
-  // }, [isLogin]);
+  useEffect(() => {
+    const token = localStorage.getItem(ACCESS_TOKEN);
+    if (token) {
+      document.cookie = `${ACCESS_TOKEN}=${token}; path=/`;
+      getUserProfile();
+    } else {
+      setProfileLoading(false);
+      document.cookie = `${ACCESS_TOKEN}=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
 
-  const isToken = () => {
-    // if (typeof window !== 'undefined') {
-    // }
-    // return false;
-    return localStorage?.getItem(ACCESS_TOKEN) ? true : false;
+      const isProtectedPath = protectedRoutes.some((route) => pathName.startsWith(route));
+
+      if (isProtectedPath) {
+        router.push(`/login?redirectTo=${pathName}`);
+      }
+    }
+  }, [pathName]);
+
+  const loginHandler = async (body, callback) => {
+    await api.post({ url: LOGIN_URL_API_URL, setLoading, body }, (response) => {
+      const token = response.data.token;
+      localStorage.setItem(ACCESS_TOKEN, token);
+      document.cookie = `${ACCESS_TOKEN}=${token}; path=/`;
+
+      setRole(response.data.user?.role?.alias);
+      setProfile(response.data.user);
+      setIsLogin(true);
+
+      const params = new URLSearchParams(window.location.search);
+      const redirectTo = params.get('redirectTo');
+      if (redirectTo) {
+        router.push(redirectTo);
+      } else {
+        router.push(PATH_HOME);
+      }
+      Toast('success', 'Success', ' Login successfully.');
+
+      callback(response);
+    });
   };
 
-  // const login = async (body, callback) => {
-  //   await api.post({ url: LOGIN_URL, setLoading, body }, (response) => {
-  //     localStorage.setItem(ACCESS_TOKEN, response.data.token);
-  //     setRole(response.data.user?.role?.alias);
-  //     setProfile(response.data.user);
-  //     // setIsLogin(true);
-  //     callback(response);
-  //   });
-  // };
-  // const forgetPassword = async (body, callback) => {
-  //   await api.updateData({ url: FORGET_PASSWORD_URL, setLoading, body }, () => {
-  //     callback();
-  //   });
-  // };
-  // const resetPasswordAuth = async (body, callback) => {
-  //   await api.post(
-  //     { url: RESET_PASSWORD_AUTH_CODE, setLoading, body },
-  //     (response) => {
-  //       setRole(response.data.user?.role?.alias);
-  //       setProfile(response.data.user);
-  //       callback();
-  //     },
-  //   );
-  // };
+  const forgetPassword = async (body, callback) => {
+    await api.updateData({ url: FORGET_PASSWORD_URL, setLoading, body }, () => {
+      callback();
+    });
+  };
+  const resetPasswordAuth = async (body, callback) => {
+    await api.post({ url: RESET_PASSWORD_AUTH_CODE, setLoading, body }, (response) => {
+      setRole(response.data.user?.role?.alias);
+      setProfile(response.data.user);
+      callback();
+    });
+  };
 
-  // const signup = async (body, callback) => {
-  //   await api.post({ url: SIGNUP_URL, setLoading, body }, (response) => {
-  //     localStorage.setItem(ACCESS_TOKEN, response.data.token);
-  //     callback();
-  //   });
-  // };
+  const signupHandler = async (body, callback) => {
+    await api.post({ url: SIGNUP_URL, setLoading, body }, (response) => {
+      localStorage.setItem(ACCESS_TOKEN, response.data.token);
+      callback(response);
+    });
+  };
 
-  // const otpVerify = async (body, callback) => {
-  //   await api.getSingleData(
-  //     {
-  //       url: `${VERIFY_OTP}?phone=${body.phone}&otp=${body.otp}&type=signup`,
-  //       setLoading,
-  //     },
-  //     (response) => {
-  //       localStorage.setItem(ACCESS_TOKEN, response.data.token);
-  //       callback();
-  //     },
-  //   );
-  // };
+  const otpVerify = async (body, callback) => {
+    await api.getSingleData(
+      {
+        url: `${VERIFY_OTP}?phone=${body.phone}&otp=${body.otp}&type=signup`,
+        setLoading,
+      },
+      (response) => {
+        localStorage.setItem(ACCESS_TOKEN, response.data.token);
+        callback();
+      },
+    );
+  };
 
-  // const profilePersonalInfoUpdate = async (body) => {
-  //   await api.updateData(
-  //     {
-  //       url: UPDATE_USER_URL,
-  //       setLoading: setLoading,
-  //       body: body,
-  //     },
-  //     async () => {
-  //       Toast('success', 'Success', 'Profile information update successfully');
-  //       getUserProfile();
-  //     },
-  //   );
-  // };
-  // const profileUpdateOtpVerify = async (body, callback) => {
-  //   await api.getSingleData(
-  //     {
-  //       url: `${VERIFY_OTP}?phone=${body.phone}&otp=${body.otp}&type=update%20info`,
-  //       setLoading,
-  //     },
-  //     () => {
-  //       callback();
-  //     },
-  //   );
-  // };
-  // const profileUpdateSendOtp = async (body, callback) => {
-  //   await api.getSingleData(
-  //     {
-  //       url: `${SEND_OTP}?phone=${body}&type=update%20info`,
-  //       setLoading,
-  //     },
-  //     () => {
-  //       callback();
-  //     },
-  //   );
-  // };
-  // const profileChangePassword = async (body, callback) => {
-  //   const newValues = {
-  //     currentPassword: body.currentPassword,
-  //     newPassword: body.newPassword,
-  //   };
-  //   await api.updateData(
-  //     {
-  //       url: CHANGE_PASSWORD_URL,
-  //       setLoading: setLoading,
-  //       body: newValues,
-  //     },
-  //     async () => {
-  //       Toast('success', 'Success', 'Password changed successfully.');
-  //       callback();
-  //     },
-  //   );
-  // };
-  // const sellerProfileUpdate = async (body, callback) => {
-  //   await api.updateData(
-  //     {
-  //       url: SELLER_PROFILE_UPDATE,
-  //       setLoading,
-  //       body,
-  //     },
-  //     () => {
-  //       Toast(
-  //         'success',
-  //         'profile update',
-  //         'seller profile update successfully!',
-  //       );
-  //       callback();
-  //       getUserProfile();
-  //     },
-  //   );
-  // };
-  // const sendOtp = async (body, callback) => {
-  //   await api.getSingleData(
-  //     {
-  //       url: `${SEND_OTP}?phone=${body}&type=signup`,
-  //       setLoading,
-  //     },
-  //     (response) => {
-  //       localStorage.setItem(ACCESS_TOKEN, response.data.token);
-  //       if (callback) {
-  //         callback();
-  //       }
-  //     },
-  //   );
-  // };
-  // const sendForgetPasswordOtp = async (body, callback) => {
-  //   await api.getSingleData(
-  //     {
-  //       url: `${SEND_OTP}?phone=${body}&type=forgotPassword`,
-  //       setLoading,
-  //     },
-  //     (response) => {
-  //       localStorage.setItem(ACCESS_TOKEN, response.data.token);
-  //       if (callback) {
-  //         callback();
-  //       }
-  //     },
-  //   );
-  // };
-  // const otpVerifyForgetPassword = async (body, callback) => {
-  //   await api.getSingleData(
-  //     {
-  //       url: `${VERIFY_OTP}?phone=${body.phone}&otp=${body.otp}&type=forgotPassword`,
-  //       setLoading,
-  //     },
-  //     () => {
-  //       callback();
-  //     },
-  //   );
-  // };
+  const profileChangePassword = async (body, callback) => {
+    const newValues = {
+      currentPassword: body.currentPassword,
+      newPassword: body.newPassword,
+    };
+    await api.updateData(
+      {
+        url: CHANGE_PASSWORD_URL,
+        setLoading: setLoading,
+        body: newValues,
+      },
+      async () => {
+        Toast('success', 'Success', 'Password changed successfully.');
+        callback();
+      },
+    );
+  };
 
-  // const getUserProfile = async () => {
-  //   const errorHandle = () => {
-  //     logout();
-  //   };
-  //   api.getSingleData(
-  //     {
-  //       url: USER_PROFILE_API_URL,
-  //       setLoading: setProfileLoading,
-  //       errorHandle: () => errorHandle(),
-  //     },
-  //     (response) => {
-  //       setProfile(response.data);
-  //       setIsLogin(true);
-  //     },
-  //   );
-  // };
+  const sendOtp = async (body, callback) => {
+    await api.getSingleData(
+      {
+        url: `${SEND_OTP}?phone=${body}&type=signup`,
+        setLoading,
+      },
+      (response) => {
+        localStorage.setItem(ACCESS_TOKEN, response.data.token);
+        if (callback) {
+          callback();
+        }
+      },
+    );
+  };
+  const sendForgetPasswordOtp = async (body, callback) => {
+    await api.getSingleData(
+      {
+        url: `${SEND_OTP}?phone=${body}&type=forgotPassword`,
+        setLoading,
+      },
+      (response) => {
+        localStorage.setItem(ACCESS_TOKEN, response.data.token);
+        if (callback) {
+          callback();
+        }
+      },
+    );
+  };
+  const otpVerifyForgetPassword = async (body, callback) => {
+    await api.getSingleData(
+      {
+        url: `${VERIFY_OTP}?phone=${body.phone}&otp=${body.otp}&type=forgotPassword`,
+        setLoading,
+      },
+      () => {
+        callback();
+      },
+    );
+  };
+
+  const getUserProfile = async () => {
+    const errorHandle = () => {
+      logout();
+    };
+    api.getSingleData(
+      {
+        url: USER_PROFILE_API_URL,
+        setLoading: setProfileLoading,
+        errorHandle: () => errorHandle(),
+      },
+      (response) => {
+        setProfile(response.data);
+        setIsLogin(true);
+      },
+    );
+  };
 
   const onRedirectionPage = () => {
     if (router.query && router.query.redirectTo) {
@@ -234,6 +203,7 @@ export default function AuthContextProvider({ children }) {
     setIsLogin(false);
     setProfile(null);
     localStorage.clear();
+    document.cookie = `${ACCESS_TOKEN}=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
     router.push('/login');
   };
 
@@ -249,23 +219,14 @@ export default function AuthContextProvider({ children }) {
         role,
         permissions: profile ? profile.permissions : [],
         logout,
-        // getUserProfile,
-        // signup,
-        // forgetPassword,
+        signupHandler,
         resetPassword,
         setResetPassword,
-        // resetPasswordAuth,
-        // otpVerify,
-        // sendOtp,
-        // profileUpdateOtpVerify,
-        // profileUpdateSendOtp,
-        // sellerProfileUpdate,
-        // profilePersonalInfoUpdate,
-        // profileChangePassword,
-        // sendForgetPasswordOtp,
-        // otpVerifyForgetPassword,
+        otpVerify,
+        loginHandler,
         onRedirectionPage,
-        isToken,
+        isToken: () => (localStorage.getItem(ACCESS_TOKEN) ? true : false),
+        isProtectedRoute: (path) => protectedRoutes.some((route) => path.startsWith(route)),
       }}
     >
       {children}
