@@ -3,8 +3,10 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useGlobalContext } from '@/contexts/GlobalContextProvider';
 
 const ProductItem = ({ item }) => {
+  const { updateCart } = useGlobalContext();
   const imageSrc =
     Array.isArray(item.images) && item.images.length > 0 ? item.images[0].image : item.image;
   return (
@@ -49,7 +51,7 @@ const ProductItem = ({ item }) => {
 
             {/* add to cart */}
             <button
-              // onClick={() => handleAddToCart()}
+              onClick={() => updateCart(item, 1)}
               className="inline-flex font-medium text-custom-sm py-[7px] px-5 rounded-[5px] bg-blue text-white ease-out duration-200 bg-blue-500 hover:bg-blue-700"
             >
               Add to cart

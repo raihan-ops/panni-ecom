@@ -2,7 +2,7 @@ import React from 'react';
 
 const LoadingSuspense = () => {
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
+    <div className="flex items-center justify-center h-screen bg-gray-100 w-full">
       <svg
         className="w-20 h-20 text-primary animate-spin"
         xmlns="http://www.w3.org/2000/svg"

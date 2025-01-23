@@ -1,7 +1,7 @@
 import AuthContextProvider from '@/contexts/AuthContextProvider';
 import GlobalContextProvider from '@/contexts/GlobalContextProvider';
 
-const providers = [AuthContextProvider, GlobalContextProvider];
+const providers = [GlobalContextProvider, AuthContextProvider];
 
 const ProviderInjection = ({ children }) => {
   return providers.reduce((acc, Provider) => {

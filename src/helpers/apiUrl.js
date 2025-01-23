@@ -1,5 +1,5 @@
-export const ROOT_URL = 'http://192.168.0.109:7001';
-// export const ROOT_URL = 'http://localhost:7001';
+// export const ROOT_URL = 'http://192.168.0.109:7001';
+export const ROOT_URL = 'http://localhost:7001';
 // export const ROOT_URL = 'https://5621-220-247-128-71.ngrok-free.app';
 const API_VERSION = '/api/1.0.0';
 export const API_URL = `${ROOT_URL}${API_VERSION}`;
@@ -43,3 +43,8 @@ export const GET_ALL_PRODUCT_COLORS = `${API_URL}/product-colors`;
 
 //offer
 export const GET_ACTIVE_OFFER = `${API_URL}/active-offer`;
+
+// cart
+export const UPDATE_CART_API = `${API_URL}/secured/carts/update`;
+export const GET_CART_API = `${API_URL}/secured/carts/get-customer-cart`;
+export const CLEAR_CART_API = `${API_URL}/secured/carts/clear`;

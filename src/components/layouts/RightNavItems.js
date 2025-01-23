@@ -4,15 +4,19 @@ import React, { useState } from 'react';
 import { Input } from '../shared/input';
 import { ShoppingOutlined } from '@ant-design/icons';
 import Link from 'next/link';
-import { LOGIN, SIGN_UP } from '@/helpers/Slugs';
+import { LOGIN, PATH_CHECKOUT, SIGN_UP } from '@/helpers/Slugs';
 import { MAIN_NAV_ITEMS } from '@/helpers/Navs';
 import Image from 'next/image';
 import { Button, Drawer } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 import assets from '@/assets/asset';
 import { useAuthContext } from '@/contexts/AuthContextProvider';
+import { useGlobalContext } from '@/contexts/GlobalContextProvider';
+import { useRouter } from 'next/navigation';
 
 const RightNavItems = ({ toggleMenu }) => {
+  const router = useRouter();
+  const { cart, updateCart, clearCart, getCartItemQuantity } = useGlobalContext();
   const { isLogin, logout, profile } = useAuthContext();
   const handleToggle = () => {
     if (toggleMenu) {
@@ -38,29 +42,19 @@ const RightNavItems = ({ toggleMenu }) => {
     setOpenCart(false);
   };
 
-  // cart drawer
-  const [products, setProducts] = useState([
-    { id: 1, name: 'Product 1', price: 2000, quantity: 1, image: assets.Tv },
-    { id: 2, name: 'Product 2', price: 1500, quantity: 1, image: assets.Tv },
-    { id: 3, name: 'Product 3', price: 2200, quantity: 1, image: assets.Tv },
-  ]);
-  const handleDelete = (id) => {
-    setProducts((prevProducts) => prevProducts.filter((product) => product.id !== id));
+  const handleQuantityChange = async (product, operation) => {
+    const currentQuantity = getCartItemQuantity(product.id);
+    const newQuantity =
+      operation === 'increase' ? currentQuantity + 1 : Math.max(currentQuantity - 1, 0);
+
+    if (newQuantity === 0) {
+      await updateCart(product, 0);
+    } else {
+      await updateCart(product, newQuantity);
+    }
   };
 
-  const handleQuantityChange = (id, operation) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((product) =>
-        product.id === id
-          ? {
-              ...product,
-              quantity:
-                operation === 'increase' ? product.quantity + 1 : Math.max(product.quantity - 1, 1),
-            }
-          : product,
-      ),
-    );
-  };
+  console.log('Cartttt', cart);
 
   return (
     <div className=" bg-white w-full py-2 ">
@@ -134,33 +128,41 @@ const RightNavItems = ({ toggleMenu }) => {
               style={{
                 color: 'black',
                 fontSize: '24px',
+                cursor: 'pointer',
               }}
             />
             <div className="text-white text-[12px] bg-gray-600 w-5 h-5 flex items-center justify-center text-xs rounded-full absolute -top-[6px] -right-[8px]">
-              3
+              {cart.invoice.totalProduct}
             </div>
           </div>
           <Drawer title="Cart" onClose={onCloseCart} open={openCart}>
             <div>
               {/* cart items */}
-              {products && products.length > 0 ? (
+              {cart.cartDetailsList && cart.cartDetailsList.length > 0 ? (
                 <div className="mb-12 h-72 overflow-y-auto rounded-lg cartSection">
-                  {products.map((product) => (
+                  {cart.cartDetailsList.map((item) => (
                     <div
-                      key={product.id}
+                      key={item.id}
                       className="px-3 py-3 mb-2 bg-white rounded-md flex justify-between items-center shadow-md relative"
                     >
                       <div className="rounded-lg">
-                        <Image width={120} height={80} src={product.image} alt="cart-product" />
+                        {item?.product?.images?.length > 0 && (
+                          <Image
+                            width={120}
+                            height={80}
+                            src={item?.product?.images[0]?.image}
+                            alt="cart-product"
+                          />
+                        )}
                       </div>
                       <div className="w-80">
-                        <p className="line-clamp-2">{product.name}</p>
+                        <p className="line-clamp-2">{item?.product?.name}</p>
                       </div>
                       <div className="flex items-center w-fit rounded-md border border-gray-3">
                         <button
                           aria-label="button for remove product"
                           className="flex items-center justify-center w-6 h-6 ease-out duration-200 hover:text-blue"
-                          onClick={() => handleQuantityChange(product.id, 'decrease')}
+                          onClick={() => handleQuantityChange(item.product, 'decrease')}
                         >
                           <svg
                             className="fill-current"
@@ -178,11 +180,11 @@ const RightNavItems = ({ toggleMenu }) => {
                         </button>
 
                         <span className="flex items-center justify-center w-10 h-6 border-x border-gray-4">
-                          {product.quantity}
+                          {item.quantity}
                         </span>
 
                         <button
-                          onClick={() => handleQuantityChange(product.id, 'increase')}
+                          onClick={() => handleQuantityChange(item.product, 'increase')}
                           aria-label="button for add product"
                           className="flex items-center justify-center w-6 h-6 ease-out duration-200 hover:text-blue"
                         >
@@ -210,7 +212,7 @@ const RightNavItems = ({ toggleMenu }) => {
                         <p className="text-gray-500 text-sm">৳{product.price * product.quantity}</p>
                       </div> */}
                       <button
-                        onClick={() => handleDelete(product.id)}
+                        onClick={() => handleQuantityChange(item.product, 'decrease')}
                         className="w-fit h-fit dbtn bg-red-100 transition-all duration-200 hover:shadow-md p-1 rounded-full -top-1 -right-1"
                       >
                         <svg
@@ -269,7 +271,7 @@ const RightNavItems = ({ toggleMenu }) => {
                   <div className="mb-4 border-b pb-5">
                     <div className="flex justify-between items-center text-gray-600">
                       <p className="w-fit">Subtotal:</p>
-                      <p className="w-fit">৳2190.00</p>
+                      <p className="w-fit">৳{cart.invoice.totalPrice.toFixed(2)}</p>
                     </div>
 
                     <div className="flex justify-between items-center text-gray-600">
@@ -286,18 +288,28 @@ const RightNavItems = ({ toggleMenu }) => {
                     </div>
                     <div className="flex justify-between items-center">
                       <p className="w-fit">Total:</p>
-                      <p className="w-fit">৳2190.00</p>
+                      <p className="w-fit">৳{cart.invoice.finalPrice.toFixed(2)}</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <button
-                type="submit"
-                className="absolute bottom-5 inline-flex mt-2 font-medium text-white bg-blue-500 py-2 px-7 rounded-md ease-out duration-200 hover:bg-blue-700"
-              >
-                Apply
-              </button>
+              {cart.cartDetailsList && cart.cartDetailsList.length > 0 && (
+                <div className="flex gap-3 absolute bottom-5">
+                  <button
+                    onClick={() => router.push(PATH_CHECKOUT)}
+                    className=" mt-2 font-medium text-white bg-blue-500 py-2 px-7 rounded-md ease-out duration-200 hover:bg-blue-700"
+                  >
+                    Apply
+                  </button>
+                  <button
+                    onClick={clearCart}
+                    className="mt-2 font-medium text-black bg-white py-2 px-7 rounded-md ease-out duration-200 hover:bg-gray-300"
+                  >
+                    Clear
+                  </button>
+                </div>
+              )}
             </div>
           </Drawer>
           {/* </Link> */}
