@@ -12,7 +12,7 @@ import axios from 'axios';
 import { GET_ALL_PRODUCT_COLORS, GET_ALL_PRODUCTS, GET_ALL_SUB_CATEGORIES } from '@/helpers/apiUrl';
 import Link from 'next/link';
 
-const AllProductsPAge = () => {
+const AllProductsPAge = ({ params }) => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [colors, setColors] = useState([]);
@@ -51,8 +51,10 @@ const AllProductsPAge = () => {
 
       const sortQuery = `&sort=${sortOption}`;
 
+      const offerQuery = params.offerId ? `&offerId=${params.offerId}` : '';
+
       const response = await axios.get(
-        `${GET_ALL_PRODUCTS}?size=10${categoryQuery}${sortQuery}${colorQuery}${sizeQuery}`,
+        `${GET_ALL_PRODUCTS}?size=10${categoryQuery}${sortQuery}${colorQuery}${sizeQuery}${offerQuery}`,
       );
 
       setProducts(response.data?.content);

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import axios from 'axios';
 import { GET_ACTIVE_OFFER } from '@/helpers/apiUrl';
+import Link from 'next/link';
+import { PATH_ALL_PRODUCT } from '@/helpers/Slugs';
 
 const CountDown = () => {
   const [days, setDays] = useState(0);
@@ -101,12 +103,12 @@ const CountDown = () => {
             </div>
             {/* <!-- Countdown timer ends --> */}
 
-            <a
-              href="#"
+            <Link
+              href={`${PATH_ALL_PRODUCT}?offerId=${offer?.id}`}
               className="inline-flex font-medium text-custom-sm text-white bg-blue py-3 px-9 rounded-md ease-out duration-200 bg-blue-500 hover:bg-blue-700 mt-7"
             >
               Check it Out!
-            </a>
+            </Link>
           </div>
 
           {/* <!-- bg shapes --> */}
