@@ -3,8 +3,10 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useGlobalContext } from '@/contexts/GlobalContextProvider';
 
 const ProductItem = ({ item }) => {
+  const { updateCart } = useGlobalContext();
   const imageSrc =
     Array.isArray(item.images) && item.images.length > 0 ? item.images[0].image : item.image;
   return (

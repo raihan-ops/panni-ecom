@@ -42,3 +42,8 @@ export const GET_ALL_PRODUCT_COLORS = `${API_URL}/product-colors`;
 
 //offer
 export const GET_ACTIVE_OFFER = `${API_URL}/active-offer`;
+
+// cart
+export const UPDATE_CART_API = `${API_URL}/secured/carts/update`;
+export const GET_CART_API = `${API_URL}/secured/carts/get-customer-cart`;
+export const CLEAR_CART_API = `${API_URL}/secured/carts/clear`;

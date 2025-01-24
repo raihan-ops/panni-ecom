@@ -6,6 +6,8 @@ import { Form, Select } from 'antd';
 import Image from 'next/image';
 import assets from '@/assets/asset';
 import { Checkbox } from 'antd';
+import { useGlobalContext } from '@/contexts/GlobalContextProvider';
+import { useForm } from 'react-hook-form';
 
 const onChange = (e) => {
   console.log(`checked = ${e.target.checked}`);
@@ -16,28 +18,68 @@ const handleChange = (value) => {
 };
 
 const CheckoutPage = () => {
-  const [products, setProducts] = useState([
-    { id: 1, name: 'Product 1', price: 2000, quantity: 1, image: assets.Tv },
-    { id: 2, name: 'Product 2', price: 1500, quantity: 1, image: assets.Tv },
-    { id: 3, name: 'Product 3', price: 2200, quantity: 1, image: assets.Tv },
-  ]);
+  const { cart, updateCart } = useGlobalContext();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    setValue,
+  } = useForm({
+    defaultValues: {
+      fullName: '',
+      email: '',
+      phone: '',
+      city: '',
+      address: '',
+      note: '',
+      termsAccepted: false,
+      shippingMethod: 'standard',
+      paymentMethod: 'cod',
+      couponCode: '',
+    },
+  });
 
-  const handleDelete = (id) => {
-    setProducts((prevProducts) => prevProducts.filter((product) => product.id !== id));
+  const getShippingFee = () => {
+    return watch('shippingMethod') === 'standard' ? 130 : 0;
   };
 
-  const handleQuantityChange = (id, operation) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((product) =>
-        product.id === id
-          ? {
-              ...product,
-              quantity:
-                operation === 'increase' ? product.quantity + 1 : Math.max(product.quantity - 1, 1),
-            }
-          : product,
-      ),
-    );
+  const calculateTotals = () => {
+    const subtotal = cart.invoice.totalPrice || 0;
+    const shippingFee = getShippingFee();
+    const tax = 0;
+    const discount = 0;
+    const finalPrice = subtotal + shippingFee + tax - discount;
+
+    return {
+      subtotal,
+      shippingFee,
+      tax,
+      discount,
+      finalPrice,
+    };
+  };
+
+  const handleCouponSubmit = (e) => {
+    e.preventDefault();
+    console.log('Applying coupon:', watch('couponCode'));
+  };
+
+  const handleDelete = (product) => {
+    updateCart(product, 0);
+  };
+
+  const handleQuantityChange = (product, operation) => {
+    const currentQuantity =
+      cart.cartDetailsList.find((item) => item.product.id === product.id)?.quantity || 0;
+    const newQuantity =
+      operation === 'increase' ? currentQuantity + 1 : Math.max(currentQuantity - 1, 0);
+    updateCart(product, newQuantity);
+  };
+
+  const onSubmit = (data) => {
+    console.log('Form Data:', data);
+    console.log('Cart Items:', cart);
   };
 
   return (
@@ -49,16 +91,22 @@ const CheckoutPage = () => {
           <div className="flex flex-col xl:flex-row gap-7">
             <div className="xl:max-w-[770px] w-full bg-gray-100 rounded-xl shadow-1 p-4 sm:p-7.5 xl:p-10">
               <h1 className="mb-5 text-2xl font-medium">Cart Items</h1>
-              {/* cart items */}
-              {products && products.length > 0 ? (
+              {cart.cartDetailsList && cart.cartDetailsList.length > 0 ? (
                 <div className="mb-12 h-44 overflow-y-auto rounded-lg cartSection">
-                  {products.map((product) => (
+                  {cart.cartDetailsList.map(({ product, quantity }) => (
                     <div
                       key={product.id}
                       className="px-3 py-3 mb-2 bg-white rounded-md flex justify-between items-center shadow-md relative"
                     >
                       <div className="rounded-lg">
-                        <Image width={40} height={40} src={product.image} alt="cart-product" />
+                        {product.images.length > 0 && (
+                          <Image
+                            width={40}
+                            height={40}
+                            src={product?.images[0]?.image}
+                            alt="cart-product"
+                          />
+                        )}
                       </div>
                       <div className="w-80">
                         <p className="line-clamp-2">{product.name}</p>
@@ -67,7 +115,7 @@ const CheckoutPage = () => {
                         <button
                           aria-label="button for remove product"
                           className="flex items-center justify-center w-6 h-6 ease-out duration-200 hover:text-blue"
-                          onClick={() => handleQuantityChange(product.id, 'decrease')}
+                          onClick={() => handleQuantityChange(product, 'decrease')}
                         >
                           <svg
                             className="fill-current"
@@ -85,11 +133,11 @@ const CheckoutPage = () => {
                         </button>
 
                         <span className="flex items-center justify-center w-10 h-6 border-x border-gray-4">
-                          {product.quantity}
+                          {quantity}
                         </span>
 
                         <button
-                          onClick={() => handleQuantityChange(product.id, 'increase')}
+                          onClick={() => handleQuantityChange(product, 'increase')}
                           aria-label="button for add product"
                           className="flex items-center justify-center w-6 h-6 ease-out duration-200 hover:text-blue"
                         >
@@ -114,10 +162,10 @@ const CheckoutPage = () => {
                       </div>
                       <div>
                         <p className="m-0 p-0 text-sm">Price</p>
-                        <p className="text-gray-500 text-sm">৳{product.price * product.quantity}</p>
+                        <p className="text-gray-500 text-sm">৳{product.price * quantity}</p>
                       </div>
                       <button
-                        onClick={() => handleDelete(product.id)}
+                        onClick={() => handleDelete(product)}
                         className="w-fit h-fit dbtn bg-red-100 transition-all duration-200 hover:shadow-md p-1 rounded-full -top-1 -right-1"
                       >
                         <svg
@@ -169,38 +217,46 @@ const CheckoutPage = () => {
               ) : (
                 <p className="mb-10 text-red-500">&quot;no product available in the cart&quot;</p>
               )}
-              {/* cart items end*/}
 
-              <form>
+              <form onSubmit={handleSubmit(onSubmit)}>
                 <h1 className="mb-5 text-2xl font-medium">Shipping information</h1>
                 <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
                   <div className="w-full">
-                    <label htmlFor="fullname" className="block mb-1 text-sm">
+                    <label htmlFor="fullName" className="block mb-1 text-sm">
                       Full Name <span className="text-red-500">*</span>
                     </label>
-
                     <input
+                      {...register('fullName', {
+                        required: 'Full name is required',
+                        minLength: { value: 3, message: 'Name must be at least 3 characters' },
+                      })}
                       type="text"
-                      name="fullname"
-                      id="fullname"
                       placeholder="Name"
-                      required
                       className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-black"
                     />
+                    {errors.fullName && (
+                      <p className="text-red-500 text-sm mt-1">{errors.fullName.message}</p>
+                    )}
                   </div>
 
                   <div className="w-full">
                     <label htmlFor="email" className="block mb-1 text-sm">
                       Email
                     </label>
-
                     <input
+                      {...register('email', {
+                        pattern: {
+                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                          message: 'Invalid email address',
+                        },
+                      })}
                       type="text"
-                      name="email"
-                      id="email"
                       placeholder="**@email.com"
                       className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-black"
                     />
+                    {errors.email && (
+                      <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                    )}
                   </div>
                 </div>
 
@@ -209,30 +265,39 @@ const CheckoutPage = () => {
                     <label htmlFor="phone" className="block mb-1 text-sm">
                       Phone <span className="text-red-500">*</span>
                     </label>
-
                     <input
+                      {...register('phone', {
+                        required: 'Phone number is required',
+                        pattern: {
+                          value: /^[0-9]{11}$/,
+                          message: 'Please enter a valid 11-digit phone number',
+                        },
+                      })}
                       type="text"
-                      name="phone"
-                      id="phone"
                       placeholder="Enter your phone"
-                      required
                       className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-black"
                     />
+                    {errors.phone && (
+                      <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+                    )}
                   </div>
 
                   <div className="w-full">
-                    <label htmlFor="subject" className="block mb-1 text-sm">
+                    <label htmlFor="city" className="block mb-1 text-sm">
                       City <span className="text-red-500">*</span>
                     </label>
                     <Select
-                      defaultValue="Select City"
+                      {...register('city', { required: 'City is required' })}
+                      onChange={(value) => setValue('city', value)}
                       className="rounded-md border border-gray-3 bg-gray-1 w-full h-10 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-black"
-                      onChange={handleChange}
                       options={[
                         { label: 'Inside-Dhaka', value: 'Inside-Dhaka' },
                         { label: 'Outside-Dhaka', value: 'Outside-Dhaka' },
                       ]}
                     />
+                    {errors.city && (
+                      <p className="text-red-500 text-sm mt-1">{errors.city.message}</p>
+                    )}
                   </div>
                 </div>
 
@@ -240,35 +305,46 @@ const CheckoutPage = () => {
                   <label htmlFor="address" className="block mb-2">
                     Address <span className="text-red-500">*</span>
                   </label>
-
                   <textarea
-                    name="address"
-                    id="address"
+                    {...register('address', {
+                      required: 'Address is required',
+                      minLength: { value: 10, message: 'Address must be at least 10 characters' },
+                    })}
                     rows={2}
-                    required
                     placeholder="Type your address"
                     className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full p-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-black"
                   />
+                  {errors.address && (
+                    <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>
+                  )}
                 </div>
 
                 <div className="mb-7 mt-5">
-                  <label htmlFor="message" className="block mb-2">
+                  <label htmlFor="note" className="block mb-2">
                     Note
                   </label>
 
                   <textarea
-                    name="message"
-                    id="message"
+                    {...register('note')}
                     rows={1}
                     placeholder="Type your message"
                     className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full p-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-black"
                   />
-                  <Checkbox checked onChange={onChange}>
-                    I agree to the <span className="text-blue-500">Terms and Conditions</span>,{' '}
-                    <span className="text-blue-500">Privacy Policy</span>, Shipping & Delivery,
-                    Returns & Exchanges
-                  </Checkbox>
                 </div>
+
+                <div className="mb-4">
+                  <Checkbox
+                    {...register('termsAccepted', {
+                      required: 'You must accept the terms and conditions',
+                    })}
+                  >
+                    I agree to the <span className="text-blue-500">Terms and Conditions</span>
+                  </Checkbox>
+                  {errors.termsAccepted && (
+                    <p className="text-red-500 text-sm mt-1">{errors.termsAccepted.message}</p>
+                  )}
+                </div>
+
                 <button
                   type="submit"
                   className="inline-flex font-medium text-white bg-blue-500 py-3 px-7 rounded-md ease-out duration-200 hover:bg-blue-700"
@@ -279,17 +355,16 @@ const CheckoutPage = () => {
             </div>
 
             <div className="xl:max-w-[370px] w-full h-fit bg-gray-100 rounded-xl shadow-1">
-              {/* <div className="py-5 px-4 sm:px-7.5 border-b border-gray-3">
-                                <p className="font-medium text-xl text-dark">Contact Information</p>
-                            </div> */}
-
               <div className="p-4 sm:p-7.5">
                 <div className="flex flex-col gap-4">
                   <div className="mb-4">
                     <p className="flex items-center gap-4">Shipping Method:</p>
                     <Checkbox
                       className="border w-full my-2 bg-white rounded-md px-4 py-2"
-                      onChange={onChange}
+                      checked={watch('shippingMethod') === 'standard'}
+                      onChange={(e) =>
+                        setValue('shippingMethod', e.target.checked ? 'standard' : '')
+                      }
                     >
                       Standard Delivery | ৳130
                     </Checkbox>
@@ -298,53 +373,63 @@ const CheckoutPage = () => {
                   <div className="mb-4">
                     <p className="flex items-center gap-4">Payment method:</p>
                     <Checkbox
-                      checked
+                      checked={watch('paymentMethod') === 'cod'}
                       className="border w-full my-2 bg-white rounded-md px-4 py-2"
-                      onChange={onChange}
+                      onChange={(e) => setValue('paymentMethod', e.target.checked ? 'cod' : '')}
                     >
                       Cash on delivery
                     </Checkbox>
                   </div>
 
                   <div className="mb-4 border-b pb-5">
-                    <div className="flex justify-between items-center text-gray-600">
-                      <p className="w-fit">Subtotal:</p>
-                      <p className="w-fit">৳2190.00</p>
-                    </div>
+                    {(() => {
+                      const totals = calculateTotals();
+                      return (
+                        <>
+                          <div className="flex justify-between items-center text-gray-600">
+                            <p className="w-fit">Subtotal:</p>
+                            <p className="w-fit">৳{totals.subtotal}</p>
+                          </div>
 
-                    <div className="flex justify-between items-center text-gray-600">
-                      <p className="w-fit">Shipping fee:</p>
-                      <p className="w-fit">৳00.00</p>
-                    </div>
-                    <div className="flex justify-between items-center text-gray-600">
-                      <p className="w-fit">Tax:</p>
-                      <p className="w-fit">৳00.00</p>
-                    </div>
-                    <div className="flex justify-between items-center text-gray-600">
-                      <p className="w-fit">Discount:</p>
-                      <p className="w-fit">৳00.00</p>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <p className="w-fit">Total:</p>
-                      <p className="w-fit">৳2190.00</p>
-                    </div>
+                          <div className="flex justify-between items-center text-gray-600">
+                            <p className="w-fit">Shipping fee:</p>
+                            <p className="w-fit">৳{totals.shippingFee}</p>
+                          </div>
+
+                          <div className="flex justify-between items-center text-gray-600">
+                            <p className="w-fit">Tax:</p>
+                            <p className="w-fit">৳{totals.tax}</p>
+                          </div>
+
+                          <div className="flex justify-between items-center text-gray-600">
+                            <p className="w-fit">Discount:</p>
+                            <p className="w-fit">৳{totals.discount}</p>
+                          </div>
+
+                          <div className="flex justify-between items-center">
+                            <p className="w-fit">Total:</p>
+                            <p className="w-fit">৳{totals.finalPrice}</p>
+                          </div>
+                        </>
+                      );
+                    })()}
                   </div>
 
-                  <div className="w-full ">
-                    <label htmlFor="phone" className="block mb-1 text-sm">
+                  <div className="w-full">
+                    <label htmlFor="couponCode" className="block mb-1 text-sm">
                       Coupon code
                     </label>
 
                     <input
+                      {...register('couponCode')}
                       type="text"
-                      name="phone"
-                      id="phone"
                       placeholder="Enter your code"
                       className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-black"
                     />
 
                     <button
-                      type="submit"
+                      onClick={handleCouponSubmit}
+                      type="button"
                       className="inline-flex mt-2 font-medium text-white bg-blue-500 py-2 px-7 rounded-md ease-out duration-200 hover:bg-blue-700"
                     >
                       Apply

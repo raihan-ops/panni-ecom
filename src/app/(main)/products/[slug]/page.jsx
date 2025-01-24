@@ -7,6 +7,8 @@ import RelatedProducts from '@/components/pages/Common/RelatedProducts';
 import axios from 'axios';
 import { GET_PRODUCT_BY_SLUG } from '@/helpers/apiUrl';
 import { Icons } from '@/assets/icons';
+import LoadingSuspense from '@/components/loader/LoadingSuspense';
+import { useGlobalContext } from '@/contexts/GlobalContextProvider';
 
 const ProductDetails = () => {
   const params = useParams();
@@ -14,6 +16,11 @@ const ProductDetails = () => {
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [quantity, setQuantity] = useState(1);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
+
+  const { updateCart, getCartItemQuantity, cart } = useGlobalContext();
 
   const axiosConfig = {
     headers: {
@@ -23,21 +30,64 @@ const ProductDetails = () => {
   };
 
   useEffect(() => {
-    (async function fetchProducts() {
+    const fetchProducts = async () => {
       try {
         const response = await axios.get(`${(GET_PRODUCT_BY_SLUG, axiosConfig)}/${slug}`);
         setProduct(response.data);
-        console.log('Data', response.data);
+        if (response.data?.colorList?.length) {
+          setSelectedColor(response.data.colorList[0]);
+        }
+        if (response.data?.size) {
+          setSelectedSize(response.data.size);
+        }
       } catch (error) {
-        console.error('Error fetching categories:', error);
+        console.error('Error fetching product:', error);
       } finally {
         setLoading(false);
       }
-    })();
+    };
+
+    fetchProducts();
   }, [slug]);
+
+  useEffect(() => {
+    if (product?.id) {
+      setQuantity(getCartItemQuantity(product.id));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product, cart]);
 
   const images = product?.images;
   const [selectedImage, setSelectedImage] = useState(images?.length > 0 ? images[0] : null);
+
+  useEffect(() => {
+    if (images?.length > 0) {
+      setSelectedImage(images[0]);
+    }
+  }, [images]);
+
+  const handleQuantityChange = (action) => {
+    if (action === 'increase') {
+      setQuantity((prev) => prev + 1);
+    } else if (action === 'decrease' && quantity > 1) {
+      setQuantity((prev) => prev - 1);
+    }
+  };
+
+  const handleAddToCart = async (e) => {
+    e.preventDefault();
+    await updateCart(product, quantity);
+  };
+
+  const handleBuyNow = (e) => {
+    e.preventDefault();
+    console.log({
+      product,
+      quantity,
+      selectedColor,
+      selectedSize,
+    });
+  };
 
   const tabs = [
     {
@@ -50,6 +100,10 @@ const ProductDetails = () => {
     },
   ];
   const [activeTab, setActiveTab] = useState('tabOne');
+
+  if (loading) {
+    return <LoadingSuspense />;
+  }
   return (
     <div>
       <section className="overflow-hidden relative pb-20 pt-12">
@@ -199,11 +253,12 @@ const ProductDetails = () => {
                 <div className="flex flex-wrap items-center gap-4">
                   <div className="flex items-center rounded-md border border-gray-3">
                     <button
-                      aria-label="button for remove product"
+                      aria-label="decrease quantity"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleQuantityChange('decrease');
+                      }}
                       className="flex items-center justify-center w-10 h-10 ease-out duration-200 hover:text-blue"
-                      //   onClick={() =>
-                      //     quantity > 1 && setQuantity(quantity - 1)
-                      //   }
                     >
                       <svg
                         className="fill-current"
@@ -221,12 +276,15 @@ const ProductDetails = () => {
                     </button>
 
                     <span className="flex items-center justify-center w-12 h-10 border-x border-gray-4">
-                      {/* {quantity} */}2
+                      {quantity}
                     </span>
 
                     <button
-                      //   onClick={() => setQuantity(quantity + 1)}
-                      aria-label="button for add product"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleQuantityChange('increase');
+                      }}
+                      aria-label="increase quantity"
                       className="flex items-center justify-center w-10 h-10 ease-out duration-200 hover:text-blue"
                     >
                       <svg
@@ -249,19 +307,19 @@ const ProductDetails = () => {
                     </button>
                   </div>
 
-                  <a
-                    href="#"
-                    className="inline-flex font-medium text-white bg-blue py-2 px-5  rounded-md ease-out duration-200 bg-blue-500 hover:bg-blue-700"
+                  <button
+                    onClick={handleAddToCart}
+                    className="inline-flex font-medium text-white bg-blue py-2 px-5 rounded-md ease-out duration-200 bg-blue-500 hover:bg-blue-700"
                   >
                     Add-to-cart
-                  </a>
+                  </button>
 
-                  <a
-                    href="#"
+                  {/* <button
+                    onClick={handleBuyNow}
                     className="inline-flex font-medium text-white bg-blue py-2 px-5 rounded-md ease-out duration-200 bg-blue-500 hover:bg-blue-700"
                   >
                     Buy Now
-                  </a>
+                  </button> */}
                 </div>
               </form>
             </div>
