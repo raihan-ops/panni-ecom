@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Input } from '../shared/input';
 import { ShoppingOutlined } from '@ant-design/icons';
 import Link from 'next/link';
-import { LOGIN, SIGN_UP } from '@/helpers/Slugs';
+import { LOGIN, PATH_HOME, SIGN_UP } from '@/helpers/Slugs';
 import { MAIN_NAV_ITEMS } from '@/helpers/Navs';
 import Image from 'next/image';
 import { Button, Drawer } from 'antd';
@@ -89,7 +89,9 @@ const RightNavItems = ({ toggleMenu }) => {
               open={open}
             >
               <div>
-                <Image src="" alt="Logo" />
+                <Link href={PATH_HOME}>
+                  <Image src={assets.logo} width={50} height={50} alt="Logo" />
+                </Link>
               </div>
               <div className="mt-8">
                 <ul>
@@ -123,7 +125,9 @@ const RightNavItems = ({ toggleMenu }) => {
 
           {/* <p className="font-semibold text-primary mb-0">Panni.com</p> */}
           <div>
-            <Image src="" alt="Logo" />
+            <Link href={PATH_HOME}>
+              <Image src={assets.logo} height={55} width={55} alt="Logo" />
+            </Link>
           </div>
         </div>
 

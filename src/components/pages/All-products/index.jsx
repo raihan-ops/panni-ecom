@@ -67,9 +67,16 @@ const AllProductsPAge = ({ params }) => {
     }
   };
 
+  const axiosConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+      'ngrok-skip-browser-warning': 'true',
+    },
+  };
+
   const fetchColors = async () => {
     try {
-      const response = await axios.get(`${GET_ALL_PRODUCT_COLORS}`);
+      const response = await axios.get(`${GET_ALL_PRODUCT_COLORS}`, axiosConfig);
       setColors(response.data);
     } catch (error) {
       console.error('Error fetching colors:', error);
@@ -138,7 +145,7 @@ const AllProductsPAge = ({ params }) => {
       <div className="container">
         <Breadcrumb title={'Explore All Products'} pages={['shop', '/', 'All-Products']} />
         <section className="relative my-10 ">
-          <div className="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0">
+          <div className=" mx-auto px-4 sm:px-8 xl:px-0">
             <div className="flex gap-7">
               {/* Sidebar */}
               <div className="hidden lg:block w-[30%]">
@@ -176,7 +183,7 @@ const AllProductsPAge = ({ params }) => {
                       {/* <Select defaultValue={"sort"} className="w-40" options={options} /> */}
                       <Dropdown
                         menu={{
-                          items: items.map((item) => ({
+                          items: items?.map((item) => ({
                             ...item,
                             onClick: () => handleSortChange(item),
                           })),
@@ -202,7 +209,7 @@ const AllProductsPAge = ({ params }) => {
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-4">
-                  {products.map((item, key) => (
+                  {products?.map((item, key) => (
                     <div key={key}>
                       <Link href={`products/${item?.slug}`}>
                         <ProductItem item={item} />

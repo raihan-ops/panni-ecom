@@ -88,7 +88,7 @@ const CategoryDropdown = ({ categories, onCategoryClick }) => {
       </div>
 
       <div className={`flex-col gap-3 py-6 pl-6 pr-5 ${toggleDropdown ? 'flex' : 'hidden'}`}>
-        {categories.map((category, key) => (
+        {categories?.map((category, key) => (
           <CategoryItem key={key} category={category} onCategoryClick={onCategoryClick} />
         ))}
       </div>

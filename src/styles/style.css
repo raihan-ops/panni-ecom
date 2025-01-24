@@ -78,3 +78,18 @@
         height: 7rem!important;
     }
 }
+
+
+.blinking-cursor {
+    display: inline-block;
+    width: 1px;
+    background-color: black;
+    animation: blink 0.7s steps(2, start) infinite;
+  }
+  
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  

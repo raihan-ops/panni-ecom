@@ -18,6 +18,7 @@ import watch from '@/assets/images/categories/categories-07.png';
 import promoBanner1 from '@/assets/images/promo/promo-01.png';
 import promoBanner2 from '@/assets/images/promo/promo-02.png';
 import promoBanner3 from '@/assets/images/promo/promo-03.png';
+import logo from '@/assets/logo/panni.png';
 
 const assets = {
   hero1,
@@ -36,6 +37,7 @@ const assets = {
   promoBanner2,
   promoBanner3,
   banner,
+  logo,
   // icon1,
   // icon2,
   // icon3,

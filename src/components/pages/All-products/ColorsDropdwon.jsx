@@ -38,7 +38,7 @@ const ColorsDropdown = ({ colors, onColorClick }) => {
       </div>
 
       <div className={`flex-wrap gap-2 p-6 ${toggleDropdown ? 'flex' : 'hidden'}`}>
-        {colors.map((color, key) => (
+        {colors?.map((color, key) => (
           <label
             key={key}
             htmlFor={color.code}
