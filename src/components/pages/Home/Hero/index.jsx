@@ -11,10 +11,20 @@ const Hero = () => {
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const axiosConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+      'ngrok-skip-browser-warning': 'true',
+    },
+  };
+
   useEffect(() => {
     (async function fetchBanners() {
       try {
-        const response = await axios.get(`${GET_ALL_BANNERS}?bannerType=HOMEPAGE_SLIDER`);
+        const response = await axios.get(
+          `${GET_ALL_BANNERS}?bannerType=HOMEPAGE_SLIDER`,
+          axiosConfig,
+        );
         setBanners(response.data); // Assuming response.data contains the banners array
         // console.log('Banners--------', response.data);
       } catch (error) {
@@ -29,9 +39,9 @@ const Hero = () => {
 
   return (
     <section className="overflow-hidden pt-6 pb-10 lg:pb-12 xl:pb-12 lg:pt-5 xl:pt-5 rounded">
-      <div className="w-full mx-auto px-4 sm:px-8 xl:px-0">
+      <div className="w-full mx-auto sm:px-0 md:px-8 lg:px-4 xl:px-0">
         <div className="flex flex-wrap gap-5">
-          <div className="w-full">
+          <div className="w-full hero_welcome_banner">
             <div className="relative z-1 rounded-[10px] bg-white overflow-hidden">
               {/* <!-- bg shapes --> */}
               <Image

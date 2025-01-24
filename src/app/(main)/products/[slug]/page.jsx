@@ -15,10 +15,17 @@ const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const axiosConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+      'ngrok-skip-browser-warning': 'true', // Add this to skip the ngrok browser warning
+    },
+  };
+
   useEffect(() => {
     (async function fetchProducts() {
       try {
-        const response = await axios.get(`${GET_PRODUCT_BY_SLUG}/${slug}`);
+        const response = await axios.get(`${(GET_PRODUCT_BY_SLUG, axiosConfig)}/${slug}`);
         setProduct(response.data);
         console.log('Data', response.data);
       } catch (error) {

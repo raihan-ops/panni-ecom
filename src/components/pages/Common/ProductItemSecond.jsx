@@ -48,17 +48,16 @@ const ProductItem = ({ item }) => {
             </button>
 
             {/* add to cart */}
-            <button
-              // onClick={() => handleAddToCart()}
+            {/* <button
               className="inline-flex font-medium text-custom-sm py-[7px] px-5 rounded-[5px] bg-blue text-white ease-out duration-200 bg-blue-500 hover:bg-blue-700"
             >
               Add to cart
-            </button>
+            </button> */}
           </div>
         </div>
 
         <h3
-          className="font-medium text-black ease-out duration-200 hover:text-blue mb-0"
+          className="font-medium text-black ease-out duration-200 hover:text-blue mb-0 line-clamp-2"
           // onClick={() => handleProductDetails()}
         >
           <Link href={'//' + item?.slug}> {item.name} </Link>

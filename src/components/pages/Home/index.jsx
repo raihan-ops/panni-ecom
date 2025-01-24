@@ -6,6 +6,7 @@ import CountDown from './Countdown';
 import SectionProductItems from '../Common/SectionProductItems';
 import ReverseProductItems from '../Common/ReverseProductItems';
 import PromoBannerTwice from './PromoBanner/PromoBannerTwice';
+import NewProductItems from '../Common/NewProductItems';
 
 const HomePage = () => {
   return (
@@ -18,6 +19,7 @@ const HomePage = () => {
       <ReverseProductItems />
       <PromoBannerTwice />
       <CountDown />
+      <NewProductItems />
     </main>
   );
 };

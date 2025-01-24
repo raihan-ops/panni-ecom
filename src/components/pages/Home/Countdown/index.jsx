@@ -25,19 +25,24 @@ const CountDown = () => {
   };
 
   useEffect(() => {
-    // @ts-ignore
     const interval = setInterval(() => getTime(offer?.endDate), 1000);
-
     return () => clearInterval(interval);
   }, [offer]);
+
+  const axiosConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+      'ngrok-skip-browser-warning': 'true',
+    },
+  };
 
   useEffect(() => {
     (async function fetchOffer() {
       try {
-        const response = await axios.get(`${GET_ACTIVE_OFFER}`);
+        const response = await axios.get(`${GET_ACTIVE_OFFER}`, axiosConfig);
         setOffer(response.data);
       } catch (error) {
-        console.error('Error fetching categories:', error);
+        console.error('Error fetching offer:', error);
       } finally {
         setLoading(false);
       }
@@ -45,80 +50,67 @@ const CountDown = () => {
   }, []);
 
   return (
-    <section className="overflow-hidden py-16 ">
-      <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0 ">
-        <div className="relative overflow-hidden z-1 rounded-lg bg-[#D0E9F3] p-4 sm:p-7.5 lg:p-10 xl:p-15">
-          <div className="max-w-[422px] w-full h-[300px]">
-            <h2 className="font-bold text-dark text-xl lg:text-heading-4 xl:text-heading-3 mb-3">
+    <section className="overflow-hidden py-16">
+      <div className="w-full mx-auto px-4 sm:px-8 xl:px-0">
+        <div className="relative z-1 grid grid-cols-1 sm:grid-cols-12 rounded-lg bg-[#D0E9F3]">
+          <div className="w-full col-span-1 sm:col-span-5 p-6 sm:p-8 lg:p-10 xl:p-14">
+            <h2 className="font-bold text-dark text-xl sm:text-2xl lg:text-3xl xl:text-4xl mb-4">
               {offer?.description}
             </h2>
 
-            {/* <!-- Countdown timer --> */}
-            <div className="flex flex-wrap gap-6 mt-6" x-data="timer()" x-init="countdown()">
-              {/* <!-- timer day --> */}
+            {/* Countdown Timer */}
+            <div className="flex flex-wrap gap-4 sm:gap-6 mt-6">
+              {/* Days */}
               <div>
-                <span
-                  className="min-w-[64px] h-14.5 font-semibold text-xl lg:text-3xl text-dark rounded-lg flex items-center justify-center bg-white shadow-2 px-4 mb-2"
-                  x-text="days"
-                >
-                  {' '}
-                  {days < 10 ? '0' + days : days}{' '}
+                <span className="min-w-[64px] h-14 font-semibold text-lg sm:text-xl lg:text-2xl text-dark rounded-lg flex items-center justify-center bg-white shadow-md px-4 mb-2">
+                  {days < 10 ? '0' + days : days}
                 </span>
-                <span className="block text-custom-sm text-dark text-center">Days</span>
+                <span className="block text-sm sm:text-base text-dark text-center">Days</span>
               </div>
 
-              {/* <!-- timer hours --> */}
+              {/* Hours */}
               <div>
-                <span
-                  className="min-w-[64px] h-14.5 font-semibold text-xl lg:text-3xl text-dark rounded-lg flex items-center justify-center bg-white shadow-2 px-4 mb-2"
-                  x-text="hours"
-                >
-                  {' '}
-                  {hours < 10 ? '0' + hours : hours}{' '}
+                <span className="min-w-[64px] h-14 font-semibold text-lg sm:text-xl lg:text-2xl text-dark rounded-lg flex items-center justify-center bg-white shadow-md px-4 mb-2">
+                  {hours < 10 ? '0' + hours : hours}
                 </span>
-                <span className="block text-custom-sm text-dark text-center">Hours</span>
+                <span className="block text-sm sm:text-base text-dark text-center">Hours</span>
               </div>
 
-              {/* <!-- timer minutes --> */}
+              {/* Minutes */}
               <div>
-                <span
-                  className="min-w-[64px] h-14.5 font-semibold text-xl lg:text-3xl text-dark rounded-lg flex items-center justify-center bg-white shadow-2 px-4 mb-2"
-                  x-text="minutes"
-                >
-                  {minutes < 10 ? '0' + minutes : minutes}{' '}
+                <span className="min-w-[64px] h-14 font-semibold text-lg sm:text-xl lg:text-2xl text-dark rounded-lg flex items-center justify-center bg-white shadow-md px-4 mb-2">
+                  {minutes < 10 ? '0' + minutes : minutes}
                 </span>
-                <span className="block text-custom-sm text-dark text-center">Minutes</span>
+                <span className="block text-sm sm:text-base text-dark text-center">Minutes</span>
               </div>
 
-              {/* <!-- timer seconds --> */}
+              {/* Seconds */}
               <div>
-                <span
-                  className="min-w-[64px] h-14.5 font-semibold text-xl lg:text-3xl text-dark rounded-lg flex items-center justify-center bg-white shadow-2 px-4 mb-2"
-                  x-text="seconds"
-                >
-                  {seconds < 10 ? '0' + seconds : seconds}{' '}
+                <span className="min-w-[64px] h-14 font-semibold text-lg sm:text-xl lg:text-2xl text-dark rounded-lg flex items-center justify-center bg-white shadow-md px-4 mb-2">
+                  {seconds < 10 ? '0' + seconds : seconds}
                 </span>
-                <span className="block text-custom-sm text-dark text-center">Seconds</span>
+                <span className="block text-sm sm:text-base text-dark text-center">Seconds</span>
               </div>
             </div>
-            {/* <!-- Countdown timer ends --> */}
 
             <Link
               href={`${PATH_ALL_PRODUCT}?offerId=${offer?.id}`}
-              className="inline-flex font-medium text-custom-sm text-white bg-blue py-3 px-9 rounded-md ease-out duration-200 bg-blue-500 hover:bg-blue-700 mt-7"
+              className="inline-flex items-center justify-center font-medium text-sm sm:text-base text-white bg-blue-500 hover:bg-blue-700 py-3 px-6 rounded-md mt-6 transition-all duration-200"
             >
               Check it Out!
             </Link>
           </div>
 
-          {/* <!-- bg shapes --> */}
-          <Image
-            src={offer?.image}
-            alt="bg shapes"
-            className="hidden sm:block absolute right-0 bottom-0 -z-1"
-            width={737}
-            height={482}
-          />
+          {/* Background Image */}
+          <div className="col-span-1 sm:col-span-7">
+            <img
+              src={offer?.image}
+              alt="Offer Background"
+              width={600}
+              height={600}
+              className="rounded-lg w-full h-full"
+            />
+          </div>
         </div>
       </div>
     </section>

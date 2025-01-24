@@ -7,7 +7,7 @@ import axios from 'axios';
 import { GET_ALL_PRODUCTS } from '@/helpers/apiUrl';
 // import ProductItem from './ProductItem';
 
-const SectionProductItems = () => {
+const NewProductItems = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -18,23 +18,11 @@ const SectionProductItems = () => {
     },
   };
 
-  // useEffect(() => {
-  //   (async function fetchProducts() {
-  //     try {
-  //       const response = await axios.get(`${GET_ALL_PRODUCTS}?size=${9}&categoryType=MEN`, axiosConfig);
-  //       setProducts(response.data.content);
-  //     } catch (error) {
-  //       console.error('Error fetching categories:', error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   })();
-  // }, []);
   useEffect(() => {
     (async function fetchProducts() {
       try {
         const response = await axios.get(
-          `${GET_ALL_PRODUCTS}?size=${9}&categoryType=WOMEN`,
+          `${GET_ALL_PRODUCTS}?size=${9}&categoryType=NEW_ARRIVAL`,
           axiosConfig,
         );
         setProducts(response.data.content);
@@ -49,7 +37,7 @@ const SectionProductItems = () => {
     <div>
       <div>
         <div className="flex justify-between items-center mb-2">
-          <h2 className="text-2xl font-bold mb-2">women</h2>
+          <h2 className="text-2xl font-bold mb-2">New Arrival</h2>
           <Link
             href={PATH_ALL_PRODUCT}
             className="border h-fit rounded py-1 px-5 text-center text-sm bg-white transition-all duration-500 hover:bg-black hover:text-white"
@@ -110,4 +98,4 @@ const SectionProductItems = () => {
   );
 };
 
-export default SectionProductItems;
+export default NewProductItems;
