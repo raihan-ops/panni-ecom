@@ -9,32 +9,32 @@
 // import { useRouter } from 'next/navigation';
 
 const ResetPassword = () => {
-//   const formItems = useFormItems();
-//   const router = useRouter();
-//   const [isLoading, setIsLoading] = useState(false);
-//   const handleSubmit = async (form) => {
-//     try {
-//       await form.validateFields();
-//       const value = form.getFieldsValue(true);
+  //   const formItems = useFormItems();
+  //   const router = useRouter();
+  //   const [isLoading, setIsLoading] = useState(false);
+  //   const handleSubmit = async (form) => {
+  //     try {
+  //       await form.validateFields();
+  //       const value = form.getFieldsValue(true);
 
-//       api.post(
-//         {
-//           url: USER_PASSWORD_RESET_API_URL,
-//           body: value,
-//           setLoading: setIsLoading,
-//         },
-//         (res) => {
-          
-//         },
-//       );
-//     } catch (error) {
-//       console.log('Form validation failed:', error);
-//     }
-//   };
+  //       api.post(
+  //         {
+  //           url: USER_PASSWORD_RESET_API_URL,
+  //           body: value,
+  //           setLoading: setIsLoading,
+  //         },
+  //         (res) => {
 
-//   const onChange = (e) => {
-//     console.log(`checked = ${e.target.checked}`);
-//   };
+  //         },
+  //       );
+  //     } catch (error) {
+  //       console.log('Form validation failed:', error);
+  //     }
+  //   };
+
+  //   const onChange = (e) => {
+  //     console.log(`checked = ${e.target.checked}`);
+  //   };
 
   return (
     <div className="w-full">

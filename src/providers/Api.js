@@ -54,11 +54,11 @@ const apiCall = async (
     console.log('Getting error', error);
     onErrorHandle && onErrorHandle(error);
     setLoading(false);
-    const _error = error.response.data;
-    if (_error?.errors) {
+    const _error = error?.response?.data?.message;
+    if (_error) {
       // Extract error messages from the error response
-      const errorMessages = Object.values(_error.errors).flat().join(', ');
-      Toast('error', 'Error', errorMessages);
+      // const errorMessages = Object.values(_error.errors).flat().join(', ');
+      Toast('error', 'Error', _error);
     } else {
       Toast('error', 'Error', 'An unexpected error occurred.');
     }

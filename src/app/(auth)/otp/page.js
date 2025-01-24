@@ -12,7 +12,7 @@ import { USER_OTP_RESEND_API_URL, USER_OTP_VERIFY_API_URL } from '@/helpers/apiU
 import { PATH_HOME } from '@/helpers/Slugs';
 import { Icons } from '@/assets/icons';
 
-const OtpVerify = () => {
+const OTP = () => {
   const formItems = useFormItems();
   const searchParams = useSearchParams();
   const email = searchParams.get('email');
@@ -106,4 +106,4 @@ const OtpVerify = () => {
   );
 };
 
-export default OtpVerify;
+export default OTP;

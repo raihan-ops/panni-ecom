@@ -10,8 +10,10 @@ import Image from 'next/image';
 import { Button, Drawer } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 import assets from '@/assets/asset';
+import { useAuthContext } from '@/contexts/AuthContextProvider';
 
 const RightNavItems = ({ toggleMenu }) => {
+  const { isLogin, logout, profile } = useAuthContext();
   const handleToggle = () => {
     if (toggleMenu) {
       toggleMenu();
@@ -300,6 +302,8 @@ const RightNavItems = ({ toggleMenu }) => {
           </Drawer>
           {/* </Link> */}
 
+          {isLogin && <p>Hello ,{profile?.firstName}</p>}
+
           <div className="w-fit border flex items-center gap-2 rounded-md overflow-hidden px-3 py-1">
             <div>
               <svg
@@ -317,21 +321,28 @@ const RightNavItems = ({ toggleMenu }) => {
                 />
               </svg>
             </div>
-            <div className="flex">
-              <Link href={LOGIN}>
-                <div className="login group">
-                  Login
-                  <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
-                </div>
-              </Link>
-              /
-              <Link href={SIGN_UP}>
-                <div className="login group">
-                  Sign-up
-                  <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
-                </div>
-              </Link>
-            </div>
+            {isLogin ? (
+              <div className="login group cursor-pointer" onClick={() => logout()}>
+                Logout
+                <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+              </div>
+            ) : (
+              <div className="flex">
+                <Link href={LOGIN}>
+                  <div className="login group">
+                    Login
+                    <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+                  </div>
+                </Link>
+                /
+                <Link href={SIGN_UP}>
+                  <div className="login group">
+                    Sign-up
+                    <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+                  </div>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
