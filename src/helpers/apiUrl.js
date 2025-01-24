@@ -47,3 +47,6 @@ export const GET_ACTIVE_OFFER = `${API_URL}/active-offer`;
 export const UPDATE_CART_API = `${API_URL}/secured/carts/update`;
 export const GET_CART_API = `${API_URL}/secured/carts/get-customer-cart`;
 export const CLEAR_CART_API = `${API_URL}/secured/carts/clear`;
+
+// order
+export const GET_ORDER_BY_INVOICE_NO = `${API_URL}/orders/invoice-number`;
