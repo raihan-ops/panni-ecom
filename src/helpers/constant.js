@@ -9,11 +9,13 @@ export const openRoutes = [
   '/signup',
   '/register',
   '/',
+  '/order',
+  '/checkout',
   '/verify-otp',
   '/forgot-password',
 ];
 
-export const protectedRoutes = ['/order', '/checkout', '/payment'];
+export const protectedRoutes = [];
 
-export const MODE_CAR = 1;
-export const MODE_BIKE = 2;
+// export const MODE_CAR = 1;
+// export const MODE_BIKE = 2;

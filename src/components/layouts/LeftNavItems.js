@@ -96,7 +96,17 @@ const LeftNavItems = ({ toggleMenu }) => {
     })();
   }, []);
 
-  console.log(women);
+  // console.log(women);
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isSubDropdownOpen, setIsSubDropdownOpen] = useState(false);
+
+  const handleDropdownToggle = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+  const handleSubDropdownToggle = () => {
+    setIsSubDropdownOpen(!isDropdownOpen);
+  };
 
   return (
     <div className="bg-white border-b">
@@ -105,7 +115,7 @@ const LeftNavItems = ({ toggleMenu }) => {
           <div className="cursor-pointer">
             <p
               onClick={showDrawer}
-              className="font-medium transition-all duration-200 hover:text-red-700"
+              className="font-medium transition-all duration-200 hover:text-[#FF69B4]"
             >
               All Categories
             </p>
@@ -132,19 +142,38 @@ const LeftNavItems = ({ toggleMenu }) => {
               </div>
               <div className="mt-8">
                 <ul>
-                  <li
-                    className={`max-lg:mb-2 lg:ml-2 cursor-pointer transition-all `}
-                    // ${isActiveRoute(nav.path)}
-                  >
-                    <Link
-                      href={PATH_ALL_PRODUCT}
-                      title="New Arrivals"
-                      onClick={handleToggle}
-                      className="inline-block w-full h-full p-2 text-black font-normal group"
+                  <li className="max-lg:mb-2 lg:ml-2 cursor-pointer transition-all relative group">
+                    <div
+                      onClick={handleDropdownToggle}
+                      className="inline-block w-full h-full p-2 text-lg text-black font-normal group"
                     >
                       New-Arrivals
                       <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
-                    </Link>
+                    </div>
+
+                    {/* Dropdown content */}
+
+                    <div
+                      className={`dropdownText transition-all duration-500 overflow-hidden ${
+                        isDropdownOpen ? 'max-h-[200px] opacity-100' : 'max-h-0 opacity-0'
+                      }`}
+                    >
+                      {Array.isArray(categories) && categories.length > 0 && (
+                        <ul className="ml-4">
+                          {categories.map((_sub_category, j) => (
+                            <li key={j} className="mb-4" onClick={handleDropdownToggle}>
+                              <Link
+                                href={PATH_ALL_PRODUCT}
+                                title={_sub_category.name}
+                                className="font-bold text-black hover:text-gray-700 transition-all"
+                              >
+                                {_sub_category.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
                   </li>
 
                   {/* <li
@@ -161,16 +190,36 @@ const LeftNavItems = ({ toggleMenu }) => {
                     </Link>
                   </li> */}
 
-                  <li className={`max-lg:mb-2 lg:ml-2 cursor-pointer transition-all `}>
-                    <Link
-                      href={PATH_ALL_PRODUCT}
-                      title="Women"
-                      onClick={handleToggle}
-                      className="inline-block w-full h-full p-2 text-black font-normal group"
+                  <li className="max-lg:mb-2 lg:ml-2 cursor-pointer transition-all relative group">
+                    <div
+                      onClick={handleSubDropdownToggle}
+                      className="inline-block w-full h-full p-2 text-lg text-black font-normal group"
                     >
                       Women
                       <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
-                    </Link>
+                    </div>
+                    <div
+                      className={`dropdownText transition-all duration-500 overflow-hidden ${
+                        isSubDropdownOpen ? 'max-h-[200px] opacity-100' : 'max-h-0 opacity-0'
+                      }`}
+                    >
+                      {Array.isArray(women) && women.length > 0 && (
+                        <ul className="ml-4">
+                          {women.map((_sub_category, j) => (
+                            <li key={j} className="mb-4" onClick={handleSubDropdownToggle}>
+                              <Link
+                                href={PATH_ALL_PRODUCT}
+                                title={_sub_category.name}
+                                className="font-bold text-black hover:text-gray-700 transition-all"
+                              >
+                                {_sub_category.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                    {/* </Link> */}
                   </li>
                   <li
                     className={`max-lg:mb-2 lg:ml-2 cursor-pointer transition-all `}
@@ -179,8 +228,8 @@ const LeftNavItems = ({ toggleMenu }) => {
                     <Link
                       href={PATH_ABOUT}
                       title="About"
-                      onClick={handleToggle}
-                      className="inline-block w-full h-full p-2 text-black font-normal group"
+                      // onClick={handleToggle}
+                      className="inline-block w-full h-full p-2 text-lg text-black font-normal group"
                     >
                       About
                       <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
@@ -193,8 +242,8 @@ const LeftNavItems = ({ toggleMenu }) => {
                     <Link
                       href={PATH_CONTACT}
                       title="Contact"
-                      onClick={handleToggle}
-                      className="inline-block w-full h-full p-2 text-black font-normal group"
+                      // onClick={handleToggle}
+                      className="inline-block w-full h-full p-2 text-lg text-black font-normal group"
                     >
                       Contact
                       <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>

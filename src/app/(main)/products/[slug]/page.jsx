@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import RelatedProducts from '@/components/pages/Common/RelatedProducts';
@@ -9,11 +9,13 @@ import { GET_PRODUCT_BY_SLUG } from '@/helpers/apiUrl';
 import { Icons } from '@/assets/icons';
 import LoadingSuspense from '@/components/loader/LoadingSuspense';
 import { useGlobalContext } from '@/contexts/GlobalContextProvider';
+import { PATH_CHECKOUT } from '@/helpers/Slugs';
 
 const ProductDetails = () => {
   const params = useParams();
   const { slug } = params;
 
+  const router = useRouter();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
@@ -25,14 +27,15 @@ const ProductDetails = () => {
   const axiosConfig = {
     headers: {
       'Content-Type': 'application/json',
-      'ngrok-skip-browser-warning': 'true', // Add this to skip the ngrok browser warning
+      'ngrok-skip-browser-warning': 'true',
     },
   };
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`${(GET_PRODUCT_BY_SLUG, axiosConfig)}/${slug}`);
+        // const response = await axios.get(`${(GET_PRODUCT_BY_SLUG, axiosConfig)}/${slug}`,axiosConfig);
+        const response = await axios.get(`${GET_PRODUCT_BY_SLUG}/${slug}`, axiosConfig);
         setProduct(response.data);
         if (response.data?.colorList?.length) {
           setSelectedColor(response.data.colorList[0]);
@@ -66,11 +69,19 @@ const ProductDetails = () => {
     }
   }, [images]);
 
+  // const handleQuantityChange = (action) => {
+  //   if (action === 'increase') {
+  //     setQuantity((prev) => prev + 1);
+  //   } else if (action === 'decrease' && quantity > 1) {
+  //     setQuantity((prev) => prev - 1);
+  //   }
+  // };
+
   const handleQuantityChange = (action) => {
     if (action === 'increase') {
       setQuantity((prev) => prev + 1);
     } else if (action === 'decrease' && quantity > 1) {
-      setQuantity((prev) => prev - 1);
+      setQuantity((prev) => Math.max(1, prev - 1));
     }
   };
 
@@ -81,12 +92,15 @@ const ProductDetails = () => {
 
   const handleBuyNow = (e) => {
     e.preventDefault();
-    console.log({
-      product,
-      quantity,
-      selectedColor,
-      selectedSize,
-    });
+    const buyNow_data = [product, quantity];
+    // console.log({
+    //   product,
+    //   quantity,
+    //   selectedColor,
+    //   selectedSize,
+    // });
+    localStorage.setItem('buy-now', JSON.stringify(buyNow_data));
+    router.push(PATH_CHECKOUT);
   };
 
   const tabs = [
@@ -164,11 +178,11 @@ const ProductDetails = () => {
 
               <div className="flex flex-wrap items-center gap-5 mb-4">
                 <div className="flex items-center gap-2">
-                  {product?.quantity > 0 ? <Icons.InStock /> : <Icons.OutOfStock />}
+                  {product?.quantity > 1 ? <Icons.InStock /> : <Icons.OutOfStock />}
 
                   <span className="text-green">
                     {' '}
-                    {product?.quantity > 0 ? 'In Stock' : 'Out Of Stock'}{' '}
+                    {product?.quantity > 1 ? 'In Stock' : 'Out Of Stock'}{' '}
                   </span>
                 </div>
               </div>
@@ -314,12 +328,12 @@ const ProductDetails = () => {
                     Add-to-cart
                   </button>
 
-                  {/* <button
+                  <button
                     onClick={handleBuyNow}
                     className="inline-flex font-medium text-white bg-blue py-2 px-5 rounded-md ease-out duration-200 bg-blue-500 hover:bg-blue-700"
                   >
                     Buy Now
-                  </button> */}
+                  </button>
                 </div>
               </form>
             </div>

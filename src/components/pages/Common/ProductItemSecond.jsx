@@ -10,7 +10,7 @@ const ProductItem = ({ item }) => {
   const imageSrc =
     Array.isArray(item.images) && item.images.length > 0 ? item.images[0].image : item.image;
   return (
-    <Link href={'/##/' + item?.slug}>
+    <Link href={'products/' + item?.slug}>
       <div className="group h-full">
         <div className="relative overflow-hidden flex items-center pImgsec justify-center rounded-lg bg-[#F6F7FB]  mb-1">
           <Image src={imageSrc} alt="" width={250} height={250} />
@@ -68,7 +68,7 @@ const ProductItem = ({ item }) => {
         <span className="flex items-center gap-2 font-medium text-sm">
           {item.discountPercentage > 0 ? (
             <div>
-              <span className="text-black">
+              <span className="text-[#FF69B4]">
                 {' '}
                 ৳{(item.price * (1 - item.discountPercentage / 100)).toFixed(2)}
               </span>
@@ -76,14 +76,14 @@ const ProductItem = ({ item }) => {
             </div>
           ) : item.productOffer && item.productOffer?.discountPercentage > 0 ? (
             <>
-              <span className="text-black">
+              <span className="text-[#FF69B4]">
                 {' '}
                 ৳{(item.price * (1 - item.productOffer?.discountPercentage / 100)).toFixed(2)}
               </span>
               <span className="text-gray-400 line-through">৳{item.price}</span>
             </>
           ) : (
-            <span className="text-black ">৳{item.price}</span>
+            <span className="text-[#FF69B4] ">৳{item.price}</span>
           )}
         </span>
       </div>

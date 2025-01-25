@@ -59,10 +59,10 @@ export default function GlobalContextProvider({ children }) {
   };
 
   const updateCart = async (product, quantity, skipLoginCheck = false) => {
-    if (!skipLoginCheck && !isLogin) {
-      Toast('error', 'Error', 'Please login first');
-      return;
-    }
+    // if (!skipLoginCheck && !isLogin) {
+    //   Toast('error', 'Error', 'Please login first');
+    //   return;
+    // }
 
     setCartLoading(true);
     try {

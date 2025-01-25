@@ -11,16 +11,16 @@ export async function middleware(request) {
     // Check for token in cookies (synced from localStorage)
     const token = request.cookies.get(ACCESS_TOKEN);
 
-    if (!token) {
-      const loginUrl = new URL('/login', request.url);
-      loginUrl.searchParams.set('redirectTo', pathname);
-      return NextResponse.redirect(loginUrl);
-    }
+    // if (!token) {
+    //   const loginUrl = new URL('/login', request.url);
+    //   loginUrl.searchParams.set('redirectTo', pathname);
+    //   return NextResponse.redirect(loginUrl);
+    // }
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/order/:path*', '/checkout/:path*', '/payment/:path*'],
+  matcher: [],
 };

@@ -90,11 +90,7 @@ const RightNavItems = ({ toggleMenu }) => {
               <div className="mt-8">
                 <ul>
                   {MAIN_NAV_ITEMS.map((nav, i) => (
-                    <li
-                      key={i}
-                      className={`max-lg:mb-2 lg:ml-2 cursor-pointer transition-all `}
-                      // ${isActiveRoute(nav.path)}
-                    >
+                    <li key={i} className={`max-lg:mb-2 lg:ml-2 cursor-pointer transition-all `}>
                       <Link
                         href={nav.path}
                         title={nav.title}
@@ -117,7 +113,6 @@ const RightNavItems = ({ toggleMenu }) => {
             </Drawer>
           </div>
 
-          {/* <p className="font-semibold text-primary mb-0">Panni.com</p> */}
           <div>
             <Link href={PATH_HOME}>
               <Image src={assets.logo} height={55} width={55} alt="Logo" />

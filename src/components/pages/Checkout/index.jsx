@@ -334,9 +334,10 @@ const CheckoutPage = () => {
 
                 <div className="mb-4">
                   <Checkbox
-                    {...register('termsAccepted', {
-                      required: 'You must accept the terms and conditions',
-                    })}
+                    checked
+                    // {...register('termsAccepted', {
+                    //   required: 'You must accept the terms and conditions',
+                    // })}
                   >
                     I agree to the <span className="text-blue-500">Terms and Conditions</span>
                   </Checkbox>

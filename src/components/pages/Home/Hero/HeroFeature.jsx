@@ -16,7 +16,7 @@ const HeroFeature = () => {
   const sequence = messages.flatMap((message) => [message, 2000]);
 
   return (
-    <div className="w-full my-16 mx-auto sm:px-4 md:px-0 round-md border-2 py-6">
+    <div className="w-full mt-16 mx-auto px-4 rounded-md border-2 py-6">
       <TypeAnimation
         sequence={[
           ...sequence,
