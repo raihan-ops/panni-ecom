@@ -7,12 +7,15 @@ import Link from 'next/link';
 import { LOGIN, PATH_HOME, PATH_CHECKOUT, SIGN_UP } from '@/helpers/Slugs';
 import { MAIN_NAV_ITEMS } from '@/helpers/Navs';
 import Image from 'next/image';
-import { Button, Drawer } from 'antd';
+import { Button, Drawer, Modal, Spin } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 import assets from '@/assets/asset';
 import { useAuthContext } from '@/contexts/AuthContextProvider';
 import { useGlobalContext } from '@/contexts/GlobalContextProvider';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import api from '@/providers/Api';
+import { ORDER_TRACK_INVOICE_API_URL } from '@/helpers/apiUrl';
 
 const RightNavItems = ({ toggleMenu }) => {
   const router = useRouter();
@@ -43,18 +46,51 @@ const RightNavItems = ({ toggleMenu }) => {
   };
 
   const handleQuantityChange = async (product, operation) => {
-    const currentQuantity = getCartItemQuantity(product.id);
+    // Get the exact cart item with its selected color and size
+    const cartItem = cart.cartDetailsList.find((item) => item.product.id === product.id);
+
+    if (!cartItem) return;
+
+    const currentQuantity = cartItem.quantity;
     const newQuantity =
       operation === 'increase' ? currentQuantity + 1 : Math.max(currentQuantity - 1, 0);
 
-    if (newQuantity === 0) {
-      await updateCart(product, 0);
-    } else {
-      await updateCart(product, newQuantity);
-    }
+    // Pass the same color and size when updating
+    await updateCart(product, newQuantity, cartItem.selectedColor, cartItem.selectedSize);
   };
 
   console.log('Cartttt', cart);
+
+  // Add these new states
+  const [trackingModal, setTrackingModal] = useState(false);
+  const [invoiceNumber, setInvoiceNumber] = useState('');
+  const [orderDetails, setOrderDetails] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleTrackOrder = async () => {
+    if (!invoiceNumber.trim()) {
+      setError('Please enter an invoice number');
+      return;
+    }
+
+    setError('');
+
+    api.getSingleData(
+      {
+        url: `${ORDER_TRACK_INVOICE_API_URL}/${invoiceNumber}`,
+        setLoading: setLoading,
+        errorHandle: () => {
+          setError('Failed to fetch order details. Please check your invoice number.');
+          setOrderDetails(null);
+          setLoading(false);
+        },
+      },
+      (response) => {
+        setOrderDetails(response.data);
+      },
+    );
+  };
 
   return (
     <div className=" bg-white w-full py-2 ">
@@ -121,7 +157,25 @@ const RightNavItems = ({ toggleMenu }) => {
         </div>
 
         <div className="flex items-center gap-6">
-          {/* <Link href="/checkout"> */}
+          {/* Add this button before the cart icon */}
+          <Button onClick={() => setTrackingModal(true)} className="flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-5 h-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"
+              />
+            </svg>
+            Track Order
+          </Button>
+
           <div className="w-fit h-fit relative" onClick={showCartDrawer}>
             <ShoppingOutlined
               style={{
@@ -211,7 +265,9 @@ const RightNavItems = ({ toggleMenu }) => {
                         <p className="text-gray-500 text-sm">৳{product.price * product.quantity}</p>
                       </div> */}
                       <button
-                        onClick={() => handleQuantityChange(item.product, 'decrease')}
+                        onClick={() =>
+                          updateCart(item.product, 0, item.selectedColor, item.selectedSize)
+                        }
                         className="w-fit h-fit dbtn bg-red-100 transition-all duration-200 hover:shadow-md p-1 rounded-full -top-1 -right-1"
                       >
                         <svg
@@ -311,7 +367,6 @@ const RightNavItems = ({ toggleMenu }) => {
               )}
             </div>
           </Drawer>
-          {/* </Link> */}
 
           {isLogin && <p>Hello ,{profile?.firstName}</p>}
 
@@ -357,6 +412,96 @@ const RightNavItems = ({ toggleMenu }) => {
           </div>
         </div>
       </div>
+
+      {/* Add the Modal */}
+      <Modal
+        title="Track Your Order"
+        open={trackingModal}
+        onCancel={() => {
+          setTrackingModal(false);
+          setOrderDetails(null);
+          setInvoiceNumber('');
+          setError('');
+        }}
+        footer={null}
+      >
+        <div className="space-y-4">
+          <div className="flex gap-2">
+            <Input.Text
+              placeholder="Enter Invoice Number"
+              value={invoiceNumber}
+              onChange={(e) => setInvoiceNumber(e.target.value)}
+            />
+            <Button onClick={handleTrackOrder}>Track</Button>
+          </div>
+
+          {error && <p className="text-red-500">{error}</p>}
+
+          {loading && (
+            <div className="flex justify-center">
+              <Spin />
+            </div>
+          )}
+
+          {orderDetails && (
+            <div className="space-y-4">
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">Order Status: {orderDetails.status}</h3>
+                <p>Invoice: {orderDetails.invoiceNumber}</p>
+                <p>
+                  Customer: {orderDetails.customer.firstName} {orderDetails.customer.lastName}
+                </p>
+                <p>Email: {orderDetails.email}</p>
+                <p>
+                  Phone: {orderDetails.countryCode} {orderDetails.mobileNumber}
+                </p>
+              </div>
+
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">Delivery Address</h3>
+                <p>{orderDetails.deliveryAddress.title}</p>
+                <p>{orderDetails.deliveryAddress.addressDesc}</p>
+                <p>{orderDetails.deliveryAddress.city}</p>
+              </div>
+
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">Order Items</h3>
+                {orderDetails.cartDetailsList.map((item) => (
+                  <div key={item.id} className="flex justify-between items-center py-2 border-b">
+                    <div>
+                      <p className="font-medium">{item.product.name}</p>
+                      <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
+                    </div>
+                    <p className="font-medium">৳{item.totalPrice}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">Order Summary</h3>
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <p>Subtotal:</p>
+                    <p>৳{orderDetails.invoice.totalProductPrice}</p>
+                  </div>
+                  <div className="flex justify-between">
+                    <p>Delivery Charge:</p>
+                    <p>৳{orderDetails.invoice.deliveryCharge}</p>
+                  </div>
+                  <div className="flex justify-between">
+                    <p>Discount:</p>
+                    <p>৳{orderDetails.invoice.promoDiscount}</p>
+                  </div>
+                  <div className="flex justify-between font-semibold">
+                    <p>Total:</p>
+                    <p>৳{orderDetails.invoice.finalPrice}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </Modal>
     </div>
   );
 };

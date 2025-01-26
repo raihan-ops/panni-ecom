@@ -3,6 +3,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Toast } from '@/components/shared/toast/Toast';
 import { useAuthContext } from './AuthContextProvider';
+import api from '@/providers/Api';
+import { GET_SETTINGS_API_URL } from '@/helpers/apiUrl';
 
 const GlobalContext = createContext();
 
@@ -22,7 +24,12 @@ export default function GlobalContextProvider({ children }) {
   });
   const [cartLoading, setCartLoading] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [settingsLoader, setSettingsLoader] = useState(false);
+  const [settingsData, setSettingsData] = useState({});
 
+  useEffect(() => {
+    getSettingsApi();
+  }, []);
   // Load cart from localStorage on initial render
   useEffect(() => {
     const savedCart = localStorage.getItem('cart');
@@ -44,6 +51,20 @@ export default function GlobalContextProvider({ children }) {
     }
   }, [cart, isInitialized]);
 
+  const getSettingsApi = () => {
+    api.getSingleData(
+      {
+        url: GET_SETTINGS_API_URL,
+        setLoading: setSettingsLoader,
+      },
+      (res) => {
+        if (res.data) {
+          setSettingsData(res.data);
+        }
+      },
+    );
+  };
+
   const calculateInvoice = (cartDetails) => {
     const totalProduct = cartDetails.reduce((sum, item) => sum + item.quantity, 0);
     const totalPrice = cartDetails.reduce(
@@ -58,7 +79,13 @@ export default function GlobalContextProvider({ children }) {
     };
   };
 
-  const updateCart = async (product, quantity, skipLoginCheck = false) => {
+  const updateCart = async (
+    product,
+    quantity,
+    selectedColor,
+    selectedSize,
+    skipLoginCheck = false,
+  ) => {
     // if (!skipLoginCheck && !isLogin) {
     //   Toast('error', 'Error', 'Please login first');
     //   return;
@@ -68,7 +95,10 @@ export default function GlobalContextProvider({ children }) {
     try {
       const updatedCart = { ...cart };
       const existingItemIndex = updatedCart.cartDetailsList.findIndex(
-        (item) => item.product.id === product.id,
+        (item) =>
+          item.product.id === product.id &&
+          item.selectedColor === selectedColor &&
+          item.selectedSize === selectedSize,
       );
 
       if (existingItemIndex >= 0) {
@@ -81,6 +111,8 @@ export default function GlobalContextProvider({ children }) {
         updatedCart.cartDetailsList.push({
           product,
           quantity,
+          selectedColor,
+          selectedSize,
         });
       }
 
@@ -132,6 +164,7 @@ export default function GlobalContextProvider({ children }) {
         clearCart,
         getCartItemQuantity,
         isInitialized,
+        settingsData,
       }}
     >
       {children}

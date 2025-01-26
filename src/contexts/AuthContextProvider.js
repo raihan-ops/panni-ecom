@@ -210,9 +210,11 @@ export default function AuthContextProvider({ children }) {
   };
 
   const logout = () => {
+    console.log();
     setIsLogin(false);
     setProfile(null);
-    localStorage.clear();
+    // localStorage.clear();
+    localStorage.removeItem(ACCESS_TOKEN);
     document.cookie = `${ACCESS_TOKEN}=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
     // router.push('/login');
   };
