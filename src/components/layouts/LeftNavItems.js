@@ -1,29 +1,30 @@
 'use client';
 
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { MAIN_NAV_ITEMS } from '@/helpers/Navs';
-import { AudioOutlined } from '@ant-design/icons';
-import { Input, Space } from 'antd';
-import { Button, Drawer } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
+import { Drawer, Input } from 'antd';
 import Image from 'next/image';
 import { PATH_ABOUT, PATH_ALL_PRODUCT, PATH_CONTACT, PATH_HOME } from '@/helpers/Slugs';
 import {
+  GET_ALL_PRODUCTS,
   GET_NAVBAR_CATEGORIES_MEN,
   GET_NAVBAR_CATEGORIES_NEW_ARRIVAL,
   GET_NAVBAR_CATEGORIES_WOMEN,
 } from '@/helpers/apiUrl';
 import axios from 'axios';
-import Img from '../shared/Img';
+import { debounce } from 'next/dist/server/utils';
 
 const { Search } = Input;
 // const { Option } = Select;
 
 const LeftNavItems = ({ toggleMenu }) => {
-  const onSearch = (value, _e, info) => console.log(info?.source, value);
   const pathname = usePathname();
+
+  const [searchResults, setSearchResults] = useState([]);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleToggle = () => {
     if (toggleMenu) {
@@ -76,6 +77,19 @@ const LeftNavItems = ({ toggleMenu }) => {
     })();
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownVisible(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   // women
   useEffect(() => {
     (async function fetchWomenCategories() {
@@ -88,7 +102,33 @@ const LeftNavItems = ({ toggleMenu }) => {
     })();
   }, []);
 
-  // console.log(women);
+  const fetchProducts = async (query) => {
+    try {
+      const response = await axios.get(`${GET_ALL_PRODUCTS}`, {
+        params: { searchKey: query }, // Pass query as a parameter
+      });
+      console.log('Products----', response.data.content);
+      return response.data.content; // Adjust based on your API response structure
+    } catch (error) {
+      console.error('Failed to fetch products:', error);
+      return [];
+    }
+  };
+
+  const handleSearch = debounce(async (value) => {
+    if (value) {
+      const results = await fetchProducts(value);
+      setSearchResults(results);
+      setIsDropdownVisible(true);
+    } else {
+      setSearchResults([]);
+      setIsDropdownVisible(false);
+    }
+  }, 300);
+
+  const onInputChange = (e) => {
+    handleSearch(e.target.value);
+  };
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isSubDropdownOpen, setIsSubDropdownOpen] = useState(false);
@@ -321,71 +361,6 @@ const LeftNavItems = ({ toggleMenu }) => {
               </div>
             )}
           </li>
-
-          {/* <li className="max-lg:mb-2 lg:ml-2 cursor-pointer transition-all relative group">
-            <Link
-              href={PATH_ALL_PRODUCT}
-              title="Men"
-              className="inline-block w-full h-full p-2 text-black font-normal group"
-            >
-              Men
-              <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
-            </Link>
-            <div className="absolute min-h-[18rem] flex justify-between w-full border border-black overflow-hidden rounded-md left-0 top-full bg-white ml-[-5rem] shadow-md min-w-[50rem] opacity-0 transform scale-95 translate-y-2 invisible group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 z-10">
-              <div className="grid grid-cols-3 gap-4 w-full px-4 py-1">
-                {Array.isArray(men) ? (
-                  men.map((_sub_category, j) => (
-                    <>
-                      <div key={j} className="col-span-1 h-fit">
-                        <div className="mb-2 mt-2">
-                          <Link
-                            href={PATH_ALL_PRODUCT}
-                            title={_sub_category.name}
-                            className="font-bold text-black hover:text-gray-700 transition-all"
-                          >
-                            {_sub_category.name}
-                          </Link>
-                        </div>
-
-                        {_sub_category.subCategoryList && (
-                          <ul className="space-y-2">
-                            {_sub_category.subCategoryList.map((_subsubcategory, k) => (
-                              <li key={k} className="hover:bg-gray-200">
-                                {_subsubcategory && (
-                                  <Link
-                                    href={PATH_ALL_PRODUCT}
-                                    title={_subsubcategory.name}
-                                    className="text-black hover:text-gray-700 transition-all w-full"
-                                  >
-                                    {_subsubcategory.name}
-                                  </Link>
-                                )}
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-                    </>
-                  ))
-                ) : (
-                  <p>No categories available</p>
-                )}
-              </div>
-              {men?.[0] && (
-                <div className="w-[35rem]">
-                  <img
-                    className="w-full h-full"
-                    src={men[0].subCategoryList?.[0]?.image || men[0].image || ''}
-                    alt={
-                      men[0].subCategoryList?.[0]?.image
-                        ? 'Subcategory Image'
-                        : 'No Image Available'
-                    }
-                  />
-                </div>
-              )}
-            </div>
-          </li> */}
           <li className="max-lg:mb-2 lg:ml-2 cursor-pointer transition-all relative group">
             <Link
               href={PATH_ALL_PRODUCT}
@@ -467,16 +442,40 @@ const LeftNavItems = ({ toggleMenu }) => {
           </li>
         </ul>
 
-        <div className="bg-white">
+        <div className="bg-white relative">
           <Search
-            placeholder="input search text"
-            onSearch={onSearch}
+            placeholder="Search prodct by name, category, or sub-category"
+            onChange={onInputChange}
             allowClear
             size="large"
             style={{
-              width: 300,
+              width: 500,
             }}
           />
+          {isDropdownVisible && searchResults.length > 0 && (
+            <div
+              ref={dropdownRef}
+              className="absolute w-full top-12 rounded border p-2 bg-white max-h-40 overflow-y-auto shadow-lg z-10"
+            >
+              {searchResults.map((product) => (
+                <Link
+                  key={product.id}
+                  href={`/products/${product?.slug}`} // Use the correct URL format here
+                >
+                  <div className="py-1 px-2 hover:bg-gray-100 cursor-pointer">{product.name}</div>
+                </Link>
+              ))}
+            </div>
+          )}
+          {/* Message for no results */}
+          {isDropdownVisible && searchResults.length === 0 && (
+            <div
+              ref={dropdownRef}
+              className="absolute w-full top-12 rounded border p-2 bg-white shadow-lg z-10"
+            >
+              <p className="text-gray-500">No products found</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
