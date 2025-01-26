@@ -1,7 +1,6 @@
 import moment from 'moment';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Permission from './Permission';
-import { PATH_HOME } from './Slugs';
 
 // import { createIntl, createIntlCache } from 'react-intl';
 
@@ -74,10 +73,7 @@ export const getQueryParams = (query, filterItems) => {
 export const getBase64Image = (data) => {
   const base64 = btoa(
     // eslint-disable-next-line no-undef
-    new Uint8Array(data).reduce(
-      (data, byte) => data + String.fromCharCode(byte),
-      '',
-    ),
+    new Uint8Array(data).reduce((data, byte) => data + String.fromCharCode(byte), ''),
   );
 
   return 'data:;base64,' + base64;
@@ -146,6 +142,10 @@ export const hasPermission = (loggedInUserPermissions, permissions) => {
 
   return false;
 };
+export const formatDate = (timestamp) => {
+  const date = new Date(timestamp);
+  return date.toLocaleString(); // Format as local date and time
+};
 
 // const cache = createIntlCache();
 
@@ -181,11 +181,7 @@ export const getStringAndObjectValue = (value, key) => {
   if (value === undefined || value === null) {
     return 'N/A';
   }
-  return typeof value === 'string'
-    ? value
-    : value[key]
-      ? value[key]
-      : 'Not Found key';
+  return typeof value === 'string' ? value : value[key] ? value[key] : 'Not Found key';
 };
 
 export const getValue = (value, key) => {
