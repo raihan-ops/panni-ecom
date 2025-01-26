@@ -54,7 +54,7 @@ const RightNavItems = ({ toggleMenu }) => {
     }
   };
 
-  console.log('Cartttt', cart);
+  // console.log('Cartttt', cart);
 
   return (
     <div className=" bg-white w-full py-2 ">

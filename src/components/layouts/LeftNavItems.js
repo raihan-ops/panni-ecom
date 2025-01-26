@@ -467,22 +467,19 @@ const LeftNavItems = ({ toggleMenu }) => {
           </li>
         </ul>
 
-        <div className="bg-white">
-          {/* <Search
-            addonBefore={selectBefore}
-            placeholder="Input search text"
-            allowClear
-            enterButton="Search"
-            size="large"
-            onSearch={onSearch}
-          /> */}
+        <div className="bg-white relative">
           <Search
             placeholder="input search text"
             onSearch={onSearch}
+            allowClear
+            size="large"
             style={{
-              width: 200,
+              width: 300,
             }}
           />
+          <div className="resultOfSearch absolute left-0 top-10 bg-white border overflow-y-auto p-3 rounded w-full min-h-[4rem] max-h-[10rem]">
+            <p className="line-clamp-1 w-[98%]"></p>
+          </div>
         </div>
       </div>
     </div>

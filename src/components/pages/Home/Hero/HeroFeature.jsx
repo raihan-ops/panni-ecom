@@ -21,7 +21,7 @@ const HeroFeature = () => {
         sequence={[
           ...sequence,
           () => {
-            console.log('Animation sequence completed');
+            console.log('');
           },
         ]}
         wrapper="span"

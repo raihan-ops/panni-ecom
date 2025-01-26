@@ -26,6 +26,8 @@ export const GET_NAVBAR_CATEGORIES_NEW_ARRIVAL = `${API_URL}/categories/type/NEW
 export const GET_NAVBAR_CATEGORIES_MEN = `${API_URL}/categories/type/MEN`;
 export const GET_NAVBAR_CATEGORIES_WOMEN = `${API_URL}/categories/type/WOMEN`;
 
+export const GET_GLOBAL_SEARCH = `${API_URL}/products`;
+
 //banner
 export const GET_ALL_BANNERS = `${API_URL}/banners`;
 
