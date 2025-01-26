@@ -9,8 +9,12 @@ const ContactPage = () => {
 
         <section className="overflow-hidden py-10">
           <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
-            <div className="flex flex-col xl:flex-row gap-7">
-              <div className="xl:max-w-[370px] w-full bg-gray-100 rounded-xl shadow-1">
+            <div className="w-full text-center mb-8">
+              <h2 className="font-bold text-2xl">&quot;We&apos;re Here to Help!&quot;</h2>
+              <p>Stay connected and Contact-us</p>
+            </div>
+            <div className="flex flex-col justify-center xl:flex-row gap-7">
+              {/* <div className="xl:max-w-[370px] w-full bg-gray-100 rounded-xl shadow-1">
                 <div className="py-5 px-4 sm:px-7.5 border-b border-gray-3">
                   <p className="font-medium text-xl text-dark">Contact Information</p>
                 </div>
@@ -83,7 +87,7 @@ const ContactPage = () => {
                     </p>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className="xl:max-w-[770px] w-full bg-gray-100 rounded-xl shadow-1 p-4 sm:p-7.5 xl:p-10">
                 <form>

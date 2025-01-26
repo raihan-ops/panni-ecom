@@ -3,6 +3,8 @@ export const PATH_CONTACT = '/contact';
 export const PATH_ABOUT = '/about';
 export const PATH_ALL_PRODUCT = '/all-products';
 export const PATH_TRACK = '/track-order';
+export const PATH_TERMS_AND_CONDITIONS = '/terms&condition';
+export const PATH_PRIVACY_POLICY = '/privacyPolicy';
 
 // export const PATH_CAR = '/profile-list';
 

@@ -4,13 +4,19 @@ import React from 'react';
 import Image from 'next/image';
 
 const ProductItem = ({ item }) => {
+  console.log(item);
   const imageSrc =
     Array.isArray(item.images) && item.images.length > 0 ? item.images[0].image : item.image;
 
   return (
     <div className="group">
-      <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-[#F6F7FB] min-h-[250px] mb-1">
-        <Image src={imageSrc} alt="" width={250} height={250} />
+      <div className="relative  overflow-hidden flex items-center justify-center rounded-lg bg-[#F6F7FB]  mb-1">
+        <img className="w-full" src={imageSrc} alt="" />
+        {item?.productOffer?.discountPercentage && (
+          <p className="absolute top-3 left-3 text-sm font-bold bg-[#ffffff] px-4 py-[2px] rounded-xl">
+            {`${item.productOffer.discountPercentage}%`}
+          </p>
+        )}
 
         <div className="absolute left-0 bottom-0 translate-y-full w-full flex items-center justify-center gap-3 ease-linear duration-200 group-hover:-translate-y-1">
           {/* quick view */}
@@ -118,7 +124,7 @@ const ProductItem = ({ item }) => {
       </div> */}
 
       <h3
-        className="font-medium text-black ease-out duration-200 hover:text-blue mb-0"
+        className="font-medium text-black ease-out duration-200 hover:text-blue mb-0 line-clamp-2"
         // onClick={() => handleProductDetails()}
       >
         {item.name}

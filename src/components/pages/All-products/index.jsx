@@ -11,6 +11,7 @@ import ProductItem from '../Common/ProductItem';
 import axios from 'axios';
 import { GET_ALL_PRODUCT_COLORS, GET_ALL_PRODUCTS, GET_ALL_SUB_CATEGORIES } from '@/helpers/apiUrl';
 import Link from 'next/link';
+import { Button, Drawer } from 'antd';
 
 const AllProductsPAge = ({ params }) => {
   const [categories, setCategories] = useState([]);
@@ -133,6 +134,15 @@ const AllProductsPAge = ({ params }) => {
     },
   ];
 
+  // filter drawer
+  const [open, setOpen] = useState(false);
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       <div className="container">
@@ -172,7 +182,7 @@ const AllProductsPAge = ({ params }) => {
               <div className="w-full">
                 <div className="rounded-lg bg-gray-100 shadow-1 p-3 mb-6">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4 cursor-pointer">
+                    <div className="flex items-center justify-between gap-4 w-full cursor-pointer">
                       {/* <Select defaultValue={"sort"} className="w-40" options={options} /> */}
                       <Dropdown
                         menu={{
@@ -191,17 +201,38 @@ const AllProductsPAge = ({ params }) => {
                           </Space>
                         </a>
                       </Dropdown>
-                      <p>
+                      <p className="hidden md:block">
                         Showing{' '}
                         <span className="text-dark">
                           {pageTotal} of {totalProducts}
                         </span>{' '}
                         Products
                       </p>
+                      <div
+                        className="block md:hidden border px-4 py-1 rounded-md"
+                        type="primary"
+                        onClick={showDrawer}
+                      >
+                        Filter
+                      </div>
+
+                      <Drawer title="Filters" onClose={onClose} open={open}>
+                        <div className="flex flex-col gap-6">
+                          {/* <!-- category box --> */}
+                          <CategoryDropdown
+                            categories={categories}
+                            onCategoryClick={handleCategoryClick}
+                          />
+                          {/* // <!-- size box --> */}
+                          <SizeDropdown onSizeClick={handleSizeChange} />
+                          {/* // <!-- color box --> */}
+                          <ColorsDropdown colors={colors} onColorClick={handelColorCode} />
+                        </div>
+                      </Drawer>
                     </div>
                   </div>
                 </div>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {products?.map((item, key) => (
                     <div key={key}>
                       <Link href={`products/${item?.slug}`}>
