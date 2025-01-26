@@ -138,7 +138,7 @@ const ProductDetails = () => {
                       />
                     </svg>
                   </button>
-                  <Image src={selectedImage?.image} alt={product?.name} width={400} height={400} />
+                  <img src={selectedImage?.image} alt={product?.name} className="w-full rounded" />
                 </div>
               </div>
 

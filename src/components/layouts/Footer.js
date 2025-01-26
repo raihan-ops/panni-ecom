@@ -201,23 +201,13 @@ export default function Footer() {
               </div>
 
               <div className="col-span-2 sm:col-span-1">
-                <p className="font-medium text-gray-900">Downloads</p>
-
-                <ul className="mt-6 space-y-4 text-sm">
-                  <li>
-                    <a href="#" className="text-gray-700 transition hover:opacity-75">
-                      {' '}
-                      Marketing Calendar{' '}
-                    </a>
-                  </li>
-
-                  <li>
-                    <a href="#" className="text-gray-700 transition hover:opacity-75">
-                      {' '}
-                      SEO Infographics{' '}
-                    </a>
-                  </li>
-                </ul>
+                <iframe
+                  className="w-full h-[12rem]"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14599.553217544306!2d90.38312933890134!3d23.822570587577086!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c6c2ab936b87%3A0xcaa915c4069493be!2sECB%20Chattar%2C%20Dhaka!5e0!3m2!1sen!2sbd!4v1737921650296!5m2!1sen!2sbd"
+                  allowfullscreen=""
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                ></iframe>
               </div>
 
               <ul className="col-span-2 flex justify-start gap-6 lg:col-span-5 lg:justify-end">

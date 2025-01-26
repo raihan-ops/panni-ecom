@@ -13,10 +13,10 @@ const HeroCarousal = (data) => {
     <Swiper
       spaceBetween={30}
       centeredSlides={true}
-      // autoplay={{
-      //   delay: 2500,
-      //   disableOnInteraction: false,
-      // }}
+      autoplay={{
+        delay: 2500,
+        disableOnInteraction: false,
+      }}
       loop={true}
       pagination={{
         clickable: true,

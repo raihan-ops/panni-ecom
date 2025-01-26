@@ -158,7 +158,7 @@ const AllProductsPAge = ({ params }) => {
                     <div className="bg-gray-100 shadow-1 rounded-lg py-4 px-5">
                       <div className="flex items-center justify-between">
                         <p>Filters:</p>
-                        <button className="text-blue-600">Clean All</button>
+                        {/* <button className="text-blue-600">Clean All</button> */}
                       </div>
                     </div>
 

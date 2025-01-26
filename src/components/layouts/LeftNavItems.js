@@ -15,6 +15,7 @@ import {
 } from '@/helpers/apiUrl';
 import axios from 'axios';
 import { debounce } from 'next/dist/server/utils';
+import assets from '@/assets/asset';
 
 const { Search } = Input;
 // const { Option } = Select;
@@ -102,6 +103,7 @@ const LeftNavItems = ({ toggleMenu }) => {
     })();
   }, []);
 
+  // global search
   const fetchProducts = async (query) => {
     try {
       const response = await axios.get(`${GET_ALL_PRODUCTS}`, {
@@ -130,6 +132,7 @@ const LeftNavItems = ({ toggleMenu }) => {
     handleSearch(e.target.value);
   };
 
+  // open category dropdown
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isSubDropdownOpen, setIsSubDropdownOpen] = useState(false);
 
@@ -137,7 +140,7 @@ const LeftNavItems = ({ toggleMenu }) => {
     setIsDropdownOpen(!isDropdownOpen);
   };
   const handleSubDropdownToggle = () => {
-    setIsSubDropdownOpen(!isDropdownOpen);
+    setIsSubDropdownOpen(!isSubDropdownOpen);
   };
 
   return (
@@ -170,7 +173,7 @@ const LeftNavItems = ({ toggleMenu }) => {
               open={open}
             >
               <div>
-                <Image src="" alt="Logo" />
+                <Image width={50} height={50} src={assets?.logo} alt="Logo" />
               </div>
               <div className="mt-8">
                 <ul>
@@ -284,11 +287,11 @@ const LeftNavItems = ({ toggleMenu }) => {
                 </ul>
               </div>
 
-              <div className="absolute bottom-5">
+              {/* <div className="absolute bottom-5">
                 <a href="#">
                   <p className="px-4 py-1 border w-fit rounded-md">Logout</p>
                 </a>
-              </div>
+              </div> */}
             </Drawer>
           </div>
 
