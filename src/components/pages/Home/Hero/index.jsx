@@ -11,20 +11,10 @@ const Hero = () => {
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const axiosConfig = {
-    headers: {
-      'Content-Type': 'application/json',
-      'ngrok-skip-browser-warning': 'true',
-    },
-  };
-
   useEffect(() => {
     (async function fetchBanners() {
       try {
-        const response = await axios.get(
-          `${GET_ALL_BANNERS}?bannerType=HOMEPAGE_SLIDER`,
-          axiosConfig,
-        );
+        const response = await axios.get(`${GET_ALL_BANNERS}?bannerType=HOMEPAGE_SLIDER`);
         setBanners(response.data); // Assuming response.data contains the banners array
         // console.log('Banners--------', response.data);
       } catch (error) {

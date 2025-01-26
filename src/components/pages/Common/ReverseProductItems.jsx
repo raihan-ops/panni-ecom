@@ -11,20 +11,10 @@ const ReverseProductItems = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const axiosConfig = {
-    headers: {
-      'Content-Type': 'application/json',
-      'ngrok-skip-browser-warning': 'true',
-    },
-  };
-
   useEffect(() => {
     (async function fetchProducts() {
       try {
-        const response = await axios.get(
-          `${GET_ALL_PRODUCTS}?size=${9}&categoryType=WOMEN`,
-          axiosConfig,
-        );
+        const response = await axios.get(`${GET_ALL_PRODUCTS}?size=${9}&categoryType=WOMEN`);
         setProducts(response.data.content);
       } catch (error) {
         console.error('Error fetching categories:', error);

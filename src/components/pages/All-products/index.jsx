@@ -67,16 +67,9 @@ const AllProductsPAge = ({ params }) => {
     }
   };
 
-  const axiosConfig = {
-    headers: {
-      'Content-Type': 'application/json',
-      'ngrok-skip-browser-warning': 'true',
-    },
-  };
-
   const fetchColors = async () => {
     try {
-      const response = await axios.get(`${GET_ALL_PRODUCT_COLORS}`, axiosConfig);
+      const response = await axios.get(`${GET_ALL_PRODUCT_COLORS}`);
       setColors(response.data);
     } catch (error) {
       console.error('Error fetching colors:', error);

@@ -13,17 +13,10 @@ const Categories = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const axiosConfig = {
-    headers: {
-      'Content-Type': 'application/json',
-      'ngrok-skip-browser-warning': 'true', // Add this to skip the ngrok browser warning
-    },
-  };
-
   useEffect(() => {
     (async function fetchSubcategories() {
       try {
-        const response = await axios.get(`${GET_ALL_SUB_CATEGORIES}?size=${100}`, axiosConfig);
+        const response = await axios.get(`${GET_ALL_SUB_CATEGORIES}?size=${100}`);
         setCategories(response.data.content);
       } catch (error) {
         console.error('Error fetching categories:', error);

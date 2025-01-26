@@ -47,14 +47,6 @@ const LeftNavItems = ({ toggleMenu }) => {
     return 'hover:bg-primary hover:text-white rounded-sm';
   };
 
-  // ngrok
-  const axiosConfig = {
-    headers: {
-      'Content-Type': 'application/json',
-      'ngrok-skip-browser-warning': 'true',
-    },
-  };
-
   // new arrial API
   const [categories, setCategories] = useState([]);
   const [men, setMen] = useState([]);
@@ -64,7 +56,7 @@ const LeftNavItems = ({ toggleMenu }) => {
   useEffect(() => {
     (async function fetchNewArrivalCategories() {
       try {
-        const response = await axios.get(GET_NAVBAR_CATEGORIES_NEW_ARRIVAL, axiosConfig);
+        const response = await axios.get(GET_NAVBAR_CATEGORIES_NEW_ARRIVAL);
         setCategories(response?.data);
       } catch (error) {
         console.error('Error fetching new arrival categories:', error);
@@ -76,7 +68,7 @@ const LeftNavItems = ({ toggleMenu }) => {
   useEffect(() => {
     (async function fetchMenCategories() {
       try {
-        const response = await axios.get(GET_NAVBAR_CATEGORIES_MEN, axiosConfig);
+        const response = await axios.get(GET_NAVBAR_CATEGORIES_MEN);
         setMen(response?.data);
       } catch (error) {
         console.error('Error fetching new arrival categories:', error);
@@ -88,7 +80,7 @@ const LeftNavItems = ({ toggleMenu }) => {
   useEffect(() => {
     (async function fetchWomenCategories() {
       try {
-        const response = await axios.get(GET_NAVBAR_CATEGORIES_WOMEN, axiosConfig);
+        const response = await axios.get(GET_NAVBAR_CATEGORIES_WOMEN);
         setWomen(response?.data);
       } catch (error) {
         console.error('Error fetching new arrival categories:', error);

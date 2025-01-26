@@ -8,20 +8,10 @@ const PromoBannerTwice = () => {
   const [promotionalBanner, setPromotionalBanner] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const axiosConfig = {
-    headers: {
-      'Content-Type': 'application/json',
-      'ngrok-skip-browser-warning': 'true',
-    },
-  };
-
   useEffect(() => {
     (async function fetchBanners() {
       try {
-        const response = await axios.get(
-          `${GET_ALL_BANNERS}?bannerType=HOMEPAGE_PROMOTIONAL`,
-          axiosConfig,
-        );
+        const response = await axios.get(`${GET_ALL_BANNERS}?bannerType=HOMEPAGE_PROMOTIONAL`);
         setPromotionalBanner(response.data); // Assuming response.data contains the banners array
       } catch (error) {
         console.error('Error fetching banners:', error);

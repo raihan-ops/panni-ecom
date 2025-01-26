@@ -29,17 +29,10 @@ const CountDown = () => {
     return () => clearInterval(interval);
   }, [offer]);
 
-  const axiosConfig = {
-    headers: {
-      'Content-Type': 'application/json',
-      'ngrok-skip-browser-warning': 'true',
-    },
-  };
-
   useEffect(() => {
     (async function fetchOffer() {
       try {
-        const response = await axios.get(`${GET_ACTIVE_OFFER}`, axiosConfig);
+        const response = await axios.get(`${GET_ACTIVE_OFFER}`);
         setOffer(response.data);
       } catch (error) {
         console.error('Error fetching offer:', error);

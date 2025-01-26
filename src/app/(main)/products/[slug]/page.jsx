@@ -24,18 +24,10 @@ const ProductDetails = () => {
 
   const { updateCart, getCartItemQuantity, cart } = useGlobalContext();
 
-  const axiosConfig = {
-    headers: {
-      'Content-Type': 'application/json',
-      'ngrok-skip-browser-warning': 'true',
-    },
-  };
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // const response = await axios.get(`${(GET_PRODUCT_BY_SLUG, axiosConfig)}/${slug}`,axiosConfig);
-        const response = await axios.get(`${GET_PRODUCT_BY_SLUG}/${slug}`, axiosConfig);
+        const response = await axios.get(`${GET_PRODUCT_BY_SLUG}/${slug}`);
         setProduct(response.data);
         if (response.data?.colorList?.length) {
           setSelectedColor(response.data.colorList[0]);

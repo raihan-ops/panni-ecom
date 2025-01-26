@@ -297,9 +297,9 @@ const RightNavItems = ({ toggleMenu }) => {
                 <div className="flex gap-3 absolute bottom-5">
                   <button
                     onClick={() => router.push(PATH_CHECKOUT)}
-                    className=" mt-2 font-medium text-white bg-blue-500 py-2 px-7 rounded-md ease-out duration-200 hover:bg-blue-700"
+                    className=" mt-2 font-medium text-white bg-black border py-2 px-7 rounded-md ease-out duration-200 hover:bg-white hover:text-black"
                   >
-                    Apply
+                    Checkout
                   </button>
                   <button
                     onClick={clearCart}
