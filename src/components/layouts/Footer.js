@@ -23,89 +23,19 @@ export default function Footer() {
       <footer className="bg-gray-100">
         <div className="mx-auto container py-16">
           <div className="lg:flex lg:items-start lg:gap-8">
-            {/* <div>
-              <Link href={PATH_HOME}>
-                <Image src={assets.logo} width={50} height={50} alt="Logo" />
-              </Link>
-            </div> */}
-
             <div className="mt-8 grid grid-cols-2 gap-8 lg:mt-0 lg:grid-cols-5 lg:gap-y-16">
-              <div className="col-span-2">
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900">Get the latest news!</h2>
-
-                  <p className="mt-4 text-gray-500">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse non cupiditate
-                    quae nam molestias.
-                  </p>
-                </div>
-              </div>
-
-              <div className="col-span-2 lg:col-span-3 lg:flex lg:items-end">
-                <form className="w-full">
-                  {/* <label htmlFor="UserEmail" className="sr-only">
-                    {' '}
-                    Email{' '}
-                  </label> */}
-
-                  <div className="border  border-white p-2 bg-white focus-within:ring sm:flex sm:items-center sm:gap-4">
-                    <input
-                      type="email"
-                      id="UserEmail"
-                      placeholder="john@rhcp.com"
-                      className="w-full border-none focus:border-transparent focus:outline-none focus:ring-transparent sm:text-sm"
-                    />
-
-                    <button className="mt-1 w-full bg-primary px-6 py-3 text-sm font-bold uppercase tracking-wide text-white transition-none hover:bg-teal-600 sm:mt-0 sm:w-auto sm:shrink-0">
-                      Subscribe
-                    </button>
-                  </div>
-                </form>
-              </div>
-
               <div className="col-span-2 sm:col-span-1">
-                <p className="font-medium text-gray-900">Services</p>
+                <p className="font-medium text-gray-900">About</p>
 
-                <ul className="mt-6 space-y-4 text-sm">
-                  <li>
-                    <a href="#" className="text-gray-700 transition hover:opacity-75">
-                      {' '}
-                      1on1 Coaching{' '}
-                    </a>
-                  </li>
-
-                  <li>
-                    <a href="#" className="text-gray-700 transition hover:opacity-75">
-                      {' '}
-                      Company Review{' '}
-                    </a>
-                  </li>
-
-                  <li>
-                    <a href="#" className="text-gray-700 transition hover:opacity-75">
-                      {' '}
-                      Accounts Review{' '}
-                    </a>
-                  </li>
-
-                  <li>
-                    <a href="#" className="text-gray-700 transition hover:opacity-75">
-                      {' '}
-                      HR Consulting{' '}
-                    </a>
-                  </li>
-
-                  <li>
-                    <a href="#" className="text-gray-700 transition hover:opacity-75">
-                      {' '}
-                      SEO Optimisation{' '}
-                    </a>
-                  </li>
-                </ul>
+                <p className="text-gray-700 text-justify ">
+                  Your one-stop online shop for stylish and durable bags. From everyday totes to
+                  travel essentials, <span className="font-bold">PANNI</span> offers the perfect
+                  blend of fashion and function for every occasion.
+                </p>
               </div>
 
-              <div className="col-span-2 sm:col-span-1">
-                <p className="font-medium text-gray-900">Company</p>
+              <div className="col-span-2 sm:col-span-1 pl-0 md:pl-8">
+                <p className="font-medium text-gray-900">Info</p>
 
                 <ul className="mt-6 space-y-4 text-sm">
                   <li>
@@ -190,13 +120,6 @@ export default function Footer() {
                       Refund Policy{' '}
                     </a>
                   </li>
-
-                  <li>
-                    <a href="#" className="text-gray-700 transition hover:opacity-75">
-                      {' '}
-                      Hiring Statistics{' '}
-                    </a>
-                  </li>
                 </ul>
               </div>
 
@@ -204,7 +127,7 @@ export default function Footer() {
                 <iframe
                   className="w-full h-[12rem]"
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14599.553217544306!2d90.38312933890134!3d23.822570587577086!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c6c2ab936b87%3A0xcaa915c4069493be!2sECB%20Chattar%2C%20Dhaka!5e0!3m2!1sen!2sbd!4v1737921650296!5m2!1sen!2sbd"
-                  allowfullscreen=""
+                  allowFullScreen=""
                   loading="lazy"
                   referrerpolicy="no-referrer-when-downgrade"
                 ></iframe>
@@ -285,7 +208,7 @@ export default function Footer() {
           <div className="mt-8 border-t border-gray-100 pt-8">
             <div className="sm:flex sm:justify-between">
               <p className="text-xs text-gray-500">
-                &copy; 2025. Panni. All rights reserved. Powered by Ejaz
+                &copy; 2025. Panni. All rights reserved. Powered by EZR
               </p>
 
               <ul className="mt-8 flex flex-wrap justify-start gap-4 text-xs sm:mt-0 lg:justify-end">
