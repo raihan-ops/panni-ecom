@@ -48,10 +48,10 @@ const apiCall = async (
     return response;
   } catch (error) {
     if (error?.response?.status === 403 || error?.response?.status === 401) {
-      // localStorage.removeItem(ACCESS_TOKEN);
-      errorHandle && errorHandle();
+      localStorage.removeItem(ACCESS_TOKEN);
     }
     console.log('Getting error', error);
+    errorHandle && errorHandle(error);
     onErrorHandle && onErrorHandle(error);
     setLoading(false);
     const _error = error?.response?.data?.message;

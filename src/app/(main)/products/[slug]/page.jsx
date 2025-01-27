@@ -10,6 +10,7 @@ import { Icons } from '@/assets/icons';
 import LoadingSuspense from '@/components/loader/LoadingSuspense';
 import { useGlobalContext } from '@/contexts/GlobalContextProvider';
 import { PATH_CHECKOUT } from '@/helpers/Slugs';
+import { Toast } from '@/components/shared/toast/Toast';
 
 const ProductDetails = () => {
   const params = useParams();
@@ -22,7 +23,7 @@ const ProductDetails = () => {
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
 
-  const { updateCart, getCartItemQuantity, cart } = useGlobalContext();
+  const { updateCart, getCartItemQuantity, cart, clearCart } = useGlobalContext();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -79,20 +80,28 @@ const ProductDetails = () => {
 
   const handleAddToCart = async (e) => {
     e.preventDefault();
-    await updateCart(product, quantity);
+
+    if (quantity <= 0) {
+      Toast('error', 'error', 'Please add quantity first');
+      return;
+    }
+    await updateCart(product, quantity, selectedColor, selectedSize);
   };
 
-  const handleBuyNow = (e) => {
+  const handleBuyNow = async (e) => {
     e.preventDefault();
-    const buyNow_data = [product, quantity];
-    // console.log({
-    //   product,
-    //   quantity,
-    //   selectedColor,
-    //   selectedSize,
-    // });
-    localStorage.setItem('buy-now', JSON.stringify(buyNow_data));
-    router.push(PATH_CHECKOUT);
+    if (quantity <= 0) {
+      Toast('error', 'error', 'Please add quantity first');
+      return;
+    }
+
+    try {
+      await clearCart(false);
+      await updateCart(product, quantity, selectedColor, selectedSize, true);
+      router.push(PATH_CHECKOUT);
+    } catch (error) {
+      Toast('error', 'Error', 'Failed to process buy now request');
+    }
   };
 
   const tabs = [
@@ -174,7 +183,7 @@ const ProductDetails = () => {
 
                   <span className="text-green">
                     {' '}
-                    {product?.quantity > 1 ? 'In Stock' : 'Out Of Stock'}{' '}
+                    {product?.quantity > 1 ? 'In Stock' : 'Out Of Stock'} ({product?.quantity})
                   </span>
                 </div>
               </div>
@@ -220,19 +229,22 @@ const ProductDetails = () => {
                       {product?.colorList?.map((color, key) => (
                         <label
                           key={key}
-                          htmlFor={color}
+                          htmlFor={color.code}
                           className="cursor-pointer select-none flex items-center"
                         >
                           <div className="relative">
                             <input
                               type="radio"
                               name="color"
-                              id={color}
+                              id={color.code}
                               className="sr-only"
-                              //   onChange={() => setActiveColor(color)}
+                              checked={selectedColor?.code === color.code}
+                              onChange={() => setSelectedColor(color)}
                             />
                             <div
-                              className={`flex items-center justify-center w-5.5 h-5.5 rounded-full border`}
+                              className={`flex items-center justify-center w-5.5 h-5.5 rounded-full border ${
+                                selectedColor?.code === color.code ? 'border-4' : 'border'
+                              }`}
                               style={{ borderColor: `${color.code}` }}
                             >
                               <span
