@@ -198,7 +198,7 @@ const LeftNavItems = ({ toggleMenu }) => {
                           {categories.map((_sub_category, j) => (
                             <li key={j} className="mb-4" onClick={handleDropdownToggle}>
                               <Link
-                                href={PATH_ALL_PRODUCT}
+                                href={`${PATH_ALL_PRODUCT}?searchKey=${_sub_category.name}`}
                                 title={_sub_category.name}
                                 className="font-bold text-black hover:text-gray-700 transition-all"
                               >
@@ -243,7 +243,7 @@ const LeftNavItems = ({ toggleMenu }) => {
                           {women.map((_sub_category, j) => (
                             <li key={j} className="mb-4" onClick={handleSubDropdownToggle}>
                               <Link
-                                href={PATH_ALL_PRODUCT}
+                                href={`${PATH_ALL_PRODUCT}?searchKey=${_sub_category.name}`}
                                 title={_sub_category.name}
                                 className="font-bold text-black hover:text-gray-700 transition-all"
                               >
@@ -381,7 +381,7 @@ const LeftNavItems = ({ toggleMenu }) => {
                     <div key={j} className="col-span-1 h-fit">
                       <div className="mb-2 mt-2">
                         <Link
-                          href={PATH_ALL_PRODUCT}
+                          href={`${PATH_ALL_PRODUCT}?searchKey=${_sub_category.name}`}
                           title={_sub_category.name}
                           className="font-bold text-black hover:text-gray-700 transition-all"
                         >
@@ -393,7 +393,7 @@ const LeftNavItems = ({ toggleMenu }) => {
                           {_sub_category.subCategoryList.map((_subsubcategory, k) => (
                             <li key={k} className="hover:bg-gray-200">
                               <Link
-                                href={PATH_ALL_PRODUCT}
+                                href={`${PATH_ALL_PRODUCT}?searchKey=${_subsubcategory.name}`}
                                 title={_subsubcategory.name}
                                 className="text-black hover:text-gray-700 transition-all w-full"
                               >

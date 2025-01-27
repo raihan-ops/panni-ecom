@@ -39,7 +39,7 @@ const SectionProductItems = () => {
     <div>
       <div>
         <div className="flex justify-between items-center mb-2">
-          <h2 className="text-2xl font-bold mb-2">women</h2>
+          <h2 className="text-2xl font-bold mb-2">Women</h2>
           <Link
             href={PATH_ALL_PRODUCT}
             className="border h-fit rounded py-1 px-5 text-center text-sm bg-white transition-all duration-500 hover:bg-black hover:text-white"
