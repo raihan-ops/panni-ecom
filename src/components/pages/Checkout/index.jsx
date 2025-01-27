@@ -2,18 +2,14 @@
 
 import React, { useEffect, useState } from 'react';
 import Breadcrumb from '../Common/Breadcrumb';
-import { Form, Select, Modal, message } from 'antd';
+import { Checkbox, message, Modal, Select } from 'antd';
 import Image from 'next/image';
-import assets from '@/assets/asset';
-import { Checkbox } from 'antd';
 import { useGlobalContext } from '@/contexts/GlobalContextProvider';
 import { useForm } from 'react-hook-form';
 import api from '@/providers/Api';
 import { ORDER_PLACED_API_URL } from '@/helpers/apiUrl';
-import { Toast } from '@/components/shared/toast/Toast';
 import { INSIDE_DHAKA_CITIES, OUTSIDE_DHAKA_CITIES } from '@/helpers/constant';
 import { useRouter } from 'next/navigation';
-import { PATH_HOME } from '@/helpers/Slugs';
 
 const onChange = (e) => {
   console.log(`checked = ${e.target.checked}`);
@@ -556,26 +552,26 @@ const CheckoutPage = () => {
                     })()}
                   </div>
 
-                  <div className="w-full">
-                    <label htmlFor="couponCode" className="block mb-1 text-sm">
-                      Coupon code
-                    </label>
+                  {/*<div className="w-full">*/}
+                  {/*  <label htmlFor="couponCode" className="block mb-1 text-sm">*/}
+                  {/*    Coupon code*/}
+                  {/*  </label>*/}
 
-                    <input
-                      {...register('couponCode')}
-                      type="text"
-                      placeholder="Enter your code"
-                      className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-black"
-                    />
+                  {/*  <input*/}
+                  {/*    {...register('couponCode')}*/}
+                  {/*    type="text"*/}
+                  {/*    placeholder="Enter your code"*/}
+                  {/*    className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-black"*/}
+                  {/*  />*/}
 
-                    <button
-                      onClick={handleCouponSubmit}
-                      type="button"
-                      className="inline-flex mt-2 font-medium text-white bg-blue-500 py-2 px-7 rounded-md ease-out duration-200 hover:bg-blue-700"
-                    >
-                      Apply
-                    </button>
-                  </div>
+                  {/*  <button*/}
+                  {/*    onClick={handleCouponSubmit}*/}
+                  {/*    type="button"*/}
+                  {/*    className="inline-flex mt-2 font-medium text-white bg-blue-500 py-2 px-7 rounded-md ease-out duration-200 hover:bg-blue-700"*/}
+                  {/*  >*/}
+                  {/*    Apply*/}
+                  {/*  </button>*/}
+                  {/*</div>*/}
                 </div>
               </div>
             </div>

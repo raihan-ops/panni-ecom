@@ -5,7 +5,7 @@ const Breadcrumb = ({ title, pages }) => {
   return (
     <div className="overflow-hidden shadow-breadcrumb">
       <div className="">
-        <div className="max-w-[1140px] w-full mx-auto px-4 sm:px-8 xl:px-0 py-2">
+        <div className="w-full mx-auto px-4 sm:px-8 xl:px-0 py-2">
           <ul className="flex items-center gap-2">
             <li className="text-sm text-black hover:text-blue-500">
               <Link href="/">Home /</Link>
