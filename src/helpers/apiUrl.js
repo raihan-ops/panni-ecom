@@ -58,5 +58,7 @@ export const ORDER_PLACED_API_URL = `${API_URL}/orders/create`;
 export const ORDER_TRACK_INVOICE_API_URL = `${API_URL}/orders/invoice-number`;
 
 // settings
-
 export const GET_SETTINGS_API_URL = `${API_URL}/settings/get-default`;
+
+//contact
+export const SUBMIT_CONTACT = `${API_URL}/contact/create`;
