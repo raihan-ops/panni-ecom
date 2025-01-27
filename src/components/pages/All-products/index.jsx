@@ -221,6 +221,7 @@ const AllProductsPAge = ({ params }) => {
                     <CategoryDropdown
                       categories={categories}
                       onCategoryClick={handleCategoryClick}
+                      selectedCategoryIds={selectedCategoryIds}
                     />
 
                     {/* // <!-- size box --> */}
