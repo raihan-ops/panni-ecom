@@ -1,14 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const CategoryItem = ({ category, onCategoryClick }) => {
+const CategoryItem = ({ category, onCategoryClick, selectedCategoryIds }) => {
   const [selected, setSelected] = useState(false);
+  useEffect(() => {
+    if (selectedCategoryIds?.includes(category?.id)) {
+      setSelected(true);
+    } else {
+      setSelected(false);
+    }
+  }, [selectedCategoryIds]);
   return (
     <button
       className={`${
         selected && 'text-blue-500'
       } group flex items-center justify-between ease-out duration-200 hover:text-blue-500 `}
       onClick={() => {
-        setSelected(!selected);
         onCategoryClick(category.id);
       }}
     >
@@ -50,7 +56,7 @@ const CategoryItem = ({ category, onCategoryClick }) => {
   );
 };
 
-const CategoryDropdown = ({ categories, onCategoryClick }) => {
+const CategoryDropdown = ({ categories, onCategoryClick, selectedCategoryIds }) => {
   const [toggleDropdown, setToggleDropdown] = useState(true);
 
   return (
@@ -89,7 +95,12 @@ const CategoryDropdown = ({ categories, onCategoryClick }) => {
 
       <div className={`flex-col gap-3 py-6 pl-6 pr-5 ${toggleDropdown ? 'flex' : 'hidden'}`}>
         {categories?.map((category, key) => (
-          <CategoryItem key={key} category={category} onCategoryClick={onCategoryClick} />
+          <CategoryItem
+            key={key}
+            category={category}
+            onCategoryClick={onCategoryClick}
+            selectedCategoryIds={selectedCategoryIds}
+          />
         ))}
       </div>
     </div>
