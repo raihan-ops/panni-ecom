@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Breadcrumb from '../Common/Breadcrumb';
-import { Drawer, Dropdown, Space } from 'antd';
+import { Drawer, Dropdown, Space, Pagination } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import SizeDropdown from './SizeDropdown';
 import CategoryDropdown from './CategoryDropdown';
@@ -12,6 +12,8 @@ import axios from 'axios';
 import { GET_ALL_PRODUCT_COLORS, GET_ALL_PRODUCTS, GET_ALL_SUB_CATEGORIES } from '@/helpers/apiUrl';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { PATH_ALL_PRODUCT } from '@/helpers/Slugs';
+import LoadingSuspense from '@/components/loader/LoadingSuspense';
 
 const AllProductsPAge = ({ params }) => {
   const [categories, setCategories] = useState([]);
@@ -33,6 +35,9 @@ const AllProductsPAge = ({ params }) => {
 
   const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
 
+  // Add pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
     (async function fetchSubcategories() {
       try {
@@ -48,34 +53,29 @@ const AllProductsPAge = ({ params }) => {
     fetchColors();
   }, [searchKey]);
 
-  const fetchProducts = async (categoryIds = []) => {
+  // Modify fetchProducts to handle pagination and loading states properly
+  const fetchProducts = async (page = 1) => {
     try {
-      const categoryQuery =
-        categoryIds.length > 0 ? `&subCategoryIds=${categoryIds.join(',')}` : '';
-
-      const colorQuery = activeColor ? `&color=${encodeURIComponent(activeColor)}` : '';
-
-      const sizeQuery = size ? `&productSize=${size}` : '';
-
-      const sortQuery = `&sort=${sortOption}`;
-
-      const searchKeyQuery = searchKey ? `&searchKey=${searchKey}` : '';
-
-      const offerQuery = params.offerId ? `&offerId=${params.offerId}` : '';
-
       setProductLoader(true);
 
-      const response = await axios.get(
-        `${GET_ALL_PRODUCTS}?size=10${categoryQuery}${sortQuery}${colorQuery}${sizeQuery}${offerQuery}${searchKeyQuery}`,
-      );
+      const queryParams = new URLSearchParams({
+        size: 10,
+        page: page - 1,
+        sort: sortOption,
+        ...(selectedCategoryIds.length > 0 && { subCategoryIds: selectedCategoryIds.join(',') }),
+        ...(activeColor && { color: activeColor }),
+        ...(size && { productSize: size }),
+        ...(searchKey && { searchKey }),
+        ...(params.offerId && { offerId: params.offerId }),
+      });
+
+      const response = await axios.get(`${GET_ALL_PRODUCTS}?${queryParams}`);
 
       setProducts(response.data?.content);
       setTotalProducts(response.data?.totalElements);
-      setPageTotal(response.data?.content?.length);
-      // setProductLoader(false);
+      setPageTotal(response.data?.totalPages);
     } catch (error) {
       console.error('Error fetching products:', error);
-      setProductLoader(false);
     } finally {
       setProductLoader(false);
     }
@@ -92,19 +92,25 @@ const AllProductsPAge = ({ params }) => {
     }
   };
 
-  // Re-fetch products whenever sortOption changes
+  // Reset pagination when filters change
   useEffect(() => {
-    fetchProducts(selectedCategoryIds, sortOption);
-  }, [sortOption, selectedCategoryIds, activeColor, size]);
+    setCurrentPage(1);
+    fetchProducts(1);
+  }, [sortOption, selectedCategoryIds, activeColor, size, searchKey]);
 
   const handleCategoryClick = (categoryId) => {
-    // router.push(`${PATH_ALL_PRODUCT}`);
-    setSelectedCategoryIds(
-      (prev) =>
-        prev.includes(categoryId)
-          ? prev.filter((id) => id !== categoryId) // Remove if already selected
-          : [...prev, categoryId], // Add if not selected
+    // Update selected categories
+    setSelectedCategoryIds((prev) =>
+      prev.includes(categoryId) ? prev.filter((id) => id !== categoryId) : [...prev, categoryId],
     );
+
+    // Remove searchKey from URL
+    const currentParams = new URLSearchParams(window.location.search);
+    currentParams.delete('searchKey');
+
+    // Update URL without searchKey
+    const newUrl = `${PATH_ALL_PRODUCT}${currentParams.toString() ? `?${currentParams.toString()}` : ''}`;
+    router.push(newUrl);
   };
 
   const handleSortChange = ({ key }) => {
@@ -117,7 +123,34 @@ const AllProductsPAge = ({ params }) => {
 
   const handleSizeChange = (size) => {
     setSize(size);
-    console.log('Size:', size);
+  };
+
+  // Handle clear all filters
+  const handleClearFilters = () => {
+    setSelectedCategoryIds([]);
+    setActiveColor(null);
+    setSize('');
+    setSortOption('newest');
+    // Remove searchKey from URL
+    const currentParams = new URLSearchParams(window.location.search);
+    currentParams.delete('searchKey');
+
+    // Update URL without searchKey
+    const newUrl = `${PATH_ALL_PRODUCT}${currentParams.toString() ? `?${currentParams.toString()}` : ''}`;
+    router.push(newUrl);
+  };
+
+  // Load more products function
+  const loadMoreProducts = () => {
+    const nextPage = currentPage + 1;
+    setCurrentPage(nextPage);
+    fetchProducts(nextPage);
+  };
+
+  // Handle page change
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchProducts(page);
   };
 
   const items = [
@@ -158,7 +191,7 @@ const AllProductsPAge = ({ params }) => {
   };
 
   if (productLoader) {
-    console.log('Loader------', productLoader);
+    return <LoadingSuspense />;
   }
   return (
     <>
@@ -175,7 +208,12 @@ const AllProductsPAge = ({ params }) => {
                     <div className="bg-gray-100 shadow-1 rounded-lg py-4 px-5">
                       <div className="flex items-center justify-between">
                         <p>Filters:</p>
-                        {/* <button className="text-blue-600">Clean All</button> */}
+                        <button
+                          className="text-blue-600 hover:text-blue-800"
+                          onClick={handleClearFilters}
+                        >
+                          Clear All
+                        </button>
                       </div>
                     </div>
 
@@ -221,7 +259,8 @@ const AllProductsPAge = ({ params }) => {
                       <p className="hidden md:block">
                         Showing{' '}
                         <span className="text-dark">
-                          {pageTotal} of {totalProducts}
+                          {currentPage > pageTotal ? 0 : (currentPage - 1) * 10 + 1} -{' '}
+                          {Math.min(currentPage * 10, totalProducts)} of {totalProducts}
                         </span>{' '}
                         Products
                       </p>
@@ -258,6 +297,23 @@ const AllProductsPAge = ({ params }) => {
                     </div>
                   ))}
                 </div>
+
+                {/* Ant Design Pagination */}
+                <Pagination
+                  current={currentPage}
+                  pageSize={10}
+                  total={totalProducts}
+                  onChange={handlePageChange}
+                  showSizeChanger={false}
+                  className="flex justify-center mt-8"
+                />
+
+                {/* Show no results message */}
+                {products.length === 0 && !productLoader && (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500">No products found matching your filters</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
