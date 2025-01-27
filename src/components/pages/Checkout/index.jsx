@@ -12,6 +12,8 @@ import api from '@/providers/Api';
 import { ORDER_PLACED_API_URL } from '@/helpers/apiUrl';
 import { Toast } from '@/components/shared/toast/Toast';
 import { INSIDE_DHAKA_CITIES, OUTSIDE_DHAKA_CITIES } from '@/helpers/constant';
+import { useRouter } from 'next/navigation';
+import { PATH_HOME } from '@/helpers/Slugs';
 
 const onChange = (e) => {
   console.log(`checked = ${e.target.checked}`);
@@ -22,6 +24,7 @@ const handleChange = (value) => {
 };
 
 const CheckoutPage = () => {
+  const router = useRouter();
   const { cart, updateCart, settingsData, clearCart } = useGlobalContext();
 
   const [loading, setLoading] = useState(false);
@@ -63,11 +66,32 @@ const CheckoutPage = () => {
   }, [deliveryType]);
 
   const calculateTotals = () => {
-    const subtotal = cart.invoice.totalPrice || 0;
+    let totalOriginalPrice = 0;
+    let totalDiscountedPrice = 0;
+
+    cart.cartDetailsList?.forEach((item) => {
+      const basePrice = item?.product?.price;
+      const quantity = item?.quantity;
+
+      // Check both discount types and use the applicable one
+      const productOfferDiscount = item?.product?.productOffer?.discountPercentage || 0;
+      const normalDiscount = item?.product?.discountPercentage || 0;
+
+      // Use product offer discount if available, otherwise use normal discount
+      const applicableDiscount = productOfferDiscount > 0 ? productOfferDiscount : normalDiscount;
+
+      const originalPriceForItem = basePrice * quantity;
+      const discountedPriceForItem = basePrice * (1 - applicableDiscount / 100) * quantity;
+
+      totalOriginalPrice += originalPriceForItem;
+      totalDiscountedPrice += discountedPriceForItem;
+    });
+
+    const subtotal = Math.round(totalDiscountedPrice);
     const shippingFee = deliveryCharge;
     const tax = 0;
-    const discount = 0;
-    const finalPrice = subtotal + shippingFee + tax - discount;
+    const discount = Math.round(totalOriginalPrice - totalDiscountedPrice);
+    const finalPrice = subtotal + shippingFee + tax;
 
     return {
       subtotal,
@@ -132,7 +156,8 @@ const CheckoutPage = () => {
         if (res.data) {
           setOrderInfo(res?.data);
           setOrderSuccessModal(true);
-          clearCart();
+          clearCart(false);
+          // router.push(PATH_HOME);
           // Toast('success', 'success', 'Order has been placed successfully');
         }
       },
@@ -164,6 +189,13 @@ const CheckoutPage = () => {
                       key={product.id}
                       className="px-3 py-3 mb-2 bg-white rounded-md flex justify-between items-center shadow-md relative"
                     >
+                      {(product.productOffer?.discountPercentage || product.discountPercentage) >
+                        0 && (
+                        <div className="absolute -top-2 -left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-md">
+                          -{product.productOffer?.discountPercentage || product.discountPercentage}%
+                          off
+                        </div>
+                      )}
                       <div className="rounded-lg">
                         {product.images.length > 0 && (
                           <Image
@@ -228,7 +260,24 @@ const CheckoutPage = () => {
                       </div>
                       <div>
                         <p className="m-0 p-0 text-sm">Price</p>
-                        <p className="text-gray-500 text-sm">৳{product.price * quantity}</p>
+                        {(product.productOffer?.discountPercentage || product.discountPercentage) >
+                          0 && (
+                          <p className="text-gray-500 text-sm line-through">
+                            ৳{product.price * quantity}
+                          </p>
+                        )}
+                        <p className="text-gray-500 text-sm">
+                          ৳
+                          {Math.round(
+                            product.price *
+                              (1 -
+                                (product.productOffer?.discountPercentage ||
+                                  product.discountPercentage ||
+                                  0) /
+                                  100) *
+                              quantity,
+                          )}
+                        </p>
                       </div>
                       <button
                         onClick={() => handleDelete(product)}
@@ -550,15 +599,15 @@ const CheckoutPage = () => {
         ]}
       >
         <div className="py-4">
-          <p className="text-lg text-green-600 mb-4">
+          <p className="text-lg font-semibold text-green-600 mb-4">
             Thank you! Your order has been placed successfully.
           </p>
-          <div className="flex items-center gap-2 bg-gray-100 p-3 rounded-md">
+          <div className="flex items-center gap-2 bg-gray-100 p-3 rounded-md mb-4">
             <span className="font-medium">Invoice Number:</span>
             <span>{orderInfo.invoiceNumber}</span>
             <button
               onClick={handleCopyInvoice}
-              className="ml-2 p-2 hover:bg-gray-200 rounded-md"
+              className="ml-2 p-2 hover:bg-gray-200 rounded-md font-semibold"
               title="Copy invoice number"
             >
               <svg
@@ -576,6 +625,15 @@ const CheckoutPage = () => {
                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
               </svg>
             </button>
+          </div>
+          <div className="bg-yellow-50 p-4 rounded-md border border-yellow-200">
+            <p className="text-sm text-yellow-800 mb-2">
+              <span className="font-semibold">Important:</span> Please take a screenshot or copy
+              your invoice number for future reference.
+            </p>
+            <p className="text-sm text-yellow-800">
+              You can use this invoice number to check your order status and track your delivery.
+            </p>
           </div>
         </div>
       </Modal>

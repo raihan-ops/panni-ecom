@@ -19,6 +19,7 @@ export default function GlobalContextProvider({ children }) {
       totalProduct: 0,
       totalPrice: 0,
       finalPrice: 0,
+      discountAmount: 0,
     },
     cartDetailsList: [],
   });
@@ -66,16 +67,36 @@ export default function GlobalContextProvider({ children }) {
   };
 
   const calculateInvoice = (cartDetails) => {
-    const totalProduct = cartDetails.reduce((sum, item) => sum + item.quantity, 0);
-    const totalPrice = cartDetails.reduce(
-      (sum, item) => sum + item.product.price * item.quantity,
-      0,
-    );
+    const totalProduct = cartDetails?.reduce((sum, item) => sum + item?.quantity, 0);
+
+    let totalOriginalPrice = 0;
+    let totalDiscountedPrice = 0;
+
+    cartDetails?.forEach((item) => {
+      const basePrice = item?.product?.price;
+      const quantity = item?.quantity;
+
+      // Check both discount types and use the applicable one
+      const productOfferDiscount = item?.product?.productOffer?.discountPercentage || 0;
+      const normalDiscount = item?.product?.discountPercentage || 0;
+
+      // Use product offer discount if available, otherwise use normal discount
+      const applicableDiscount = productOfferDiscount > 0 ? productOfferDiscount : normalDiscount;
+
+      const originalPriceForItem = basePrice * quantity;
+      const discountedPriceForItem = basePrice * (1 - applicableDiscount / 100) * quantity;
+
+      totalOriginalPrice += originalPriceForItem;
+      totalDiscountedPrice += discountedPriceForItem;
+    });
+
+    const totalDiscountAmount = Math.round(totalOriginalPrice - totalDiscountedPrice);
 
     return {
       totalProduct,
-      totalPrice,
-      finalPrice: totalPrice, // Add any discount logic here if needed
+      totalPrice: Math.round(totalOriginalPrice),
+      discountAmount: totalDiscountAmount,
+      finalPrice: Math.round(totalDiscountedPrice),
     };
   };
 
@@ -84,6 +105,7 @@ export default function GlobalContextProvider({ children }) {
     quantity,
     selectedColor,
     selectedSize,
+    fromByNow = false,
     skipLoginCheck = false,
   ) => {
     // if (!skipLoginCheck && !isLogin) {
@@ -93,8 +115,21 @@ export default function GlobalContextProvider({ children }) {
 
     setCartLoading(true);
     try {
-      const updatedCart = { ...cart };
-      const existingItemIndex = updatedCart.cartDetailsList.findIndex(
+      let updatedCart;
+      if (fromByNow) {
+        updatedCart = {
+          invoice: {
+            totalProduct: 0,
+            totalPrice: 0,
+            finalPrice: 0,
+            discountAmount: 0,
+          },
+          cartDetailsList: [],
+        };
+      } else {
+        updatedCart = { ...cart };
+      }
+      const existingItemIndex = updatedCart?.cartDetailsList?.findIndex(
         (item) =>
           item.product.id === product.id &&
           item.selectedColor === selectedColor &&
@@ -108,7 +143,7 @@ export default function GlobalContextProvider({ children }) {
           updatedCart.cartDetailsList[existingItemIndex].quantity = quantity;
         }
       } else if (quantity > 0) {
-        updatedCart.cartDetailsList.push({
+        updatedCart?.cartDetailsList?.push({
           product,
           quantity,
           selectedColor,
@@ -123,6 +158,7 @@ export default function GlobalContextProvider({ children }) {
         Toast('success', 'Success', 'Cart updated successfully');
       }
     } catch (error) {
+      console.error('error', error);
       if (!skipLoginCheck) {
         Toast('error', 'Error', 'Failed to update cart');
       }
@@ -131,19 +167,28 @@ export default function GlobalContextProvider({ children }) {
     }
   };
 
-  const clearCart = async () => {
+  const clearCart = async (showToast = true) => {
     setCartLoading(true);
     try {
-      setCart({
+      const emptyCart = {
         invoice: {
           totalProduct: 0,
           totalPrice: 0,
           finalPrice: 0,
+          discountAmount: 0,
         },
         cartDetailsList: [],
-      });
-      Toast('success', 'Success', 'Cart cleared successfully');
+      };
+
+      // Update state and localStorage synchronously
+      setCart(emptyCart);
+      // localStorage.setItem('cart', JSON.stringify(emptyCart));
+
+      if (showToast) {
+        Toast('success', 'Success', 'Cart cleared successfully');
+      }
     } catch (error) {
+      console.error('Error clearing cart:', error);
       Toast('error', 'Error', 'Failed to clear cart');
     } finally {
       setCartLoading(false);

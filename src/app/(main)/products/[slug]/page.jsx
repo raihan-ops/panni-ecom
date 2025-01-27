@@ -23,7 +23,7 @@ const ProductDetails = () => {
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
 
-  const { updateCart, getCartItemQuantity, cart } = useGlobalContext();
+  const { updateCart, getCartItemQuantity, cart, clearCart } = useGlobalContext();
 
   const axiosConfig = {
     headers: {
@@ -96,15 +96,20 @@ const ProductDetails = () => {
     await updateCart(product, quantity, selectedColor, selectedSize);
   };
 
-  const handleBuyNow = (e) => {
+  const handleBuyNow = async (e) => {
     e.preventDefault();
     if (quantity <= 0) {
       Toast('error', 'error', 'Please add quantity first');
       return;
     }
-    const buyNow_data = { product, quantity, selectedColor, selectedSize };
-    localStorage.setItem('buy-now', JSON.stringify(buyNow_data));
-    router.push(PATH_CHECKOUT);
+
+    try {
+      await clearCart(false);
+      await updateCart(product, quantity, selectedColor, selectedSize, true);
+      router.push(PATH_CHECKOUT);
+    } catch (error) {
+      Toast('error', 'Error', 'Failed to process buy now request');
+    }
   };
 
   const tabs = [

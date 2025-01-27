@@ -59,8 +59,6 @@ const RightNavItems = ({ toggleMenu }) => {
     await updateCart(product, newQuantity, cartItem.selectedColor, cartItem.selectedSize);
   };
 
-  console.log('Cartttt', cart);
-
   // Add these new states
   const [trackingModal, setTrackingModal] = useState(false);
   const [invoiceNumber, setInvoiceNumber] = useState('');
@@ -91,6 +89,8 @@ const RightNavItems = ({ toggleMenu }) => {
       },
     );
   };
+
+  console.log('CART-----', cart);
 
   return (
     <div className=" bg-white w-full py-2 ">
@@ -198,6 +198,16 @@ const RightNavItems = ({ toggleMenu }) => {
                       key={item.id}
                       className="px-3 py-3 mb-2 bg-white rounded-md flex justify-between items-center shadow-md relative"
                     >
+                      {(item.product.productOffer?.discountPercentage ||
+                        item.product.discountPercentage) > 0 && (
+                        <div className="absolute -top-2 -left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-md">
+                          -
+                          {item.product.productOffer?.discountPercentage ||
+                            item.product.discountPercentage}
+                          % off
+                        </div>
+                      )}
+
                       <div className="rounded-lg">
                         {item?.product?.images?.length > 0 && (
                           <Image
@@ -326,7 +336,7 @@ const RightNavItems = ({ toggleMenu }) => {
                   <div className="mb-4 border-b pb-5">
                     <div className="flex justify-between items-center text-gray-600">
                       <p className="w-fit">Subtotal:</p>
-                      <p className="w-fit">৳{cart.invoice.totalPrice.toFixed(2)}</p>
+                      <p className="w-fit">৳{cart.invoice.totalPrice?.toFixed(2)}</p>
                     </div>
 
                     <div className="flex justify-between items-center text-gray-600">
@@ -339,7 +349,7 @@ const RightNavItems = ({ toggleMenu }) => {
                     </div>
                     <div className="flex justify-between items-center text-gray-600">
                       <p className="w-fit">Discount:</p>
-                      <p className="w-fit">৳00.00</p>
+                      <p className="w-fit">৳{cart.invoice?.discountAmount?.toFixed(2)}</p>
                     </div>
                     <div className="flex justify-between items-center">
                       <p className="w-fit">Total:</p>
@@ -444,57 +454,114 @@ const RightNavItems = ({ toggleMenu }) => {
           )}
 
           {orderDetails && (
-            <div className="space-y-4">
-              <div className="p-4 border rounded-lg">
-                <h3 className="font-semibold text-lg mb-2">Order Status: {orderDetails.status}</h3>
-                <p>Invoice: {orderDetails.invoiceNumber}</p>
-                <p>
-                  Customer: {orderDetails.customer.firstName} {orderDetails.customer.lastName}
-                </p>
-                <p>Email: {orderDetails.email}</p>
-                <p>
-                  Phone: {orderDetails.countryCode} {orderDetails.mobileNumber}
-                </p>
+            <div className="space-y-6">
+              {/* Status Banner */}
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                <div className="flex items-center gap-3">
+                  <div className="bg-blue-100 p-2 rounded-full">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 text-blue-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-sm text-blue-600">Order Status</p>
+                    <h3 className="font-semibold text-lg">{orderDetails.status}</h3>
+                  </div>
+                </div>
               </div>
 
-              <div className="p-4 border rounded-lg">
-                <h3 className="font-semibold text-lg mb-2">Delivery Address</h3>
-                <p>{orderDetails.deliveryAddress.title}</p>
-                <p>{orderDetails.deliveryAddress.addressDesc}</p>
-                <p>{orderDetails.deliveryAddress.city}</p>
-              </div>
-
-              <div className="p-4 border rounded-lg">
-                <h3 className="font-semibold text-lg mb-2">Order Items</h3>
-                {orderDetails.cartDetailsList.map((item) => (
-                  <div key={item.id} className="flex justify-between items-center py-2 border-b">
-                    <div>
-                      <p className="font-medium">{item.product.name}</p>
-                      <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
+              {/* Order Info */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Customer Details */}
+                <div className="p-5 border rounded-lg bg-gray-50">
+                  <h3 className="font-semibold text-gray-700 mb-4">Customer Information</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-500">Invoice:</span>
+                      <span className="font-medium">{orderDetails.invoiceNumber}</span>
                     </div>
-                    <p className="font-medium">৳{item.totalPrice}</p>
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-500">Name:</span>
+                      <span className="font-medium">{orderDetails.fullName}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-500">Phone:</span>
+                      <span className="font-medium">
+                        {orderDetails.countryCode} {orderDetails.mobileNumber}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-500">Email:</span>
+                      <span className="font-medium">{orderDetails.email}</span>
+                    </div>
                   </div>
-                ))}
+                </div>
+
+                {/* Delivery Address */}
+                <div className="p-5 border rounded-lg bg-gray-50">
+                  <h3 className="font-semibold text-gray-700 mb-4">Delivery Address</h3>
+                  <div className="space-y-2">
+                    <p className="font-medium">{orderDetails.deliveryAddress.title}</p>
+                    <p className="text-gray-600">{orderDetails.deliveryAddress.addressDesc}</p>
+                    <p className="text-gray-600">{orderDetails.deliveryAddress.city}</p>
+                  </div>
+                </div>
               </div>
 
-              <div className="p-4 border rounded-lg">
-                <h3 className="font-semibold text-lg mb-2">Order Summary</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <p>Subtotal:</p>
-                    <p>৳{orderDetails.invoice.totalProductPrice}</p>
-                  </div>
-                  <div className="flex justify-between">
-                    <p>Delivery Charge:</p>
-                    <p>৳{orderDetails.invoice.deliveryCharge}</p>
-                  </div>
-                  <div className="flex justify-between">
-                    <p>Discount:</p>
-                    <p>৳{orderDetails.invoice.promoDiscount}</p>
-                  </div>
-                  <div className="flex justify-between font-semibold">
-                    <p>Total:</p>
-                    <p>৳{orderDetails.invoice.finalPrice}</p>
+              {/* Order Items */}
+              <div className="border rounded-lg overflow-hidden">
+                <h3 className="font-semibold text-gray-700 p-4 bg-gray-50 border-b">Order Items</h3>
+                <div className="divide-y">
+                  {orderDetails.cartDetailsList.map((item) => (
+                    <div key={item.id} className="p-4 flex justify-between items-center">
+                      <div className="flex-1">
+                        <p className="font-medium text-gray-800">{item.product.name}</p>
+                        <div className="mt-1 text-sm text-gray-500 flex gap-4">
+                          <span>Quantity: {item.quantity}</span>
+                          <span>Unit Price: ৳{item.price}</span>
+                        </div>
+                      </div>
+                      <p className="font-medium text-gray-800">৳{item.totalPrice}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Order Summary */}
+              <div className="border rounded-lg overflow-hidden">
+                <h3 className="font-semibold text-gray-700 p-4 bg-gray-50 border-b">
+                  Order Summary
+                </h3>
+                <div className="p-4">
+                  <div className="space-y-3">
+                    <div className="flex justify-between text-gray-600">
+                      <span>Subtotal</span>
+                      <span>৳{orderDetails.invoice.totalProductPrice}</span>
+                    </div>
+                    <div className="flex justify-between text-gray-600">
+                      <span>Delivery Charge</span>
+                      <span>৳{orderDetails.invoice.deliveryCharge}</span>
+                    </div>
+                    <div className="flex justify-between text-gray-600">
+                      <span>Discount</span>
+                      <span>৳{orderDetails.invoice.promoDiscount}</span>
+                    </div>
+                    <div className="h-px bg-gray-200 my-2"></div>
+                    <div className="flex justify-between font-semibold text-lg">
+                      <span>Total</span>
+                      <span>৳{orderDetails.invoice.finalPrice}</span>
+                    </div>
                   </div>
                 </div>
               </div>
