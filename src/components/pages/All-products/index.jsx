@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Breadcrumb from '../Common/Breadcrumb';
-import { Dropdown, Space } from 'antd';
+import { Drawer, Dropdown, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import SizeDropdown from './SizeDropdown';
 import CategoryDropdown from './CategoryDropdown';
@@ -11,7 +11,7 @@ import ProductItem from '../Common/ProductItem';
 import axios from 'axios';
 import { GET_ALL_PRODUCT_COLORS, GET_ALL_PRODUCTS, GET_ALL_SUB_CATEGORIES } from '@/helpers/apiUrl';
 import Link from 'next/link';
-import { Button, Drawer } from 'antd';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const AllProductsPAge = ({ params }) => {
   const [categories, setCategories] = useState([]);
@@ -20,9 +20,16 @@ const AllProductsPAge = ({ params }) => {
   const [activeColor, setActiveColor] = useState(null);
   const [size, setSize] = useState('');
   const [sortOption, setSortOption] = useState('newest');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [totalProducts, setTotalProducts] = useState(0);
   const [pageTotal, setPageTotal] = useState(0);
+
+  const [productLoader, setProductLoader] = useState(false);
+
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const searchKey = searchParams.get('searchKey') || '';
 
   const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
 
@@ -39,7 +46,7 @@ const AllProductsPAge = ({ params }) => {
     // Fetch all products initially
     fetchProducts();
     fetchColors();
-  }, []);
+  }, [searchKey]);
 
   const fetchProducts = async (categoryIds = []) => {
     try {
@@ -52,19 +59,25 @@ const AllProductsPAge = ({ params }) => {
 
       const sortQuery = `&sort=${sortOption}`;
 
+      const searchKeyQuery = searchKey ? `&searchKey=${searchKey}` : '';
+
       const offerQuery = params.offerId ? `&offerId=${params.offerId}` : '';
 
+      setProductLoader(true);
+
       const response = await axios.get(
-        `${GET_ALL_PRODUCTS}?size=10${categoryQuery}${sortQuery}${colorQuery}${sizeQuery}${offerQuery}`,
+        `${GET_ALL_PRODUCTS}?size=10${categoryQuery}${sortQuery}${colorQuery}${sizeQuery}${offerQuery}${searchKeyQuery}`,
       );
 
       setProducts(response.data?.content);
       setTotalProducts(response.data?.totalElements);
       setPageTotal(response.data?.content?.length);
+      // setProductLoader(false);
     } catch (error) {
       console.error('Error fetching products:', error);
+      setProductLoader(false);
     } finally {
-      setLoading(false);
+      setProductLoader(false);
     }
   };
 
@@ -85,6 +98,7 @@ const AllProductsPAge = ({ params }) => {
   }, [sortOption, selectedCategoryIds, activeColor, size]);
 
   const handleCategoryClick = (categoryId) => {
+    // router.push(`${PATH_ALL_PRODUCT}`);
     setSelectedCategoryIds(
       (prev) =>
         prev.includes(categoryId)
@@ -143,6 +157,9 @@ const AllProductsPAge = ({ params }) => {
     setOpen(false);
   };
 
+  if (productLoader) {
+    console.log('Loader------', productLoader);
+  }
   return (
     <>
       <div className="container">
