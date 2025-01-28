@@ -11,9 +11,9 @@ const ProductItem = ({ item }) => {
     <div className="group">
       <div className="relative  overflow-hidden flex items-center justify-center rounded-lg bg-[#F6F7FB]  mb-1">
         <img className="w-full" src={imageSrc} alt="" />
-        {item?.productOffer?.discountPercentage && (
+        {(item?.discountPercentage || item?.productOffer?.discountPercentage) && (
           <p className="absolute top-3 left-3 text-sm font-bold bg-[#ffffff] px-4 py-[2px] rounded-xl">
-            {`${item.productOffer.discountPercentage}%`}
+            {`${item.discountPercentage || item.productOffer.discountPercentage}%`}
           </p>
         )}
 

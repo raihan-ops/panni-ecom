@@ -14,7 +14,9 @@ const ReverseProductItems = () => {
   useEffect(() => {
     (async function fetchProducts() {
       try {
-        const response = await axios.get(`${GET_ALL_PRODUCTS}?size=${9}&categoryType=WOMEN`);
+        const response = await axios.get(
+          `${GET_ALL_PRODUCTS}?size=${9}&page=${1}&categoryType=WOMEN`,
+        );
         setProducts(response.data.content);
       } catch (error) {
         console.error('Error fetching categories:', error);
@@ -27,16 +29,16 @@ const ReverseProductItems = () => {
     <div>
       <div>
         <div className="flex justify-between items-center mb-2">
-          {/* <h2 className="text-2xl font-bold mb-2">Women&apos;s</h2>
+          <h2 className="text-2xl font-bold mb-2">Women&apos;s</h2>
           <Link
             href={PATH_ALL_PRODUCT}
             className="border h-fit rounded py-1 px-5 text-center text-sm bg-white transition-all duration-500 hover:bg-black hover:text-white"
           >
             See More
-          </Link> */}
+          </Link>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-7 gap-y-9">
-          {products?.slice(9, 13).map((item, key) => (
+          {products?.slice(0, 4).map((item, key) => (
             <ProductItem item={item} key={key} />
           ))}
         </div>
@@ -45,18 +47,18 @@ const ReverseProductItems = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-7 gap-y-9 mt-7">
         <div className="sm:col-span-2 md:col-span-2">
           <div className="grid grid-cols-2 gap-x-7 gap-y-9 order1">
-            {products?.slice(13, 15).map((item, key) => (
+            {products?.slice(4, 6).map((item, key) => (
               <ProductItem item={item} key={key} />
             ))}
           </div>
           <div className="grid grid-cols-2 gap-x-7 gap-y-9 order2">
-            {products?.slice(15, 17).map((item, key) => (
+            {products?.slice(6, 8).map((item, key) => (
               <ProductItem item={item} key={key} />
             ))}
           </div>
         </div>
         <div className="sm:col-span-2 md:col-span-2 md:row-span-2 pImgsecMain">
-          {products?.slice(17, 18).map((item, key) => (
+          {products?.slice(8, 9).map((item, key) => (
             <ProductItem item={item} key={key} />
           ))}
         </div>

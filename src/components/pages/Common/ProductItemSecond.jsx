@@ -14,6 +14,11 @@ const ProductItem = ({ item }) => {
       <div className="group h-full">
         <div className="relative overflow-hidden flex items-center pImgsec justify-center rounded-lg bg-[#F6F7FB]  mb-1">
           <Image src={imageSrc} alt="" width={250} height={250} />
+          {(item?.discountPercentage || item?.productOffer?.discountPercentage) && (
+            <p className="absolute top-3 left-3 text-sm font-bold bg-[#ffffff] px-4 py-[2px] rounded-xl">
+              {`${item.discountPercentage || item.productOffer.discountPercentage}%`}
+            </p>
+          )}
 
           <div className="absolute left-0 bottom-0 translate-y-full w-full flex items-center justify-center gap-3 ease-linear duration-200 group-hover:-translate-y-1">
             {/* quick view */}

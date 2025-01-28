@@ -41,14 +41,14 @@ const ColorsDropdown = ({ colors, onColorClick }) => {
         {colors?.map((color, key) => (
           <label
             key={key}
-            htmlFor={color.code}
+            htmlFor={color.code.startsWith('#') ? color.code : `#${color.code}`}
             className="cursor-pointer select-none flex items-center"
           >
             <div className="relative">
               <input
                 type="radio"
                 name="color"
-                id={color.code}
+                id={color.code.startsWith('#') ? color.code : `#${color.code}`}
                 className="sr-only"
                 onChange={() => {
                   setActiveColor(color.code);
@@ -63,7 +63,9 @@ const ColorsDropdown = ({ colors, onColorClick }) => {
               >
                 <span
                   className="block w-3 h-3 rounded-full"
-                  style={{ backgroundColor: `${color.code}` }}
+                  style={{
+                    backgroundColor: `${color.code.startsWith('#') ? color.code : `#${color.code}`}`,
+                  }}
                 ></span>
               </div>
             </div>
