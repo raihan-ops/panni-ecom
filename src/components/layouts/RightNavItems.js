@@ -825,6 +825,15 @@ const RightNavItems = ({ toggleMenu }) => {
                         <div className="mt-1 text-sm text-gray-500 flex gap-4">
                           <span>Quantity: {item.quantity}</span>
                           <span>Unit Price: ৳{item.price}</span>
+                          <span className="flex items-center gap-2">
+                            Color :{' '}
+                            <span
+                              className=" flex w-4 h-4 rounded-full mt-1"
+                              style={{
+                                backgroundColor: `${item.selectedColor?.startsWith('#') ? item.selectedColor : `#${item.selectedColor}`}`,
+                              }}
+                            ></span>
+                          </span>
                         </div>
                       </div>
                       <p className="font-medium text-gray-800">৳{item.totalPrice}</p>

@@ -122,7 +122,7 @@ const CheckoutPage = () => {
     const cartDetailsList = cart.cartDetailsList.map((item) => ({
       product: { id: item.product.id },
       quantity: item.quantity,
-      // selectedColor: item.selectedColor.id,
+      selectedColor: item.selectedColor.code,
       // selectedSize: item.selectedSize,
     }));
 

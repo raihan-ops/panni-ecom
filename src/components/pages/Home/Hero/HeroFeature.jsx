@@ -16,7 +16,7 @@ const HeroFeature = () => {
   const sequence = messages.flatMap((message) => [message, 2000]);
 
   return (
-    <div className="w-full mt-16 mx-auto px-4 rounded-md border-2 py-6">
+    <div className="w-full mt-16 mx-auto px-4 rounded-md border-2 border-[#FF69B4] py-6">
       <TypeAnimation
         sequence={[
           ...sequence,
@@ -27,7 +27,7 @@ const HeroFeature = () => {
         wrapper="span"
         cursor={true}
         repeat={Infinity}
-        style={{ fontSize: '18px', display: 'inline-block' }}
+        style={{ fontSize: '18px', display: 'inline-block', color: '#FF69B4' }}
       />
     </div>
   );

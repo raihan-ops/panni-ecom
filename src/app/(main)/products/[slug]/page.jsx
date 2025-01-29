@@ -48,7 +48,7 @@ const ProductDetails = () => {
 
   useEffect(() => {
     if (product?.id) {
-      setQuantity(getCartItemQuantity(product.id));
+      setQuantity(getCartItemQuantity(product.id) > 0 ? getCartItemQuantity(product.id) : 1);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product, cart]);
@@ -81,7 +81,7 @@ const ProductDetails = () => {
   const handleAddToCart = async (e) => {
     e.preventDefault();
 
-    if (quantity <= 0) {
+    if (quantity < 1) {
       Toast('error', 'error', 'Please add quantity first');
       return;
     }
@@ -90,7 +90,7 @@ const ProductDetails = () => {
 
   const handleBuyNow = async (e) => {
     e.preventDefault();
-    if (quantity <= 0) {
+    if (quantity < 1) {
       Toast('error', 'error', 'Please add quantity first');
       return;
     }
