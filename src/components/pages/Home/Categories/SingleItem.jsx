@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 const SingleItem = ({ item }) => {
   return (
-    <a href="#" className="group flex flex-col items-center">
+    <div className="group flex flex-col items-center">
       <div className="w-40 h-40 overflow-hidden bg-[#F2F3F8]  rounded-full flex items-center justify-center mb-4 smallCategories">
         {item.image ? (
           <Image
@@ -29,7 +29,7 @@ const SingleItem = ({ item }) => {
           {item.name || 'Unknown Category'}
         </h3>
       </div>
-    </a>
+    </div>
   );
 };
 

@@ -8,6 +8,8 @@ import 'swiper/css';
 import SingleItem from './SingleItem';
 import axios from 'axios';
 import { GET_ALL_SUB_CATEGORIES } from '@/helpers/apiUrl';
+import Link from 'next/link';
+import { PATH_ALL_PRODUCT } from '@/helpers/Slugs';
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
@@ -158,7 +160,9 @@ const Categories = () => {
           >
             {categories?.map((item, key) => (
               <SwiperSlide key={key}>
-                <SingleItem item={item} />
+                <Link href={`${PATH_ALL_PRODUCT}?searchKey=${item.name}`}>
+                  <SingleItem item={item} />
+                </Link>
               </SwiperSlide>
             ))}
           </Swiper>
