@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useGlobalContext } from '@/contexts/GlobalContextProvider';
 
@@ -13,7 +12,7 @@ const ProductItem = ({ item }) => {
     <Link href={'products/' + item?.slug}>
       <div className="group h-full">
         <div className="relative overflow-hidden flex items-center pImgsec justify-center rounded-lg bg-[#F6F7FB]  mb-1">
-          <Image src={imageSrc} alt="" width={250} height={250} />
+          <img src={imageSrc} alt="" className="w-full h-full" />
           {(item?.discountPercentage || item?.productOffer?.discountPercentage) && (
             <p className="absolute top-3 left-3 text-sm text-white font-bold bg-[#E66EAA] px-4 pt-[1.75px] pb-[3px] rounded-xl">
               {`${item.discountPercentage || item.productOffer.discountPercentage}%`}

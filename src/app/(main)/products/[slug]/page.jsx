@@ -183,7 +183,8 @@ const ProductDetails = () => {
 
                   <span className="text-green">
                     {' '}
-                    {product?.quantity > 1 ? 'In Stock' : 'Out Of Stock'} ({product?.quantity})
+                    {product?.quantity > 1 ? 'In Stock' : 'Out Of Stock'}
+                    {/*({product?.quantity})*/}
                   </span>
                 </div>
               </div>
@@ -245,11 +246,15 @@ const ProductDetails = () => {
                               className={`flex items-center justify-center w-5.5 h-5.5 rounded-full border ${
                                 selectedColor?.code === color.code ? 'border-4' : 'border'
                               }`}
-                              style={{ borderColor: `${color.code}` }}
+                              style={{
+                                borderColor: `${color.code.startsWith('#') ? color.code : `#${color.code}`}`,
+                              }}
                             >
                               <span
                                 className="block w-3 h-3 rounded-full"
-                                style={{ backgroundColor: `${color.code}` }}
+                                style={{
+                                  backgroundColor: `${color.code.startsWith('#') ? color.code : `#${color.code}`}`,
+                                }}
                               ></span>
                             </div>
                           </div>

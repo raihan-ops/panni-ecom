@@ -24,7 +24,7 @@ const RelatedProducts = ({ productId }) => {
   return (
     <div>
       <section className="overflow-hidden pt-16">
-        <div className=" w-full mx-auto px-4 sm:px-8 xl:px-0">
+        <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           {/* <!-- section title --> */}
           <div className="mb-7 flex items-center justify-between">
             <div>
