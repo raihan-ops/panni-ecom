@@ -11,6 +11,8 @@ import {
   PATH_CHECKOUT,
   PATH_CONTACT,
   PATH_HOME,
+  PATH_PRIVACY_POLICY,
+  PATH_TERMS_AND_CONDITIONS,
   SIGN_UP,
 } from '@/helpers/Slugs';
 import Image from 'next/image';
@@ -213,7 +215,12 @@ const RightNavItems = ({ toggleMenu }) => {
               closable={false}
               title={
                 <div
-                  style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    overflowY: 'auto',
+                  }}
                 >
                   <span>All Categories</span>
                   <CloseOutlined
@@ -267,7 +274,7 @@ const RightNavItems = ({ toggleMenu }) => {
 
                     <div
                       className={`dropdownText transition-all duration-500 overflow-hidden ${
-                        isDropdownOpen ? 'max-h-[200px] opacity-100' : 'max-h-0 opacity-0'
+                        isDropdownOpen ? ' opacity-100' : 'max-h-0 opacity-0'
                       }`}
                     >
                       {Array.isArray(categories) && categories.length > 0 && (
@@ -281,6 +288,27 @@ const RightNavItems = ({ toggleMenu }) => {
                               >
                                 {_sub_category.name}
                               </Link>
+                              <div className="mb-2 h-fit ">
+                                {_sub_category.subCategoryList && (
+                                  <ul className="space-y-2 ml-4 mt-2 overflow-y-auto">
+                                    {_sub_category.subCategoryList.map((_subsubcategory, k) => (
+                                      <li
+                                        key={k}
+                                        onClick={onClose}
+                                        className="hover:bg-gray-200 px-2 py-1 rounded-md"
+                                      >
+                                        <Link
+                                          href={`${PATH_ALL_PRODUCT}?searchKey=${_subsubcategory.name}`}
+                                          title={_subsubcategory.name}
+                                          className="text-black hover:text-gray-700 transition-all w-full"
+                                        >
+                                          {_subsubcategory.name}
+                                        </Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </div>
                             </li>
                           ))}
                         </ul>
@@ -312,7 +340,7 @@ const RightNavItems = ({ toggleMenu }) => {
                     </div>
                     <div
                       className={`dropdownText transition-all duration-500 overflow-hidden ${
-                        isSubDropdownOpen ? 'max-h-[200px] opacity-100' : 'max-h-0 opacity-0'
+                        isSubDropdownOpen ? ' opacity-100' : 'max-h-0 opacity-0'
                       }`}
                     >
                       {Array.isArray(women) && women.length > 0 && (
@@ -326,6 +354,27 @@ const RightNavItems = ({ toggleMenu }) => {
                               >
                                 {_sub_category.name}
                               </Link>
+                              <div className="mb-2 h-fit ">
+                                {_sub_category.subCategoryList && (
+                                  <ul className="space-y-2 ml-4 mt-2 overflow-y-auto">
+                                    {_sub_category.subCategoryList.map((_subsubcategory, k) => (
+                                      <li
+                                        key={k}
+                                        onClick={onClose}
+                                        className="hover:bg-gray-200 px-2 py-1 rounded-md"
+                                      >
+                                        <Link
+                                          href={`${PATH_ALL_PRODUCT}?searchKey=${_subsubcategory.name}`}
+                                          title={_subsubcategory.name}
+                                          className="text-black hover:text-gray-700 transition-all w-full"
+                                        >
+                                          {_subsubcategory.name}
+                                        </Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </div>
                             </li>
                           ))}
                         </ul>
@@ -334,6 +383,7 @@ const RightNavItems = ({ toggleMenu }) => {
                     {/* </Link> */}
                   </li>
                   <li
+                    onClick={onClose}
                     className={`max-lg:mb-2 lg:ml-2 cursor-pointer transition-all `}
                     // ${isActiveRoute(nav.path)}
                   >
@@ -348,6 +398,7 @@ const RightNavItems = ({ toggleMenu }) => {
                     </Link>
                   </li>
                   <li
+                    onClick={onClose}
                     className={`max-lg:mb-2 lg:ml-2 cursor-pointer transition-all `}
                     // ${isActiveRoute(nav.path)}
                   >
@@ -361,53 +412,92 @@ const RightNavItems = ({ toggleMenu }) => {
                       <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
                     </Link>
                   </li>
+                  <li className={`max-lg:mb-2 lg:ml-2 cursor-pointer transition-all `}>
+                    <Link
+                      onClick={onClose}
+                      href={PATH_TERMS_AND_CONDITIONS}
+                      title="Contact"
+                      className="inline-block w-full h-full p-2 text-lg text-black font-normal group"
+                    >
+                      Terms & Condition
+                      <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+                    </Link>
+                  </li>
+                  <li
+                    onClick={onClose}
+                    className={`max-lg:mb-2 lg:ml-2 cursor-pointer transition-all `}
+                  >
+                    <Link
+                      href={PATH_PRIVACY_POLICY}
+                      title="Contact"
+                      className="inline-block w-full h-full p-2 text-lg text-black font-normal group"
+                    >
+                      Privacy Policy
+                      <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+                    </Link>
+                  </li>
                 </ul>
               </div>
 
-              {/* <div className="absolute bottom-5">
-                <a href="#">
-                  <p className="px-4 py-1 border w-fit rounded-md">Logout</p>
-                </a>
-              </div> */}
-              <div className="absolute bottom-5 w-fit border flex items-center gap-2 rounded-md overflow-hidden px-3 py-1">
-                <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="size-6"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"
-                    />
-                  </svg>
+              <div className="absolute w-[88%] bg-white shadow-md rounded-md pr-2 bottom-2 flex items-center justify-between">
+                <div className="w-fit border flex items-center gap-2 rounded-md overflow-hidden px-3 py-1">
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"
+                      />
+                    </svg>
+                  </div>
+                  {isLogin ? (
+                    <div
+                      className="login group cursor-pointer"
+                      onClick={() => {
+                        onClose();
+                        logout();
+                      }}
+                    >
+                      Logout
+                      <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+                    </div>
+                  ) : (
+                    <div className="flex">
+                      <Link href={LOGIN}>
+                        <div className="login group" onClick={onClose}>
+                          Login
+                          <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+                        </div>
+                      </Link>
+                      /
+                      <Link href={SIGN_UP}>
+                        <div className="login group" onClick={onClose}>
+                          Sign-up
+                          <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+                        </div>
+                      </Link>
+                    </div>
+                  )}
                 </div>
-                {isLogin ? (
-                  <div className="login group cursor-pointer" onClick={() => logout()}>
-                    Logout
-                    <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
-                  </div>
-                ) : (
-                  <div className="flex">
-                    <Link href={LOGIN}>
-                      <div className="login group">
-                        Login
-                        <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
-                      </div>
-                    </Link>
-                    /
-                    <Link href={SIGN_UP}>
-                      <div className="login group">
-                        Sign-up
-                        <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
-                      </div>
-                    </Link>
-                  </div>
-                )}
+
+                <div className="">
+                  <p onClick={onClose}>
+                    Contact:&nbsp;
+                    <a
+                      href="tel:01869175152"
+                      className=" font-bold transition hover:opacity-75 text-[#FF69B4]"
+                    >
+                      01869175152
+                    </a>
+                  </p>
+                </div>
               </div>
             </Drawer>
           </div>
@@ -673,13 +763,17 @@ const RightNavItems = ({ toggleMenu }) => {
               {cart.cartDetailsList && cart.cartDetailsList.length > 0 && (
                 <div className="flex gap-3 absolute bottom-5">
                   <button
-                    onClick={() => router.push(PATH_CHECKOUT)}
+                    onClick={() => {
+                      router.push(PATH_CHECKOUT), onCloseCart();
+                    }}
                     className=" mt-2 font-medium text-white bg-black border py-2 px-7 rounded-md ease-out duration-200 hover:bg-white hover:text-black"
                   >
                     Checkout
                   </button>
                   <button
-                    onClick={clearCart}
+                    onClick={() => {
+                      clearCart(), onCloseCart();
+                    }}
                     className="mt-2 font-medium text-black bg-white py-2 px-7 rounded-md ease-out duration-200 hover:bg-gray-300"
                   >
                     Clear

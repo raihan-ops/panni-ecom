@@ -6,7 +6,14 @@ import { usePathname } from 'next/navigation';
 import { CloseOutlined } from '@ant-design/icons';
 import { Drawer, Input } from 'antd';
 import Image from 'next/image';
-import { PATH_ABOUT, PATH_ALL_PRODUCT, PATH_CONTACT, PATH_HOME } from '@/helpers/Slugs';
+import {
+  PATH_ABOUT,
+  PATH_ALL_PRODUCT,
+  PATH_CONTACT,
+  PATH_HOME,
+  PATH_PRIVACY_POLICY,
+  PATH_TERMS_AND_CONDITIONS,
+} from '@/helpers/Slugs';
 import {
   GET_ALL_PRODUCTS,
   GET_NAVBAR_CATEGORIES_MEN,
@@ -190,13 +197,19 @@ const LeftNavItems = ({ toggleMenu }) => {
 
                     <div
                       className={`dropdownText transition-all duration-500 overflow-hidden ${
-                        isDropdownOpen ? 'max-h-[200px] opacity-100' : 'max-h-0 opacity-0'
+                        isDropdownOpen ? 'h-fit opacity-100' : 'max-h-0 opacity-0'
                       }`}
                     >
                       {Array.isArray(categories) && categories.length > 0 && (
                         <ul className="ml-4">
                           {categories.map((_sub_category, j) => (
-                            <li key={j} className="mb-4" onClick={handleDropdownToggle}>
+                            <li
+                              key={j}
+                              className="mb-4"
+                              onClick={() => {
+                                handleDropdownToggle(), onClose();
+                              }}
+                            >
                               <Link
                                 href={`${PATH_ALL_PRODUCT}?searchKey=${_sub_category.name}`}
                                 title={_sub_category.name}
@@ -204,6 +217,23 @@ const LeftNavItems = ({ toggleMenu }) => {
                               >
                                 {_sub_category.name}
                               </Link>
+                              <div className="mb-2">
+                                {_sub_category.subCategoryList && (
+                                  <ul className="space-y-2">
+                                    {_sub_category.subCategoryList.map((_subsubcategory, k) => (
+                                      <li key={k} onClick={onClose} className="hover:bg-gray-200">
+                                        <Link
+                                          href={`${PATH_ALL_PRODUCT}?searchKey=${_subsubcategory.name}`}
+                                          title={_subsubcategory.name}
+                                          className="text-black hover:text-gray-700 transition-all w-full"
+                                        >
+                                          {_subsubcategory.name}
+                                        </Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </div>
                             </li>
                           ))}
                         </ul>
@@ -235,13 +265,19 @@ const LeftNavItems = ({ toggleMenu }) => {
                     </div>
                     <div
                       className={`dropdownText transition-all duration-500 overflow-hidden ${
-                        isSubDropdownOpen ? 'max-h-[200px] opacity-100' : 'max-h-0 opacity-0'
+                        isSubDropdownOpen ? 'h-fit opacity-100' : 'max-h-0 opacity-0'
                       }`}
                     >
                       {Array.isArray(women) && women.length > 0 && (
-                        <ul className="ml-4">
+                        <ul className="ml-4 h-fit">
                           {women.map((_sub_category, j) => (
-                            <li key={j} className="mb-4" onClick={handleSubDropdownToggle}>
+                            <li
+                              key={j}
+                              className="mb-4"
+                              onClick={() => {
+                                handleSubDropdownToggle, onClose();
+                              }}
+                            >
                               <Link
                                 href={`${PATH_ALL_PRODUCT}?searchKey=${_sub_category.name}`}
                                 title={_sub_category.name}
@@ -249,6 +285,27 @@ const LeftNavItems = ({ toggleMenu }) => {
                               >
                                 {_sub_category.name}
                               </Link>
+                              <div className="mb-2 h-fit ">
+                                {_sub_category.subCategoryList && (
+                                  <ul className="space-y-2 ml-4 mt-2 overflow-y-auto">
+                                    {_sub_category.subCategoryList.map((_subsubcategory, k) => (
+                                      <li
+                                        key={k}
+                                        onClick={onClose}
+                                        className="hover:bg-gray-200 px-2 py-1 rounded-md"
+                                      >
+                                        <Link
+                                          href={`${PATH_ALL_PRODUCT}?searchKey=${_subsubcategory.name}`}
+                                          title={_subsubcategory.name}
+                                          className="text-black hover:text-gray-700 transition-all w-full"
+                                        >
+                                          {_subsubcategory.name}
+                                        </Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </div>
                             </li>
                           ))}
                         </ul>
@@ -257,6 +314,7 @@ const LeftNavItems = ({ toggleMenu }) => {
                     {/* </Link> */}
                   </li>
                   <li
+                    onClick={onClose}
                     className={`max-lg:mb-2 lg:ml-2 cursor-pointer transition-all `}
                     // ${isActiveRoute(nav.path)}
                   >
@@ -271,6 +329,7 @@ const LeftNavItems = ({ toggleMenu }) => {
                     </Link>
                   </li>
                   <li
+                    onClick={onClose}
                     className={`max-lg:mb-2 lg:ml-2 cursor-pointer transition-all `}
                     // ${isActiveRoute(nav.path)}
                   >
@@ -284,14 +343,46 @@ const LeftNavItems = ({ toggleMenu }) => {
                       <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
                     </Link>
                   </li>
+                  <li
+                    onClick={onClose}
+                    className={`max-lg:mb-2 lg:ml-2 cursor-pointer transition-all `}
+                  >
+                    <Link
+                      href={PATH_TERMS_AND_CONDITIONS}
+                      title="Contact"
+                      className="inline-block w-full h-full p-2 text-lg text-black font-normal group"
+                    >
+                      Terms & Condition
+                      <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+                    </Link>
+                  </li>
+                  <li
+                    onClick={onClose}
+                    className={`max-lg:mb-2 lg:ml-2 cursor-pointer transition-all `}
+                  >
+                    <Link
+                      href={PATH_PRIVACY_POLICY}
+                      title="Contact"
+                      className="inline-block w-full h-full p-2 text-lg text-black font-normal group"
+                    >
+                      Privacy Policy
+                      <div className="bg-gray-600 w-0 h-[2px] transition-all duration-200 group-hover:w-full"></div>
+                    </Link>
+                  </li>
                 </ul>
               </div>
 
-              {/* <div className="absolute bottom-5">
-                <a href="#">
-                  <p className="px-4 py-1 border w-fit rounded-md">Logout</p>
-                </a>
-              </div> */}
+              <div className="absolute bottom-5">
+                <p onClick={onClose}>
+                  Contact:&nbsp;
+                  <a
+                    href="tel:01869175152"
+                    className=" font-bold transition hover:opacity-75 text-[#FF69B4]"
+                  >
+                    01869175152
+                  </a>
+                </p>
+              </div>
             </Drawer>
           </div>
 

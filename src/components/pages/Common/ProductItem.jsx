@@ -122,7 +122,7 @@ const ProductItem = ({ item }) => {
       </div> */}
 
       <h3
-        className="font-medium text-black ease-out duration-200 hover:text-blue mb-0 line-clamp-2"
+        className="font-medium text-black ease-out duration-200 hover:text-blue mb-0 line-clamp-1"
         // onClick={() => handleProductDetails()}
       >
         {item.name}
@@ -131,7 +131,7 @@ const ProductItem = ({ item }) => {
       <span className="flex items-center gap-2 font-medium text-sm">
         {item.discountPercentage > 0 ? (
           <div>
-            <span className="text-black">
+            <span className="text-[#FF69B4]">
               {' '}
               ৳{(item.price * (1 - item.discountPercentage / 100)).toFixed(2)}
             </span>
@@ -139,14 +139,14 @@ const ProductItem = ({ item }) => {
           </div>
         ) : item.productOffer && item.productOffer?.discountPercentage > 0 ? (
           <>
-            <span className="text-black">
+            <span className="text-[#FF69B4]">
               {' '}
               ৳{(item.price * (1 - item.productOffer?.discountPercentage / 100)).toFixed(2)}
             </span>
             <span className="text-gray-400 line-through">৳{item.price}</span>
           </>
         ) : (
-          <span className="text-black ">৳{item.price}</span>
+          <span className="text-[#FF69B4]">৳{item.price}</span>
         )}
       </span>
     </div>

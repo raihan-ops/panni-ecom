@@ -42,7 +42,7 @@ const CountDown = () => {
   }, []);
 
   return (
-    <section className="overflow-hidden py-16">
+    <section className="overflow-hidden py-4 md:py-16">
       {offer && (
         <div className="w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="relative z-1 grid grid-cols-1 sm:grid-cols-12 rounded-lg bg-[#D0E9F3]">

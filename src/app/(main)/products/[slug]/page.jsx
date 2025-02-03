@@ -109,10 +109,10 @@ const ProductDetails = () => {
       id: 'tabOne',
       title: 'Description',
     },
-    {
-      id: 'tabTwo',
-      title: 'Additional Information',
-    },
+    // {
+    //   id: 'tabTwo',
+    //   title: 'Additional Information',
+    // },
   ];
   const [activeTab, setActiveTab] = useState('tabOne');
 
@@ -281,7 +281,7 @@ const ProductDetails = () => {
                         e.preventDefault();
                         handleQuantityChange('decrease');
                       }}
-                      className="flex items-center justify-center w-10 h-10 ease-out duration-200 hover:text-blue"
+                      className="flex items-center justify-center w-6 md:w-10 h-10 ease-out duration-200 hover:text-blue"
                     >
                       <svg
                         className="fill-current"
@@ -308,7 +308,7 @@ const ProductDetails = () => {
                         handleQuantityChange('increase');
                       }}
                       aria-label="increase quantity"
-                      className="flex items-center justify-center w-10 h-10 ease-out duration-200 hover:text-blue"
+                      className="flex items-center justify-center w-6 md:w-10 h-10 ease-out duration-200 hover:text-blue"
                     >
                       <svg
                         className="fill-current"
@@ -332,14 +332,14 @@ const ProductDetails = () => {
 
                   <button
                     onClick={handleAddToCart}
-                    className="inline-flex font-medium text-white bg-blue py-2 px-5 rounded-md ease-out duration-200 bg-blue-500 hover:bg-blue-700"
+                    className="inline-flex font-medium text-white bg-blue px-[4px] py-[11px] text-sm text-nowrap md:text-lg md:py-[6.5px] md:px-5 rounded-md ease-out duration-200 bg-blue-500 hover:bg-blue-700"
                   >
                     Add-to-cart
                   </button>
 
                   <button
                     onClick={handleBuyNow}
-                    className="inline-flex font-medium text-white bg-blue py-2 px-5 rounded-md ease-out duration-200 bg-blue-500 hover:bg-blue-700"
+                    className="inline-flex font-medium text-white bg-blue bg-blue px-[4px] py-[11px] text-sm text-nowrap md:text-lg md:py-[6.5px] md:px-5 rounded-md ease-out duration-200 bg-blue-500 hover:bg-blue-700"
                   >
                     Buy Now
                   </button>
@@ -351,7 +351,7 @@ const ProductDetails = () => {
       </section>
 
       {/* description */}
-      <section className="overflow-hidden bg-gray-100 py-20 mb-16">
+      <section className="overflow-hidden bg-gray-100 py-6 md:py-20 mb-16">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           {/* tab header start */}
           <div className="flex flex-wrap items-center bg-white rounded-[10px] shadow-1 gap-5 xl:gap-12 py-4 px-4 sm:px-6">
@@ -376,7 +376,7 @@ const ProductDetails = () => {
           {/*  tab content one start  */}
           <div>
             <div
-              className={`rounded-xl bg-white shadow-1 p-4 sm:p-6 mt-10  ${activeTab === 'tabOne' ? 'block' : 'hidden'}`}
+              className={`rounded-xl bg-white shadow-1 p-4 sm:p-6 mt-5 md:mt-10  ${activeTab === 'tabOne' ? 'block' : 'hidden'}`}
             >
               <div className="rounded-md even:bg-gray-1 py-4 px-4 sm:px-5">
                 {product?.description ? product.description : ''}
@@ -385,19 +385,14 @@ const ProductDetails = () => {
           </div>
           {/*  tab content one end - */}
 
-          {/*  tab content two start  */}
-          <div>
+          {/* <div>
             <div
-              className={`rounded-xl bg-white shadow-1 p-4 sm:p-6 mt-10 ${
-                activeTab === 'tabTwo' ? 'block' : 'hidden'
-              }`}
+              className={`rounded-xl bg-white shadow-1 p-4 sm:p-6 mt-10 ${activeTab === 'tabTwo' ? 'block' : 'hidden'
+                }`}
             >
-              {/*  info item  */}
               {product?.additionalInfo ?? ''}
             </div>
-          </div>
-          {/*  tab content two end  */}
-          {/* tab content end  */}
+          </div> */}
         </div>
 
         <RelatedProducts productId={product?.id} />
