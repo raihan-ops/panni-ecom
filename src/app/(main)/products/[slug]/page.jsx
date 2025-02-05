@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import RelatedProducts from '@/components/pages/Common/RelatedProducts';
 import axios from 'axios';
@@ -11,6 +11,7 @@ import LoadingSuspense from '@/components/loader/LoadingSuspense';
 import { useGlobalContext } from '@/contexts/GlobalContextProvider';
 import { PATH_CHECKOUT } from '@/helpers/Slugs';
 import { Toast } from '@/components/shared/toast/Toast';
+import Img from '@/components/shared/Img';
 
 const ProductDetails = () => {
   const params = useParams();
@@ -104,6 +105,41 @@ const ProductDetails = () => {
     }
   };
 
+  // datalayer code start
+  const sendGtmEvent = (product) => {
+    if (typeof window !== 'undefined' && product) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'view_item',
+        ecommerce: {
+          items: [
+            {
+              item_name: product.name || 'Unknown Product',
+              item_id: product.id || 'Unknown ID',
+              price: product.price || 0,
+              discount: product.discountPercentage ?? product.productOffer?.discountPercentage ?? 0, // Discount %
+              currency: 'BDT',
+              // item_category: product.category || 'Unknown',
+              item_size: product.size || 'No size',
+              // item_color: product.color || 'No Color',
+              item_sku: product.sku || 'Default',
+            },
+          ],
+        },
+      });
+    }
+  };
+
+  const hasSentEvent = useRef(false);
+
+  useEffect(() => {
+    if (product && !hasSentEvent.current) {
+      sendGtmEvent(product);
+      hasSentEvent.current = true;
+    }
+  }, [product]);
+  // datalayer code end
+
   const tabs = [
     {
       id: 'tabOne',
@@ -163,7 +199,7 @@ const ProductDetails = () => {
                         : 'hover:border-blue-800'
                     }`}
                   >
-                    <Image width={50} height={50} src={image.image} alt={product.name} />
+                    <Img className="w-full h-full" src={image.image} alt={product.name} />
                   </button>
                 ))}
               </div>
@@ -193,16 +229,16 @@ const ProductDetails = () => {
                 <span className="flex items-center gap-2 font-medium text-sm">
                   {product?.discountPercentage > 0 ? (
                     <div>
-                      <span className="text-black">
+                      <span className="text-[#E66EAA] text-lg">
                         {' '}
                         ৳{(product.price * (1 - product.discountPercentage / 100)).toFixed(2)}
                       </span>
+                      &nbsp;
                       <span className="text-gray-400 line-through">৳{product.price}</span>
                     </div>
                   ) : product?.productOffer && product.productOffer?.discountPercentage > 0 ? (
                     <>
-                      <span className="text-black">
-                        {' '}
+                      <span className="text-[#E66EAA] text-lg">
                         ৳
                         {(
                           product.price *
@@ -212,7 +248,7 @@ const ProductDetails = () => {
                       <span className="text-gray-400 line-through">৳{product.price}</span>
                     </>
                   ) : (
-                    <span className="text-black ">৳{product?.price}</span>
+                    <span className="text-[#E66EAA] text-lg">৳{product?.price}</span>
                   )}
                 </span>
               </h3>
@@ -269,7 +305,9 @@ const ProductDetails = () => {
                       <h4 className="font-medium text-dark">Size:</h4>
                     </div>
 
-                    <div className="flex items-center gap-4">{product?.size}</div>
+                    <div className="flex items-center text-md font-bold text-[#E66EAA] gap-4">
+                      {product?.size}
+                    </div>
                   </div>
                 </div>
 
@@ -332,14 +370,14 @@ const ProductDetails = () => {
 
                   <button
                     onClick={handleAddToCart}
-                    className="inline-flex font-medium text-white bg-blue px-[4px] py-[11px] text-sm text-nowrap md:text-lg md:py-[6.5px] md:px-5 rounded-md ease-out duration-200 bg-blue-500 hover:bg-blue-700"
+                    className="inline-flex font-medium text-white bg-blue px-[4px] py-[11px] text-sm text-nowrap md:text-lg md:py-[6.5px] md:px-5 rounded-md ease-out duration-200 bg-black border hover:bg-white hover:text-black"
                   >
                     Add-to-cart
                   </button>
 
                   <button
                     onClick={handleBuyNow}
-                    className="inline-flex font-medium text-white bg-blue bg-blue px-[4px] py-[11px] text-sm text-nowrap md:text-lg md:py-[6.5px] md:px-5 rounded-md ease-out duration-200 bg-blue-500 hover:bg-blue-700"
+                    className="inline-flex font-medium text-black bg-blue border bg-white px-[4px] py-[11px] text-sm text-nowrap md:text-lg md:py-[6.5px] md:px-5 rounded-md ease-out duration-200 bg-blue-500 hover:bg-black hover:text-white"
                   >
                     Buy Now
                   </button>

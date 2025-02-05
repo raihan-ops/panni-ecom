@@ -41,9 +41,9 @@ const Signup = () => {
 
   return (
     <>
-      <Breadcrumb title={'Sign-up'} pages={['Sign-up']} />
-      <section className="overflow-hidden pb-20 bg-gray-2">
-        <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
+      <section className="container overflow-hidden pb-20 bg-gray-2">
+        <div className="w-full mx-auto px-4 sm:px-8 xl:px-0">
+          <Breadcrumb title={'Sign-up'} pages={['Sign-up']} />
           <div className="max-w-[570px] w-full mx-auto rounded-xl bg-white shadow-1 p-4 sm:p-7 xl:p-11">
             <div className="text-center mb-8">
               <h2 className="font-semibold text-xl sm:text-2xl xl:text-heading-5 text-dark mb-2">
