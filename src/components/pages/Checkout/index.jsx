@@ -120,9 +120,9 @@ const CheckoutPage = () => {
   const onSubmit = (formData) => {
     // Transform cart items into the required format
     const cartDetailsList = cart.cartDetailsList.map((item) => ({
-      product: { id: item.product.id },
-      quantity: item.quantity,
-      selectedColor: item.selectedColor.code,
+      product: { id: item?.product?.id },
+      quantity: item?.quantity,
+      selectedColor: item?.selectedColor?.code,
       // selectedSize: item.selectedSize,
     }));
 
