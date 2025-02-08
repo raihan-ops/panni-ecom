@@ -116,7 +116,7 @@ const LeftNavItems = ({ toggleMenu }) => {
       const response = await axios.get(`${GET_ALL_PRODUCTS}`, {
         params: { searchKey: query }, // Pass query as a parameter
       });
-      console.log('Products----', response.data.content);
+      // console.log('Products----', response.data.content);
       return response.data.content; // Adjust based on your API response structure
     } catch (error) {
       console.error('Failed to fetch products:', error);

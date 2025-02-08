@@ -33,7 +33,7 @@ const Signup = () => {
     };
     await signupHandler(formattedData, (res) => {
       if (res.data) {
-        console.log('AUTH', res);
+        // console.log('AUTH', res);
         router.push(`/otp-verify?email=${data.email}&type=signup`);
       }
     });

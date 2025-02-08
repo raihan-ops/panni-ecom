@@ -17,7 +17,7 @@ const { Option } = Select;
 const renderFormItem = (item, options, setOptions, handleAutoCompleteChange, form) => {
   const onChange = (text) => {
     // form.setFieldsValue({ [item.name]: text });
-    console.log('otp', text);
+    // console.log('otp', text);
     form.setFieldValue(item.name, text);
   };
   const sharedProps = {

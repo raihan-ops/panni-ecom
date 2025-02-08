@@ -21,7 +21,7 @@ const LoanRequestPage = () => {
     try {
       const response = await axios.get(`${GET_ORDER_BY_INVOICE_NO}/${invoiceNumber}`);
       setOrder(response.data);
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       alert(error.response?.data?.message);
       console.error('Error fetching product:', error);

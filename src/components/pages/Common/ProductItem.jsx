@@ -3,7 +3,7 @@
 import React from 'react';
 
 const ProductItem = ({ item }) => {
-  console.log(item);
+  // console.log(item);
   const imageSrc =
     Array.isArray(item.images) && item.images.length > 0 ? item.images[0].image : item.image;
 
