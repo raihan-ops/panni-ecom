@@ -138,6 +138,10 @@ const CheckoutPage = () => {
         addressDesc: formData.address,
       },
       addressType: deliveryType,
+      shippingMethod: formData.shippingMethod,
+      paymentMethod: formData.paymentMethod,
+      couponCode: formData.couponCode,
+      note: formData.note,
     };
 
     // console.log('API Payload:', payload);
@@ -155,6 +159,37 @@ const CheckoutPage = () => {
           clearCart(false);
           // router.push(PATH_HOME);
           // Toast('success', 'success', 'Order has been placed successfully');
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({
+            event: 'purchase',
+            ecommerce: {
+              transaction_id: res?.data?.invoiceNumber || 'undefined',
+              affiliation: 'Online Store',
+              value: totals.finalPrice,
+              currency: 'BDT',
+              items: cart.cartDetailsList.map((item) => ({
+                item_name: item?.product?.name,
+                item_id: item?.product?.id,
+                price: item?.product?.price,
+                quantity: item?.quantity,
+                item_color: item?.selectedColor?.name, // Include color
+                item_size: item?.selectedSize, // Include size
+              })),
+            },
+            customer_info: {
+              full_name: formData.fullName,
+              email: formData.email,
+              phone: formData.phone,
+              address: {
+                city: formData.city,
+                address: formData.address,
+              },
+              shipping_method: formData.shippingMethod,
+              payment_method: formData.paymentMethod,
+              coupon_code: formData.couponCode,
+              note: formData.note,
+            },
+          });
         }
       },
     );
@@ -168,6 +203,49 @@ const CheckoutPage = () => {
       message.error('Failed to copy invoice number');
     }
   };
+
+  // datalayer code
+  const [totals, setTotals] = useState({
+    subtotal: 0,
+    shippingFee: 0,
+    tax: 0,
+    discount: 0,
+    finalPrice: 0,
+  });
+
+  useEffect(() => {
+    const calculatedTotals = calculateTotals();
+    setTotals(calculatedTotals);
+  }, [cart.cartDetailsList, deliveryCharge]);
+
+  useEffect(() => {
+    if (totals.finalPrice > 0 && cart.cartDetailsList.length > 0) {
+      window.dataLayer = window.dataLayer || [];
+      const { subtotal, shippingFee, tax, discount, finalPrice } = totals;
+
+      window.dataLayer.push({
+        event: 'begin_checkout',
+        ecommerce: {
+          // transaction_id: orderInfo?.invoiceNumber || 'undefined',
+          // affiliation: 'Online Store',
+          value: finalPrice,
+          currency: 'BDT',
+          items: cart.cartDetailsList.map((item) => ({
+            item_name: item?.product?.name,
+            item_id: item?.product?.id,
+            price: item?.product?.price,
+            quantity: item?.quantity,
+          })),
+        },
+        shipping: {
+          method: watch('shippingMethod'),
+          shipping_fee: shippingFee,
+        },
+        coupon: watch('couponCode') || null,
+        discount: discount,
+      });
+    }
+  }, [totals, cart.cartDetailsList, orderInfo, watch('shippingMethod'), watch('couponCode')]);
 
   return (
     <div className="container">

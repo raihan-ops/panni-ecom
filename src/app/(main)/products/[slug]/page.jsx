@@ -71,6 +71,30 @@ const ProductDetails = () => {
   //   }
   // };
 
+  const sendAddToCartEvent = (product, quantity, selectedColor, selectedSize) => {
+    if (typeof window !== 'undefined' && product) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'add_to_cart',
+        ecommerce: {
+          items: [
+            {
+              item_name: product.name || 'Unknown Product',
+              item_id: product.id || 'Unknown ID',
+              price: product.price || 0,
+              quantity: quantity || 1,
+              discount: product.discountPercentage ?? product.productOffer?.discountPercentage ?? 0,
+              currency: 'BDT',
+              item_size: selectedSize || 'No size',
+              item_color: selectedColor?.name || 'No Color',
+              item_sku: product.sku || 'Default',
+            },
+          ],
+        },
+      });
+    }
+  };
+
   const handleQuantityChange = (action) => {
     if (action === 'increase') {
       setQuantity((prev) => prev + 1);
@@ -87,6 +111,7 @@ const ProductDetails = () => {
       return;
     }
     await updateCart(product, quantity, selectedColor, selectedSize);
+    sendAddToCartEvent(product, quantity, selectedColor, selectedSize);
   };
 
   const handleBuyNow = async (e) => {
